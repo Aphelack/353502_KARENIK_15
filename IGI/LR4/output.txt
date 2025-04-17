@@ -1,0 +1,7 @@
+Total sentences: 9
+Sentences by type: {'Declarative': 6, 'Interrogative': 1, 'Imperative': 2}
+Average sentence length: 29.444444444444443
+Average word length: 4.649122807017544
+Smileys count: 3
+Phone numbers starting with 29: ['291234567', '298765432', '291112223']
+Words with consonant-vowel pattern: ['there', 'are', 'everything', 'This', 'which', 'are', 'are', 'are', 'the', 'analyzer', 'are', 'phone', 'smileys', 'cherry']
