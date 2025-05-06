@@ -24,4 +24,4 @@ def switch_max_with_diagonal(a):
     a[np.arange(n), np.argmax(a, axis=1)] = diagonal
     a[np.arange(n), np.arange(n)] = max_values
 switch_max_with_diagonal(A)
-print(A)
+print(np.median(A.diagonal()))

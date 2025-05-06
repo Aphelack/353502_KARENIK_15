@@ -16,7 +16,7 @@ class FigureColor(ABC):
 
 class Rectangle(GeometicFigure, FigureColor):
     def __init__(self, width: float, height: float, color: str):
-        GeometicFigure.__init__(self)
+        #GeometicFigure.__init__(self)
         FigureColor.__init__(self, color)
         self._width = width
         self._height = height

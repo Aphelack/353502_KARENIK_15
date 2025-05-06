@@ -60,7 +60,7 @@ class TextAnalyzer:
         return total_chars / len(words)
     
     def count_smileys(self):
-        pattern = r'(?<!\w)[:;]-*([()\[\]])\1*(?!\w)'
+        pattern = r'[:;]-*([()\[\]])'
         smileys = re.findall(pattern, self.text)
         return len(smileys)
 
@@ -69,15 +69,10 @@ class TextAnalyzer:
         return phones
 
     def find_words_with_pattern(self):
-        vowels = 'aeiouAEIOU'
-        consonants = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'
-        words = re.findall(r'[a-zA-Z]+', self.text)
-        
-        result = []
-        for word in words:
-            if len(word) >= 3 and word[1] in consonants and word[2] in vowels:
-                result.append(word)
-        return result
+        vowel = r'[aeiouAEIOU]'
+        consonant = r'[^aeiouAEIOU\W\d]'
+        pattern = fr'\b[a-zA-Z]{consonant}{vowel}[a-zA-Z]*\b'
+        return re.findall(pattern, self.text)
 
     def analyze_and_save(self):
         self.read_text()
