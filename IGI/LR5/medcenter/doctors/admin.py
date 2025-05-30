@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import DoctorProfile, Specialization, Category
 
-# Register your models here.
+@admin.register(DoctorProfile)
+class DoctorProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'first_name', 'last_name', 'specialization', 'category')
+
+
+admin.site.register(Specialization)
+admin.site.register(Category)
