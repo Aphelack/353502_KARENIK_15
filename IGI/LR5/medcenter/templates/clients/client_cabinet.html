@@ -38,6 +38,7 @@
         <tr><td colspan="4">Нет записей</td></tr>
         {% endfor %}
     </table>
+    <a href="{% url 'service_list' %}" class="btn btn-primary mb-3">Посмотреть и заказать услуги</a>
     <a href="{% url 'account_logout' %}" class="btn btn-danger mt-3">Выйти</a>
 </div>
 {% endblock %}

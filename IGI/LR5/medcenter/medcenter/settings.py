@@ -57,9 +57,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # <-- добавьте эту строку
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.timezone.TimeZoneMiddleware',
 ]
 
 ROOT_URLCONF = 'medcenter.urls'
@@ -143,14 +144,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "optional"  # или "mandatory" для обязательного подтверждения
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
-#LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_FIELDS = ['email', 'username*', 'password1*', 'password2*']
+#ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_LOGIN_METHOD = {'email', 'username'}
 LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_ON_GET = True
 
-# ACCOUNT_FORMS = {
-#     'signup': 'accounts.forms.CustomUserCreationForm',
-# }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

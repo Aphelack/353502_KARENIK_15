@@ -39,6 +39,29 @@
         <tr><td colspan="4">Нет записей</td></tr>
         {% endfor %}
     </table>
+    <h3>Оказываемые услуги</h3>
+    <ul>
+        {% for service in user.doctorprofile.services.all %}
+            <li>{{ service.name }} — {{ service.price }} BYN</li>
+        {% empty %}
+            <li>Нет выбранных услуг</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Форма добавления услуги -->
+    <form method="post" class="mt-3 mb-3">
+        {% csrf_token %}
+        <div class="input-group">
+            <select name="service_id" class="form-select" required>
+                <option value="" disabled selected>Добавить услугу...</option>
+                {% for service in available_services %}
+                    <option value="{{ service.id }}">{{ service.name }} — {{ service.price }} BYN</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-success">Добавить</button>
+        </div>
+    </form>
+
     <a href="{% url 'account_logout' %}" class="btn btn-danger mt-3">Выйти</a>
 </div>
 {% endblock %}

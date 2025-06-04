@@ -15,6 +15,13 @@
         {% block content %}
         {% endblock %}
     </div>
+    <input type="hidden" id="user_timezone" name="user_timezone">
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.getElementById('user_timezone').value = tz;
+        });
+    </script>
 </body>
 </html>
