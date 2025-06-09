@@ -100,6 +100,33 @@
             {% endfor %}
         </div>
     </main>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Шутка дня</h2>
+        {% if joke %}
+            <div class="alert alert-info text-center" role="alert">
+                <strong>{{ joke.setup }}</strong><br>
+                <em>{{ joke.punchline }}</em>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Шутка недоступна.</p>
+        {% endif %}
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Цитата дня</h2>
+        {% if quote %}
+            <div class="alert alert-secondary text-center" role="alert">
+                <blockquote class="blockquote mb-0">
+                    <p>"{{ quote.body }}"</p>
+                    <footer class="blockquote-footer mt-2">{{ quote.author }}</footer>
+                </blockquote>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Цитата недоступна.</p>
+        {% endif %}
+    </div>
+
+
 
     <footer class="bg-light py-4 mt-5">
         <div class="container text-center">
