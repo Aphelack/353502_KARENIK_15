@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; background: #f7f7f7; }
+        .news-container { max-width: 700px; margin: 0 auto; background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+        .news-item { margin-bottom: 2em; border-bottom: 1px solid #eee; padding-bottom: 1em; }
+        .news-title { font-size: 1.6em; color: #2a2a2a; margin-bottom: 0.3em; }
+        .news-meta { color: #888; font-size: 0.9em; margin-bottom: 1em; }
+        .news-content { font-size: 1.1em; color: #333; }
+        .add-news-link { display: inline-block; margin-bottom: 1.5em; background: #2d72d9; color: #fff; padding: 0.5em 1em; border-radius: 4px; text-decoration: none; }
+        .add-news-link:hover { background: #1956b3; }
+    </style>
+</head>
+<body>
+    <div class="news-container">
+        <h1>Новости</h1>
+        {% if user.is_superuser %}
+            <a href="{% url 'add_news' %}" class="add-news-link">Добавить новость</a>
+        {% endif %}
+        {% for news in news %}
+            <div class="news-item">
+                <div class="news-title">{{ news.title }}</div>
+                <div class="news-meta">
+                    Опубликовано: {{ news.created_at|date:"d.m.Y H:i" }} | Автор: {{ news.author.username }}
+                </div>
+                <div class="news-content">{{ news.content|linebreaks }}</div>
+            </div>
+        {% empty %}
+            <p>Пока нет новостей.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,12 +1,23 @@
 from django import forms
 from allauth.account.forms import SignupForm
 from doctors.models import Specialization, Category
+from datetime import date
 
 class ClientSignupForm(SignupForm):
     first_name = forms.CharField(label="Имя", max_length=50)
     last_name = forms.CharField(label="Фамилия", max_length=50)
     address = forms.CharField(label="Адрес", max_length=255)
     birth_date = forms.DateField(label="Дата рождения", widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        today = date.today()
+        age = today.year - birth_date.year - (
+            (today.month, today.day) < (birth_date.month, birth_date.day)
+        )
+        if age < 18:
+            raise forms.ValidationError("Регистрация доступна только для лиц старше 18 лет.")
+        return birth_date
 
     def save(self, request):
         user = super().save(request)
@@ -30,6 +41,17 @@ class DoctorSignupForm(SignupForm):
     birth_date = forms.DateField(label="Дата рождения", widget=forms.DateInput(attrs={'type': 'date'}), required=False)
     specialization = forms.ModelChoiceField(label="Специализация", queryset=Specialization.objects.all(), required=False)
     category = forms.ModelChoiceField(label="Категория", queryset=Category.objects.all(), required=False)
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        if birth_date:
+            today = date.today()
+            age = today.year - birth_date.year - (
+                (today.month, today.day) < (birth_date.month, birth_date.day)
+            )
+            if age < 18:
+                raise forms.ValidationError("Регистрация доступна только для лиц старше 18 лет.")
+        return birth_date
 
     def save(self, request):
         user = super().save(request)

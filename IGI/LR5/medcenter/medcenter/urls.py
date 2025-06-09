@@ -26,4 +26,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', lambda request: HttpResponseRedirect('/accounts/login/')),
     path('clients/', include('clients.urls')),
+    path('news/', include('news.urls')),
+    path('about/', include('about.urls')),
+    path('stats/', include('stats.urls')),
 ]

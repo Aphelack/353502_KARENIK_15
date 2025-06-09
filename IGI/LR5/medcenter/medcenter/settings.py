@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'services',
     'appointments',
     'accounts',
+    'news',
     'crispy_forms',
     'crispy_bootstrap5',
     'django.contrib.sites',
