@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Медицинский центр - Главная</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Медицинский центр с широким спектром услуг. Запишитесь на прием онлайн.">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>МедЦентр</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">
+                            <i class="bi bi-box-arrow-in-right"></i> Вход
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">
+                            <i class="bi bi-gear"></i> Админка
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5 py-4">
+        <div class="text-center">
+            <h1 class="mb-4 display-4 fw-bold">Добро пожаловать в Медицинский центр!</h1>
+            <p class="lead fs-4">Профессиональная медицинская помощь с заботой о каждом пациенте</p>
+            
+            <div class="row mt-5 g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title">Онлайн запись</h3>
+                            <p class="card-text">Запишитесь на прием в удобное для вас время</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title">Наши специалисты</h3>
+                            <p class="card-text">Опытные врачи высшей категории</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title">Удобное расположение</h3>
+                            <p class="card-text">Центр города, удобная парковка</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container my-5">
+            <h2 class="mb-4 text-center">Наши услуги</h2>
+            {% for category in categories %}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ category.name }}</h4>
+                        {% if category.description %}
+                            <p class="card-text">{{ category.description }}</p>
+                        {% endif %}
+                        {% if category.services.all %}
+                            <ul class="list-group list-group-flush">
+                                {% for service in category.services.all %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <strong>{{ service.name }}</strong>
+                                            {% if service.description %} — {{ service.description }}{% endif %}
+                                        </span>
+                                        <span class="badge bg-primary rounded-pill">{{ service.price }} BYN</span>
+                                    </li>
+                                {% empty %}
+                                    <li class="list-group-item">Нет услуг в этой категории.</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>Нет категорий услуг.</p>
+            {% endfor %}
+        </div>
+    </main>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Шутка дня</h2>
+        {% if joke %}
+            <div class="alert alert-info text-center" role="alert">
+                <strong>{{ joke.setup }}</strong><br>
+                <em>{{ joke.punchline }}</em>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Шутка недоступна.</p>
+        {% endif %}
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Цитата дня</h2>
+        {% if quote %}
+            <div class="alert alert-secondary text-center" role="alert">
+                <blockquote class="blockquote mb-0">
+                    <p>"{{ quote.body }}"</p>
+                    <footer class="blockquote-footer mt-2">{{ quote.author }}</footer>
+                </blockquote>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Цитата недоступна.</p>
+        {% endif %}
+    </div>
+
+
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2025 Медицинский центр. Все права защищены.</p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Профиль врача</h2>
+    <ul>
+        <li>Имя: {{ doctor.first_name }}</li>
+        <li>Фамилия: {{ doctor.last_name }}</li>
+        <li>Телефон: {{ doctor.phone }}</li>
+        <li>Специализация: {{ doctor.specialization }}</li>
+        <li>Категория: {{ doctor.category }}</li>
+    </ul>
+</div>
+{% endblock %}
