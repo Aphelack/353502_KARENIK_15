@@ -1,0 +1,1 @@
+# Promotions app for discounts and coupons

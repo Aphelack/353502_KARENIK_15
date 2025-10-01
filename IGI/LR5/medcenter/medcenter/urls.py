@@ -17,13 +17,34 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.conf.urls.static import static
 import medcenter.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    
+    # Authentication
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', lambda request: HttpResponseRedirect('/accounts/login/')),
+    
+    # Main apps
+    path('services/', include('services.urls')),
     path('clients/', include('clients.urls')),
+    path('doctors/', include('doctors.urls')),
+    path('appointments/', include('appointments.urls')),
+    
+    # New feature apps
+    path('news/', include('news.urls')),
+    path('company/', include('company.urls')),
+    path('glossary/', include('glossary.urls')),
+    path('reviews/', include('reviews.urls')),
+    path('orders/', include('orders.urls')),
 ]
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

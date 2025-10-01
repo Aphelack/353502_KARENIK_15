@@ -2,26 +2,257 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Мой сайт{% endblock %}</title>
-
-    <!-- Bootstrap (для стиля формы) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="{% block meta_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}медицинский центр, врачи, медицинские услуги, здоровье{% endblock %}">
+    <meta name="author" content="{% block meta_author %}Медицинский центр{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="{% block og_title %}{{ title|default:'Медицинский центр' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'images/logo.png' %}{% endblock %}">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ title|default:'Медицинский центр' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    
+    <title>{% block title %}Медицинский центр{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'images/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% load static %}{% static 'images/apple-touch-icon.png' %}">
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalOrganization",
+        "name": "Медицинский центр",
+        "description": "Медицинский центр предоставляет качественные медицинские услуги",
+        "url": "{{ request.build_absolute_uri }}",
+        "telephone": "+375-XX-XXX-XX-XX",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Минск",
+            "addressCountry": "BY"
+        }
+    }
+    </script>
     {% block head %}{% endblock %}
 </head>
-<body class="bg-dark text-white">
+<body>
+    <!-- Skip navigation link for accessibility -->
+    <a href="#main-content" class="visually-hidden-focusable">Перейти к основному содержанию</a>
+    
+    <!-- Header -->
+    <header class="header bg-primary text-white">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Логотип медицинского центра" height="40" class="d-inline-block align-text-top me-2">
+                    Медицинский центр
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">
+                                <i class="bi bi-house"></i> Главная
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'service_list' %}">
+                                <i class="bi bi-heart-pulse"></i> Услуги
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'news_list' %}">
+                                <i class="bi bi-newspaper"></i> Новости
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-building"></i> О компании
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'company_info' %}">О нас</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company_history' %}">История</a></li>
+                                <li><a class="dropdown-item" href="{% url 'contacts' %}">Контакты</a></li>
+                                <li><a class="dropdown-item" href="{% url 'vacancies' %}">Вакансии</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'faq_list' %}">
+                                <i class="bi bi-question-circle"></i> FAQ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reviews_list' %}">
+                                <i class="bi bi-star"></i> Отзывы
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% if user.profile.is_client %}
+                                        <li><a class="dropdown-item" href="{% url 'client_cabinet' %}">
+                                            <i class="bi bi-person"></i> Личный кабинет
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="{% url 'cart' %}">
+                                            <i class="bi bi-cart3"></i> Корзина
+                                            {% if user.cart.items_count %}
+                                                <span class="badge bg-danger ms-1">{{ user.cart.items_count }}</span>
+                                            {% endif %}
+                                        </a></li>
+                                    {% elif user.profile.is_doctor %}
+                                        <li><a class="dropdown-item" href="{% url 'doctor_cabinet' %}">
+                                            <i class="bi bi-hospital"></i> Кабинет врача
+                                        </a></li>
+                                    {% elif user.profile.is_admin %}
+                                        <li><a class="dropdown-item" href="{% url 'admin:index' %}">
+                                            <i class="bi bi-gear"></i> Админ панель
+                                        </a></li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'account_logout' %}">
+                                        <i class="bi bi-box-arrow-right"></i> Выход
+                                    </a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_login' %}">
+                                    <i class="bi bi-box-arrow-in-right"></i> Вход
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-plus"></i> Регистрация
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'client_register' %}">Как клиент</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'doctor_register' %}">Как врач</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-    <div class="container mt-5">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <!-- Breadcrumb navigation -->
+    {% block breadcrumb %}{% endblock %}
+    
+    <!-- Main content -->
+    <main id="main-content" role="main">
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="container mt-4">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Медицинский центр</h5>
+                    <p>Качественное медицинское обслуживание для вашего здоровья.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6>Быстрые ссылки</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'service_list' %}" class="text-light text-decoration-none">Услуги</a></li>
+                        <li><a href="{% url 'news_list' %}" class="text-light text-decoration-none">Новости</a></li>
+                        <li><a href="{% url 'contacts' %}" class="text-light text-decoration-none">Контакты</a></li>
+                        <li><a href="{% url 'privacy_policy' %}" class="text-light text-decoration-none">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Контакты</h6>
+                    <address>
+                        <p><i class="bi bi-geo-alt"></i> г. Минск, ул. Примерная, 1</p>
+                        <p><i class="bi bi-telephone"></i> <a href="tel:+375123456789" class="text-light text-decoration-none">+375 (12) 345-67-89</a></p>
+                        <p><i class="bi bi-envelope"></i> <a href="mailto:info@medcenter.by" class="text-light text-decoration-none">info@medcenter.by</a></p>
+                    </address>
+                </div>
+                <div class="col-md-3">
+                    <h6>Социальные сети</h6>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-2" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-2" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light me-2" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+                        <a href="#" class="text-light" aria-label="VK"><i class="bi-vk"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; {% now "Y" %} Медицинский центр. Все права защищены.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>
+                        Время: <time datetime="{% now 'c' %}">{% now 'j F Y H:i' %}</time>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <input type="hidden" id="user_timezone" name="user_timezone">
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
             document.getElementById('user_timezone').value = tz;
         });
     </script>
+    
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

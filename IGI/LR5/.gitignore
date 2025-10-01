@@ -1,6 +1,8 @@
 djungo_venv/
-vscode/
+.vscode/
 
 *.pyc
 
 *.pyo
+
+.venv/

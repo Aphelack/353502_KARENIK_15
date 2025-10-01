@@ -1,143 +1,298 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Медицинский центр - Главная</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Медицинский центр с широким спектром услуг. Запишитесь на прием онлайн.">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <strong>МедЦентр</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">
-                            <i class="bi bi-box-arrow-in-right"></i> Вход
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/">
-                            <i class="bi bi-gear"></i> Админка
-                        </a>
-                    </li>
-                </ul>
+{% block title %}Главная - Медицинский центр{% endblock %}
+
+{% block meta_description %}Медицинский центр - современное медицинское оборудование, квалифицированные врачи, качественное обслуживание{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Banners -->
+<section class="hero-section mb-5">
+    {% if banners %}
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                {% for banner in banners %}
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
+                            {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                            aria-label="Слайд {{ forloop.counter }}"></button>
+                {% endfor %}
             </div>
-        </div>
-    </nav>
-
-    <main class="container my-5 py-4">
-        <div class="text-center">
-            <h1 class="mb-4 display-4 fw-bold">Добро пожаловать в Медицинский центр!</h1>
-            <p class="lead fs-4">Профессиональная медицинская помощь с заботой о каждом пациенте</p>
             
-            <div class="row mt-5 g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title">Онлайн запись</h3>
-                            <p class="card-text">Запишитесь на прием в удобное для вас время</p>
+            <div class="carousel-inner">
+                {% for banner in banners %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ banner.image.url }}" class="d-block w-100" alt="{{ banner.title }}" style="height: 400px; object-fit: cover;">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h2>{{ banner.title }}</h2>
+                            {% if banner.subtitle %}
+                                <p>{{ banner.subtitle }}</p>
+                            {% endif %}
+                            {% if banner.link_url and banner.link_text %}
+                                <a href="{{ banner.link_url }}" class="btn btn-primary">{{ banner.link_text }}</a>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title">Наши специалисты</h3>
-                            <p class="card-text">Опытные врачи высшей категории</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title">Удобное расположение</h3>
-                            <p class="card-text">Центр города, удобная парковка</p>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Предыдущий</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Следующий</span>
+            </button>
+        </div>
+    {% else %}
+        <div class="jumbotron bg-primary text-white p-5 rounded">
+            <div class="container">
+                <h1 class="display-4">Добро пожаловать в наш медицинский центр</h1>
+                <p class="lead">Современное медицинское оборудование, квалифицированные врачи, индивидуальный подход к каждому пациенту.</p>
+                <a class="btn btn-light btn-lg" href="{% url 'service_list' %}" role="button">Наши услуги</a>
             </div>
         </div>
+    {% endif %}
+</section>
 
-        <div class="container my-5">
-            <h2 class="mb-4 text-center">Наши услуги</h2>
+<!-- Services Catalog -->
+<section class="services-section mb-5">
+    <h2 class="text-center mb-4">
+        <i class="bi bi-heart-pulse text-primary"></i>
+        Наши услуги
+    </h2>
+    
+    {% if categories %}
+        <div class="row">
             {% for category in categories %}
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ category.name }}</h4>
-                        {% if category.description %}
-                            <p class="card-text">{{ category.description }}</p>
-                        {% endif %}
-                        {% if category.services.all %}
-                            <ul class="list-group list-group-flush">
-                                {% for service in category.services.all %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>
-                                            <strong>{{ service.name }}</strong>
-                                            {% if service.description %} — {{ service.description }}{% endif %}
-                                        </span>
-                                        <span class="badge bg-primary rounded-pill">{{ service.price }} BYN</span>
-                                    </li>
-                                {% empty %}
-                                    <li class="list-group-item">Нет услуг в этой категории.</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
+                <div class="col-md-4 mb-4">
+                    <article class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title h5">
+                                <i class="bi bi-folder text-primary"></i>
+                                {{ category.name }}
+                            </h3>
+                            {% if category.description %}
+                                <p class="card-text">{{ category.description|truncatewords:20 }}</p>
+                            {% endif %}
+                            <p class="text-muted mb-3">
+                                <small>
+                                    <i class="bi bi-list"></i>
+                                    {{ category.services.count }} услуг{{ category.services.count|pluralize:"а,и,и" }}
+                                </small>
+                            </p>
+                            
+                            <!-- Sample services -->
+                            {% if category.services.all %}
+                                <ul class="list-unstyled mb-3">
+                                    {% for service in category.services.all|slice:":3" %}
+                                        <li class="mb-1">
+                                            <i class="bi bi-check-circle text-success"></i>
+                                            <a href="{% url 'service_detail' service.id %}" class="text-decoration-none">
+                                                {{ service.name }}
+                                            </a>
+                                            <small class="text-muted">({{ service.price }} руб.)</small>
+                                        </li>
+                                    {% endfor %}
+                                    {% if category.services.count > 3 %}
+                                        <li class="text-muted">
+                                            <small>и еще {{ category.services.count|add:"-3" }}...</small>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'service_category' category.id %}" class="btn btn-outline-primary">
+                                Смотреть все услуги
+                            </a>
+                        </div>
+                    </article>
                 </div>
-            {% empty %}
-                <p>Нет категорий услуг.</p>
             {% endfor %}
         </div>
-    </main>
-    <div class="container my-5">
-        <h2 class="text-center mb-4">Шутка дня</h2>
-        {% if joke %}
-            <div class="alert alert-info text-center" role="alert">
-                <strong>{{ joke.setup }}</strong><br>
-                <em>{{ joke.punchline }}</em>
-            </div>
-        {% else %}
-            <p class="text-center text-muted">Шутка недоступна.</p>
-        {% endif %}
-    </div>
-
-    <div class="container my-5">
-        <h2 class="text-center mb-4">Цитата дня</h2>
-        {% if quote %}
-            <div class="alert alert-secondary text-center" role="alert">
-                <blockquote class="blockquote mb-0">
-                    <p>"{{ quote.body }}"</p>
-                    <footer class="blockquote-footer mt-2">{{ quote.author }}</footer>
-                </blockquote>
-            </div>
-        {% else %}
-            <p class="text-center text-muted">Цитата недоступна.</p>
-        {% endif %}
-    </div>
-
-
-
-    <footer class="bg-light py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">© 2025 Медицинский центр. Все права защищены.</p>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'service_list' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-grid"></i>
+                Все услуги
+            </a>
         </div>
-    </footer>
+    {% else %}
+        <div class="text-center">
+            <p class="text-muted">Каталог услуг в разработке.</p>
+        </div>
+    {% endif %}
+</section>
 
+<!-- Latest News -->
+{% if latest_news %}
+<section class="news-section mb-5">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2>
+                <i class="bi bi-newspaper text-primary"></i>
+                Последние новости
+            </h2>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'news_list' %}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-right"></i>
+                Все новости
+            </a>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for news in latest_news %}
+            <div class="col-md-4 mb-4">
+                <article class="card h-100">
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title h5">
+                            <a href="{{ news.get_absolute_url }}" class="text-decoration-none">
+                                {{ news.title }}
+                            </a>
+                        </h3>
+                        <p class="card-text">{{ news.summary }}</p>
+                        {% if news.category %}
+                            <p class="mb-2">
+                                <span class="badge bg-secondary">{{ news.category.name }}</span>
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar3"></i>
+                            {{ news.published_at|date:"j F Y" }}
+                            <i class="bi bi-person ms-2"></i>
+                            {{ news.author.get_full_name|default:news.author.username }}
+                        </small>
+                        <div class="mt-2">
+                            <a href="{{ news.get_absolute_url }}" class="btn btn-sm btn-primary">
+                                Читать далее
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Partners -->
+{% if partners %}
+    <section class="partners-section mb-5">
+        <h2 class="text-center mb-4">
+            <i class="bi bi-people text-primary"></i>
+            Наши партнеры
+        </h2>
+        
+        <div class="row justify-content-center">
+            {% for partner in partners %}
+                <div class="col-6 col-md-3 col-lg-2 mb-3">
+                    <a href="{{ partner.website }}" target="_blank" rel="noopener" class="text-decoration-none" title="{{ partner.name }}">
+                        <div class="partner-logo p-3 text-center border rounded">
+                            <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="img-fluid" style="max-height: 60px;">
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</body>
-</html>
+<!-- Features Section -->
+<section class="features-section mb-5">
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box p-4">
+                <i class="bi bi-award display-4 text-primary mb-3"></i>
+                <h3 class="h5">Квалифицированные врачи</h3>
+                <p class="text-muted">Наши специалисты имеют высшую категорию и богатый опыт работы</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box p-4">
+                <i class="bi bi-cpu display-4 text-primary mb-3"></i>
+                <h3 class="h5">Современное оборудование</h3>
+                <p class="text-muted">Используем новейшие технологии для точной диагностики и лечения</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box p-4">
+                <i class="bi bi-clock display-4 text-primary mb-3"></i>
+                <h3 class="h5">Удобное время работы</h3>
+                <p class="text-muted">Работаем 7 дней в неделю для вашего удобства</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fun Content Section -->
+{% if joke or quote %}
+<section class="fun-content mb-5">
+    <div class="row">
+        {% if joke %}
+        <div class="col-md-6 mb-4">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h3 class="card-title h5">
+                        <i class="bi bi-emoji-smile text-warning"></i>
+                        Шутка дня
+                    </h3>
+                    <p class="card-text"><strong>{{ joke.setup }}</strong></p>
+                    <p class="card-text"><em>{{ joke.punchline }}</em></p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if quote %}
+        <div class="col-md-6 mb-4">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h3 class="card-title h5">
+                        <i class="bi bi-quote text-info"></i>
+                        Цитата дня
+                    </h3>
+                    <blockquote class="blockquote mb-0">
+                        <p>"{{ quote.body }}"</p>
+                        <footer class="blockquote-footer mt-2">{{ quote.author }}</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="bg-light p-5 rounded">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h3>Запишитесь на прием прямо сейчас</h3>
+                <p class="mb-0">Получите квалифицированную медицинскую помощь от наших специалистов</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                {% if user.is_authenticated and user.profile.is_client %}
+                    <a href="{% url 'service_list' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-calendar-plus"></i>
+                        Записаться на прием
+                    </a>
+                {% else %}
+                    <a href="{% url 'client_register' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus"></i>
+                        Стать пациентом
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
