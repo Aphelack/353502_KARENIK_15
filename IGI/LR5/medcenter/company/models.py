@@ -51,7 +51,7 @@ class CompanyHistory(models.Model):
 class Partner(models.Model):
     """Company partners."""
     name = models.CharField(max_length=200, verbose_name='Название')
-    logo = models.ImageField(upload_to='partners/', verbose_name='Логотип')
+    logo = models.ImageField(upload_to='partners/', blank=True, null=True, verbose_name='Логотип')
     website = models.URLField(verbose_name='Веб-сайт')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     is_active = models.BooleanField(default=True, verbose_name='Активный')

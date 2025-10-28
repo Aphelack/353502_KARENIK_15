@@ -14,11 +14,16 @@ def client_detail(request, pk):
 
 @login_required
 def client_cabinet(request):
-    client = getattr(request.user, 'clientprofile', None)
+    client = getattr(request.user, 'client_profile', None)
     if not client:
         return render(request, 'no_access.html')
     appointments = Appointment.objects.filter(client=client).order_by('appointment_date')
-    return render(request, 'clients/client_cabinet.html', {'appointments': appointments})
+    user_profile = getattr(request.user, 'profile', None)
+    return render(request, 'clients/client_cabinet.html', {
+        'appointments': appointments,
+        'client': client,
+        'user_profile': user_profile,
+    })
 
 def service_list(request):
     categories = ServiceCategory.objects.all()
@@ -43,7 +48,7 @@ def conform_order(request, doctor_id, service_id, date_str, hour_str):
     
     if request.method == 'POST':
         Appointment.objects.create(
-            client=request.user.clientprofile,
+            client=request.user.client_profile,
             doctor=doctor,
             service=service,
             appointment_date=appointment_date
@@ -101,7 +106,7 @@ def order_service(request, service_id):
 
 @login_required
 def delete_appointment(request, appointment_id):
-    appointment = get_object_or_404(Appointment, pk=appointment_id, client=request.user.clientprofile)
+    appointment = get_object_or_404(Appointment, pk=appointment_id, client=request.user.client_profile)
     if request.method == 'POST':
         appointment.delete()
         messages.success(request, 'Appointment successfully deleted!')
@@ -110,7 +115,7 @@ def delete_appointment(request, appointment_id):
 
 @login_required
 def edit_appointment(request, appointment_id):
-    appointment = get_object_or_404(Appointment, pk=appointment_id, client=request.user.clientprofile)
+    appointment = get_object_or_404(Appointment, pk=appointment_id, client=request.user.client_profile)
     service = appointment.service
     doctors = DoctorProfile.objects.filter(services=service)
     

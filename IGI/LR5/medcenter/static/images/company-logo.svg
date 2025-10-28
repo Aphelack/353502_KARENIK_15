@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#ffffff"/>
+  <circle cx="200" cy="200" r="150" fill="#0d6efd"/>
+  <text x="200" y="190" font-family="Arial, sans-serif" font-size="80" fill="white" text-anchor="middle" font-weight="bold">MC</text>
+  <text x="200" y="230" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">Медицинский центр</text>
+  <circle cx="200" cy="260" r="5" fill="white"/>
+  <rect x="195" y="268" width="10" height="25" fill="white"/>
+  <rect x="175" y="285" width="50" height="10" fill="white"/>
+</svg>

@@ -96,7 +96,7 @@ class Banner(models.Model):
     """Advertising banners for the homepage."""
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     subtitle = models.CharField(max_length=300, blank=True, null=True, verbose_name='Подзаголовок')
-    image = models.ImageField(upload_to='banners/', verbose_name='Изображение')
+    image = models.ImageField(upload_to='banners/', blank=True, null=True, verbose_name='Изображение')
     link_url = models.URLField(blank=True, null=True, verbose_name='Ссылка')
     link_text = models.CharField(max_length=100, blank=True, null=True, verbose_name='Текст ссылки')
     is_active = models.BooleanField(default=True, verbose_name='Активный')

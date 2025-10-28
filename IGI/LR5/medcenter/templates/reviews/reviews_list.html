@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Отзывы - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>Отзывы пациентов</h1>
+
+<div style="display: grid; grid-template-columns: 3fr 1fr; gap: 30px; margin-top: 30px;">
+    <div>
+        <!-- Add review button -->
+        {% if user.is_authenticated %}
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'add_review' %}" style="display: inline-block; background: #007bff; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none;">
+                Оставить отзыв
+            </a>
+        </div>
+        {% else %}
+        <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #ddd;">
+            <p>Чтобы оставить отзыв, пожалуйста, <a href="{% url 'account_login' %}">войдите</a> или <a href="{% url 'client_register' %}">зарегистрируйтесь</a>.</p>
+        </div>
+        {% endif %}
+
+        <!-- Reviews list -->
+        {% if page_obj %}
+            {% for review in page_obj %}
+            <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h3>{{ review.title|default:"Отзыв" }}</h3>
+                        <p><strong>{{ review.user.get_full_name|default:review.user.username }}</strong></p>
+                    </div>
+                    <div style="font-size: 1.5em; color: #ffc107;">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                        <span style="font-size: 0.6em; color: #666;">({{ review.rating }}/5)</span>
+                    </div>
+                </div>
+
+                {% if review.service %}
+                <p><small>Услуга: <a href="{% url 'service_detail' review.service.pk %}">{{ review.service.name }}</a></small></p>
+                {% endif %}
+
+                {% if review.doctor %}
+                <p><small>Врач: {{ review.doctor.full_name }}</small></p>
+                {% endif %}
+
+                <div style="margin: 15px 0;">
+                    {{ review.text|linebreaks }}
+                </div>
+
+                <p><small>Дата: {{ review.created_at|date:"d.m.Y" }}</small></p>
+
+                {% if review.is_recommended %}
+                <p style="color: #28a745;"><small>⭐ Рекомендуемый отзыв</small></p>
+                {% endif %}
+
+                <p><a href="{% url 'review_detail' review.pk %}">Читать полностью →</a></p>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div style="margin-top: 30px; text-align: center;">
+                {% if page_obj.has_previous %}
+                <a href="?page=1{% if current_rating %}&rating={{ current_rating }}{% endif %}{% if current_service %}&service={{ current_service }}{% endif %}{% if current_doctor %}&doctor={{ current_doctor }}{% endif %}">Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if current_rating %}&rating={{ current_rating }}{% endif %}{% if current_service %}&service={{ current_service }}{% endif %}{% if current_doctor %}&doctor={{ current_doctor }}{% endif %}">Предыдущая</a>
+                {% endif %}
+
+                <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if current_rating %}&rating={{ current_rating }}{% endif %}{% if current_service %}&service={{ current_service }}{% endif %}{% if current_doctor %}&doctor={{ current_doctor }}{% endif %}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if current_rating %}&rating={{ current_rating }}{% endif %}{% if current_service %}&service={{ current_service }}{% endif %}{% if current_doctor %}&doctor={{ current_doctor }}{% endif %}">Последняя</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <p>Отзывы пока отсутствуют. Будьте первым!</p>
+        {% endif %}
+    </div>
+
+    <!-- Sidebar with filters and statistics -->
+    <div>
+        <!-- Statistics -->
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
+            <h3>Статистика</h3>
+            {% if stats.total_reviews %}
+            <p><strong>Всего отзывов:</strong> {{ stats.total_reviews }}</p>
+            <p><strong>Средняя оценка:</strong> {{ stats.avg_rating|floatformat:1 }}/5</p>
+
+            <div style="margin-top: 15px;">
+                <h4>Распределение оценок:</h4>
+                {% for rating, count in rating_distribution.items %}
+                <div style="margin: 5px 0;">
+                    <span>{{ rating }} ★</span>
+                    <span style="display: inline-block; width: 100px; background: #f0f0f0; height: 10px; margin: 0 10px;">
+                        <span style="display: block; width: {% widthratio count stats.total_reviews 100 %}%; background: #ffc107; height: 100%;"></span>
+                    </span>
+                    <span>{{ count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>Статистика пока недоступна</p>
+            {% endif %}
+        </div>
+
+        <!-- Filter by rating -->
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
+            <h3>Фильтр по оценке</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="{% url 'reviews_list' %}">Все оценки</a></li>
+                {% for i in "54321" %}
+                <li><a href="?rating={{ i }}">{{ i }} ★</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Filter by service -->
+        {% if services %}
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
+            <h3>Фильтр по услуге</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="{% url 'reviews_list' %}">Все услуги</a></li>
+                {% for service in services %}
+                <li><a href="?service={{ service.id }}">{{ service.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Filter by doctor -->
+        {% if doctors %}
+        <div style="border: 1px solid #ddd; padding: 15px;">
+            <h3>Фильтр по врачу</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="{% url 'reviews_list' %}">Все врачи</a></li>
+                {% for doctor in doctors %}
+                <li><a href="?doctor={{ doctor.id }}">{{ doctor.full_name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

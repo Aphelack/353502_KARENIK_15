@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}История компании - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>История компании</h1>
+
+<div>
+    <a href="{% url 'company_info' %}">← Вернуться к информации о компании</a>
+</div>
+
+{% if history %}
+    <div style="margin-top: 30px;">
+        {% for item in history %}
+        <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: {% if item.image %}1fr 2fr{% else %}1fr{% endif %}; gap: 20px;">
+                {% if item.image %}
+                <div>
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" style="width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                {% endif %}
+                <div>
+                    <h2 style="color: #007bff;">{{ item.year }}</h2>
+                    <h3>{{ item.title }}</h3>
+                    <div>{{ item.description|linebreaks }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>История компании пока не добавлена.</p>
+{% endif %}
+{% endblock %}

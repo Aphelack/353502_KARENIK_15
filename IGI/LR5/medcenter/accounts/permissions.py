@@ -7,6 +7,9 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def role_required(*roles):
@@ -18,14 +21,24 @@ def role_required(*roles):
         @wraps(view_func)
         @login_required
         def _wrapped_view(request, *args, **kwargs):
+            logger.info(f"Role check for user {request.user.username}")
+            logger.info(f"Has profile: {hasattr(request.user, 'profile')}")
+            
             if not hasattr(request.user, 'profile'):
+                logger.error(f"User {request.user.username} has no profile")
                 messages.error(request, 'Профиль пользователя не найден.')
                 return redirect('account_login')
             
-            if request.user.profile.role not in roles:
+            user_role = request.user.profile.role
+            logger.info(f"User role: {user_role}, Required roles: {roles}")
+            logger.info(f"Role check result: {user_role in roles}")
+            
+            if user_role not in roles:
+                logger.warning(f"Access denied for user {request.user.username} with role {user_role}")
                 messages.error(request, 'У вас нет доступа к этой странице.')
                 return redirect('no_access')
             
+            logger.info(f"Access granted for user {request.user.username}")
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     return decorator

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Часто задаваемые вопросы - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>Часто задаваемые вопросы</h1>
+
+<div>
+    <!-- Search form -->
+    <form method="get" action="{% url 'faq_list' %}">
+        <input type="text" name="search" placeholder="Поиск по вопросам..." value="{{ search_query|default:'' }}">
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+<div>
+    <!-- Category filter -->
+    <h3>Категории:</h3>
+    <ul>
+        <li><a href="{% url 'faq_list' %}">Все категории</a></li>
+        {% for category in categories %}
+        <li>
+            <a href="{% url 'faq_list' %}?category={{ category.id }}">
+                {{ category.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div>
+    {% if search_query %}
+    <p>Результаты поиска для: <strong>{{ search_query }}</strong></p>
+    {% endif %}
+
+    {% if faqs %}
+        {% for faq in faqs %}
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px;">
+            <h3>{{ faq.question }}</h3>
+            {% if faq.category %}
+            <p><small>Категория: {{ faq.category.name }}</small></p>
+            {% endif %}
+            <div>
+                {{ faq.answer|linebreaks }}
+            </div>
+            <p><small>Добавлено: {{ faq.created_at|date:"d.m.Y" }}</small></p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Вопросы не найдены.</p>
+    {% endif %}
+</div>
+{% endblock %}

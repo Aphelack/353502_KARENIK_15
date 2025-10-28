@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ review.title|default:"Отзыв" }} - Отзывы{% endblock %}
+
+{% block content %}
+<div>
+    <a href="{% url 'reviews_list' %}">← Вернуться к списку отзывов</a>
+</div>
+
+<article style="margin-top: 20px;">
+    <div style="border: 1px solid #ddd; padding: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+            <div>
+                <h1>{{ review.title|default:"Отзыв" }}</h1>
+                <p style="font-size: 1.2em;"><strong>{{ review.user.get_full_name|default:review.user.username }}</strong></p>
+            </div>
+            <div style="font-size: 2em; color: #ffc107;">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+                <div style="font-size: 0.5em; color: #666;">{{ review.rating }}/5</div>
+            </div>
+        </div>
+
+        {% if review.service %}
+        <div style="margin: 15px 0; padding: 15px; background: #f8f9fa;">
+            <p><strong>Услуга:</strong> <a href="{% url 'service_detail' review.service.pk %}">{{ review.service.name }}</a></p>
+        </div>
+        {% endif %}
+
+        {% if review.doctor %}
+        <div style="margin: 15px 0; padding: 15px; background: #f8f9fa;">
+            <p><strong>Врач:</strong> {{ review.doctor.full_name }}</p>
+        </div>
+        {% endif %}
+
+        <div style="margin: 30px 0; padding: 20px; border-left: 4px solid #007bff; background: #f8f9fa;">
+            {{ review.text|linebreaks }}
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+            <p><strong>Дата публикации:</strong> {{ review.created_at|date:"d.m.Y H:i" }}</p>
+            {% if review.updated_at != review.created_at %}
+            <p><strong>Обновлено:</strong> {{ review.updated_at|date:"d.m.Y H:i" }}</p>
+            {% endif %}
+        </div>
+
+        {% if review.is_recommended %}
+        <div style="margin-top: 20px; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; color: #155724;">
+            <p><strong>⭐ Рекомендуемый отзыв</strong></p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3>Оставить свой отзыв</h3>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'add_review' %}">Написать отзыв →</a></p>
+        {% else %}
+        <p>Чтобы оставить отзыв, пожалуйста, <a href="{% url 'account_login' %}">войдите</a> или <a href="{% url 'client_register' %}">зарегистрируйтесь</a>.</p>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

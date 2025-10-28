@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vacancy.title }} - Вакансии{% endblock %}
+
+{% block content %}
+<div>
+    <a href="{% url 'vacancies' %}">← Вернуться к списку вакансий</a>
+</div>
+
+<article style="margin-top: 20px;">
+    <h1>{{ vacancy.title }}</h1>
+    
+    {% if vacancy.salary_min or vacancy.salary_max %}
+    <p style="font-size: 1.3em; color: #28a745;">
+        <strong>Зарплата:</strong>
+        {% if vacancy.salary_min and vacancy.salary_max %}
+            {{ vacancy.salary_min }} - {{ vacancy.salary_max }} BYN
+        {% elif vacancy.salary_min %}
+            от {{ vacancy.salary_min }} BYN
+        {% else %}
+            до {{ vacancy.salary_max }} BYN
+        {% endif %}
+    </p>
+    {% endif %}
+    
+    <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+        <h2>Описание вакансии</h2>
+        {{ vacancy.description|linebreaks }}
+    </div>
+    
+    <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+        <h2>Требования</h2>
+        {{ vacancy.requirements|linebreaks }}
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 20px; margin: 20px 0; border-left: 4px solid #007bff;">
+        <h2>Как откликнуться</h2>
+        <p>Пожалуйста, отправьте ваше резюме на указанные контакты:</p>
+        <p><strong>Email:</strong> <a href="mailto:{{ vacancy.contact_email }}">{{ vacancy.contact_email }}</a></p>
+        {% if vacancy.contact_phone %}
+        <p><strong>Телефон:</strong> <a href="tel:{{ vacancy.contact_phone }}">{{ vacancy.contact_phone }}</a></p>
+        {% endif %}
+    </div>
+    
+    <p><small>Вакансия опубликована: {{ vacancy.created_at|date:"d.m.Y H:i" }}</small></p>
+</article>
+{% endblock %}

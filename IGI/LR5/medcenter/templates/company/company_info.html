@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}О компании - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>О компании</h1>
+
+{% if company_info %}
+<div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+    {% if company_info.logo %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="{{ company_info.logo.url }}" alt="{{ company_info.name }}" style="max-width: 300px; height: auto;">
+    </div>
+    {% endif %}
+
+    <h2>{{ company_info.name }}</h2>
+    
+    <div style="margin: 20px 0;">
+        {{ company_info.description|linebreaks }}
+    </div>
+
+    {% if company_info.video_url %}
+    <div style="margin: 20px 0;">
+        <h3>Видео о нас</h3>
+        <p><a href="{{ company_info.video_url }}" target="_blank">Посмотреть видео</a></p>
+    </div>
+    {% endif %}
+
+    <div style="margin: 30px 0;">
+        <h3>Контактная информация</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Адрес:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ company_info.address|linebreaks }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Телефон:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><a href="tel:{{ company_info.phone }}">{{ company_info.phone }}</a></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><a href="mailto:{{ company_info.email }}">{{ company_info.email }}</a></td>
+            </tr>
+            {% if company_info.website %}
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Веб-сайт:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><a href="{{ company_info.website }}" target="_blank">{{ company_info.website }}</a></td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    <div style="margin: 30px 0;">
+        <h3>Реквизиты</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Регистрационный номер:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ company_info.registration_number }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Налоговый номер:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ company_info.tax_number }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Банковский счет:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ company_info.bank_account }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Название банка:</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ company_info.bank_name }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin: 30px 0; padding: 20px; background: #f8f9fa; border-left: 4px solid #007bff;">
+        <h3>Сертификация</h3>
+        {{ company_info.certificate_text|linebreaks }}
+    </div>
+
+    <div style="margin: 30px 0;">
+        <h3>Полезные ссылки</h3>
+        <ul>
+            <li><a href="{% url 'company_history' %}">История компании</a></li>
+            <li><a href="{% url 'contacts' %}">Наши сотрудники</a></li>
+            <li><a href="{% url 'vacancies' %}">Вакансии</a></li>
+            <li><a href="{% url 'service_list' %}">Наши услуги</a></li>
+        </ul>
+    </div>
+</div>
+{% else %}
+<p>Информация о компании пока не добавлена.</p>
+{% endif %}
+{% endblock %}
