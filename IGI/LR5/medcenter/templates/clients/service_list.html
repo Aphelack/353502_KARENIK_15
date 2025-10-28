@@ -1,96 +1,38 @@
 {% extends "base.html" %}
+
+{% block title %}Категории услуг - Медицинский центр{% endblock %}
+
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-body {
-    background-color: #181a1b;
-    color: #f1f1f1;
-}
-.accordion-item {
-    background: #23272b;
-    border-radius: 18px !important;
-    margin-bottom: 1rem;
-    border: none;
-    box-shadow: 0 2px 8px #0002;
-}
-.accordion-button {
-    background: #23272b;
-    color: #f1f1f1;
-    font-weight: bold;
-    font-size: 2rem;
-    border-radius: 18px !important;
-    transition: background 0.2s;
-}
-.accordion-button:not(.collapsed) {
-    background: #343a40;
-    color: #ffe082;
-}
-.accordion-body {
-    background: #23272b;
-    border-radius: 0 0 18px 18px;
-}
-.list-group-item {
-    background: #23272b;
-    color: #f1f1f1;
-    border: none;
-    border-radius: 12px !important;
-    margin-bottom: 0.5rem;
-}
-.btn-primary {
-    background: #ffe082;
-    color: #23272b;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.2s;
-}
-.btn-primary:hover {
-    background: #ffd54f;
-    color: #181a1b;
-}
-</style>
-
-<div class="container mt-5">
-    <h2 class="mb-4" style="color:#ffe082;">Категории услуг</h2>
-    <div class="accordion" id="serviceCategories">
-        {% for category in categories %}
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="heading{{ category.id }}">
-                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ category.id }}" aria-expanded="false" aria-controls="collapse{{ category.id }}">
-                    {{ category.name }}
-                </button>
-            </h2>
-            <div id="collapse{{ category.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ category.id }}" data-bs-parent="#serviceCategories">
-                <div class="accordion-body">
-                    {% with services=category.services.all %}
-                        {% if services %}
-                            <ul class="list-group">
-                                {% for service in services %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>
-                                        <strong>{{ service.name }}</strong> — {{ service.price }} BYN
-                                    </span>
-                                    <a href="{% url 'order_service' service.id %}" class="btn btn-primary btn-sm">Заказать</a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p>Нет услуг в этой категории.</p>
-                        {% endif %}
-                    {% endwith %}
-                </div>
-            </div>
-        </div>
-        <div class="container mt-4">
+<section>
+    <h2>Категории услуг</h2>
+    
+    {% for category in categories %}
+    <article class="card">
+        <h3>{{ category.name }}</h3>
         
-    </div>
-        {% endfor %}
-    </div>
-</div>
-<a href="{% url 'client_cabinet' %}" class="btn btn-primary">
-    ← Назад в кабинет
-</a>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        {% with services=category.services.all %}
+            {% if services %}
+                <ul>
+                    {% for service in services %}
+                    <li>
+                        <strong>{{ service.name }}</strong> — {{ service.price }} <abbr title="Белорусский рубль">BYN</abbr>
+                        <nav>
+                            <a href="{% url 'order_service' service.id %}" class="btn">Записаться</a>
+                        </nav>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Нет услуг в этой категории.</p>
+            {% endif %}
+        {% endwith %}
+    </article>
+    {% endfor %}
+    
+    <nav>
+        <a href="{% url 'client_cabinet' %}" class="btn">
+            ← Назад в кабинет
+        </a>
+    </nav>
+</section>
 {% endblock %}

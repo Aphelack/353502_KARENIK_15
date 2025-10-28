@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 from accounts.permissions import client_required
 from .models import Order, OrderItem
 from clients.models import Cart, CartItem
@@ -110,10 +111,12 @@ def checkout(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         promo_form = PromoCodeForm(request.POST)
+        payment_method = request.POST.get('payment_method', 'cash')
         
         if form.is_valid():
             order = form.save(commit=False)
             order.user = request.user
+            order.payment_method = payment_method
             
             # Apply promo code if provided
             if promo_form.is_valid() and promo_form.cleaned_data['code']:
@@ -131,22 +134,43 @@ def checkout(request):
             
             order.save()
             
-            # Create order items from cart
+            # Create order items from cart and appointments immediately
+            from appointments.models import Appointment
+            client_profile = request.user.client_profile
+            
             for cart_item in cart.items.all():
                 OrderItem.objects.create(
                     order=order,
                     service=cart_item.service,
                     quantity=cart_item.quantity,
-                    price=cart_item.service.price
+                    price=cart_item.service.price,
+                    doctor=cart_item.doctor,
+                    appointment_time=cart_item.appointment_time
                 )
+                
+                # Create appointment immediately (for all payment methods including cash)
+                if cart_item.doctor and cart_item.appointment_time:
+                    Appointment.objects.create(
+                        client=client_profile,
+                        doctor=cart_item.doctor,
+                        service=cart_item.service,
+                        appointment_date=cart_item.appointment_time,
+                        notes=order.notes or ''
+                    )
             
             # Calculate total
             order.calculate_total()
             
+            # Mark order as paid (since appointment is confirmed)
+            order.status = 'paid'
+            order.is_paid = True
+            order.paid_at = timezone.now()
+            order.save()
+            
             # Clear cart
             cart.items.all().delete()
             
-            messages.success(request, f'Заказ #{order.id} успешно создан')
+            messages.success(request, f'Заказ #{order.id} успешно оформлен! Ваши записи добавлены в личный кабинет.')
             return redirect('order_success', order_id=order.id)
     else:
         form = OrderForm()
@@ -201,10 +225,25 @@ def payment(request, order_id):
             order.payment_method = payment_method
             order.status = 'paid'
             from django.utils import timezone
+            from appointments.models import Appointment
             order.paid_at = timezone.now()
             order.save()
             
-            messages.success(request, 'Оплата прошла успешно!')
+            # Create appointments for each order item with doctor and time
+            for order_item in order.items.all():
+                if order_item.doctor and order_item.appointment_time:
+                    # Check if user has client_profile
+                    client_profile = getattr(request.user, 'client_profile', None)
+                    if client_profile:
+                        Appointment.objects.create(
+                            client=client_profile,
+                            doctor=order_item.doctor,
+                            service=order_item.service,
+                            appointment_date=order_item.appointment_time,
+                            notes=f'Заказ #{order.id}'
+                        )
+            
+            messages.success(request, 'Оплата прошла успешно! Записи на прием созданы.')
             return redirect('order_detail', order_id=order.id)
     
     context = {

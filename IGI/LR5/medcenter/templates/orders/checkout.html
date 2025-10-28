@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Оформление заказа - Медицинский центр{% endblock %}
+
+{% block meta_description %}Оформление заказа медицинских услуг{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Оформление заказа</h2>
+    
+    <article class="card">
+        <h3>Услуги в заказе</h3>
+        {% for item in cart.items.all %}
+        <dl>
+            <dt>Услуга:</dt>
+            <dd>{{ item.service.name }} × {{ item.quantity }}</dd>
+            
+            {% if item.doctor %}
+            <dt>Врач:</dt>
+            <dd>{{ item.doctor.full_name }}</dd>
+            {% endif %}
+            
+            {% if item.appointment_time %}
+            <dt>Время:</dt>
+            <dd><time datetime="{{ item.appointment_time|date:'c' }}">{{ item.appointment_time|date:"d.m.Y H:i" }}</time></dd>
+            {% endif %}
+            
+            <dt>Стоимость:</dt>
+            <dd>{{ item.total_price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+        </dl>
+        {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+        
+        <dl>
+            <dt><strong>Итого к оплате:</strong></dt>
+            <dd><strong>{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></strong></dd>
+        </dl>
+    </article>
+    
+    <article class="card">
+        <h3>Данные заказа</h3>
+        <form method="post">
+            {% csrf_token %}
+            
+            <fieldset>
+                <legend>Способ оплаты</legend>
+                
+                <div>
+                    <input type="radio" id="payment_cash" name="payment_method" value="cash" checked>
+                    <label for="payment_cash">Наличные</label>
+                </div>
+                
+                <div>
+                    <input type="radio" id="payment_card" name="payment_method" value="card">
+                    <label for="payment_card">Банковская карта</label>
+                </div>
+                
+                <div>
+                    <input type="radio" id="payment_transfer" name="payment_method" value="bank_transfer">
+                    <label for="payment_transfer">Банковский перевод</label>
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Дополнительно</legend>
+                
+                <label for="id_notes">Примечания</label>
+                <textarea id="id_notes" name="notes" rows="3" placeholder="Дополнительная информация"></textarea>
+                
+                <label for="id_promo_code">Промокод</label>
+                <input type="text" id="id_promo_code" name="code" placeholder="Введите промокод">
+            </fieldset>
+            
+            <nav>
+                <a href="{% url 'cart' %}" class="btn">Назад</a>
+                <button type="submit" class="btn">Подтвердить заказ</button>
+            </nav>
+        </form>
+    </article>
+</section>
+{% endblock %}

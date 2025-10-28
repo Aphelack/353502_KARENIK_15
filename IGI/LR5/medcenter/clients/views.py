@@ -19,6 +19,7 @@ def client_cabinet(request):
         return render(request, 'no_access.html')
     appointments = Appointment.objects.filter(client=client).order_by('appointment_date')
     user_profile = getattr(request.user, 'profile', None)
+    
     return render(request, 'clients/client_cabinet.html', {
         'appointments': appointments,
         'client': client,
@@ -45,16 +46,27 @@ def conform_order(request, doctor_id, service_id, date_str, hour_str):
     service = get_object_or_404(Service, pk=service_id)
     # hour_str now in 'HH:MM' format
     appointment_date = datetime.datetime.strptime(f"{date_str} {hour_str}", "%Y-%m-%d %H:%M")
+    appointment_date = timezone.make_aware(appointment_date)
     
     if request.method == 'POST':
-        Appointment.objects.create(
-            client=request.user.client_profile,
-            doctor=doctor,
+        # Import Cart and CartItem models
+        from clients.models import Cart, CartItem
+        
+        # Get or create cart for the user
+        cart, created = Cart.objects.get_or_create(client=request.user)
+        
+        # Create a new cart item with doctor and appointment time
+        # Since we removed unique_together, we can have multiple items with same service but different times
+        cart_item = CartItem.objects.create(
+            cart=cart,
             service=service,
-            appointment_date=appointment_date
+            quantity=1,
+            doctor=doctor,
+            appointment_time=appointment_date
         )
-        messages.success(request, 'Appointment successfully created!')
-        return render(request, 'clients/order_success.html', {'service': service})
+        
+        messages.success(request, f'Услуга "{service.name}" добавлена в корзину! Врач: {doctor.full_name}, Время: {appointment_date.strftime("%d.%m.%Y %H:%M")}')
+        return redirect('cart')
     
     return render(request, 'clients/conform_order.html', {
         'doctor': doctor,
@@ -66,42 +78,60 @@ def conform_order(request, doctor_id, service_id, date_str, hour_str):
 def order_service(request, service_id):
     service = get_object_or_404(Service, pk=service_id)
     doctors = DoctorProfile.objects.filter(services=service)
+    
+    if not doctors.exists():
+        messages.error(request, 'Нет доступных врачей для этой услуги')
+        return redirect('service_list')
+    
     today = timezone.localdate()
-    days = [today + datetime.timedelta(days=i) for i in range(7) if (today + datetime.timedelta(days=i)).weekday() < 5]
-    hours = [9,10,11,12,13,14,15,16]
+    # Generate next 7 weekdays (excluding weekends)
+    days = []
+    current_day = today
+    while len(days) < 7:
+        if current_day.weekday() < 5:  # Monday=0, Friday=4
+            days.append(current_day)
+        current_day += datetime.timedelta(days=1)
+    
     slots = []
     for day in days:
-        start_time = datetime.datetime.combine(day, datetime.time(9, 0))
-        end_time = datetime.datetime.combine(day, datetime.time(17, 0))
+        # Create timezone-aware datetime objects
+        start_time = timezone.make_aware(datetime.datetime.combine(day, datetime.time(9, 0)))
+        end_time = timezone.make_aware(datetime.datetime.combine(day, datetime.time(17, 0)))
         current_time = start_time
+        
         while current_time + service.duration <= end_time:
             slot_time = current_time
-            busy = Appointment.objects.filter(
-                appointment_date=slot_time,
-                doctor__in=doctors
-            ).count()
-            free_doctor = doctors.exclude(appointments__appointment_date=slot_time).first()
+            
+            # Find doctors available for this slot (not having an appointment at this time)
+            available_doctors = doctors.exclude(
+                appointments__appointment_date=slot_time
+            )
+            
+            free_doctor = available_doctors.first()
+            is_busy = not available_doctors.exists()
+            
             slot = {
                 'date': day,
                 'time': slot_time.time(),
                 'start': slot_time.time(),
                 'end': (slot_time + service.duration).time(),
-                'busy': busy == doctors.count(),
+                'busy': is_busy,
                 'free_doctor': free_doctor.id if free_doctor else None,
                 'display': f"{slot_time.time().strftime('%H:%M')} - {(slot_time + service.duration).time().strftime('%H:%M')}",
             }
             slots.append(slot)
             current_time += service.duration
+    
     if request.method == 'POST':
         slot = request.POST.get('slot')
         if slot:
             date_str, hour_str, doctor_id = slot.split('|')
             return redirect('confirm_order', doctor_id=doctor_id, service_id=service_id, date_str=date_str, hour_str=hour_str)
+    
     return render(request, 'clients/order_service.html', {
         'service': service,
         'slots': slots,
         'days': days,
-        'hours': hours,
     })
 
 @login_required

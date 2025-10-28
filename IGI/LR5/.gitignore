@@ -6,3 +6,7 @@ djungo_venv/
 *.pyo
 
 .venv/
+
+*.md
+
+medcenter/db.sqlite3

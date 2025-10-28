@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ оформлен - Медицинский центр{% endblock %}
+
+{% block content %}
+<section>
+    <article class="card">
+        <h2>✓ Запись успешно оформлена!</h2>
+        <p>Ваши записи подтверждены и добавлены в личный кабинет.</p>
+        
+        <dl>
+            <dt>Номер заказа:</dt>
+            <dd><strong>#{{ order.id }}</strong></dd>
+            
+            <dt>Способ оплаты:</dt>
+            <dd>
+                {% if order.payment_method == 'cash' %}
+                    Наличные
+                {% elif order.payment_method == 'card' %}
+                    Банковская карта
+                {% elif order.payment_method == 'bank_transfer' %}
+                    Банковский перевод
+                {% endif %}
+            </dd>
+            
+            <dt>Дата создания:</dt>
+            <dd><time datetime="{{ order.created_at|date:'c' }}">{{ order.created_at|date:"d.m.Y H:i" }}</time></dd>
+        </dl>
+        
+        <nav>
+            <a href="{% url 'client_cabinet' %}" class="btn">
+                Перейти в личный кабинет
+            </a>
+            <a href="{% url 'service_list' %}" class="btn">
+                Записаться ещё
+            </a>
+        </nav>
+    </article>
+</section>
+{% endblock %}

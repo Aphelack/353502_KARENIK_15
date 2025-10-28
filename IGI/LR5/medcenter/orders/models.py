@@ -76,11 +76,14 @@ class OrderItem(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name='Услуга')
     quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
+    doctor = models.ForeignKey('doctors.DoctorProfile', on_delete=models.SET_NULL, 
+                              blank=True, null=True, verbose_name='Врач')
+    appointment_time = models.DateTimeField(blank=True, null=True, 
+                                          verbose_name='Время приема')
     
     class Meta:
         verbose_name = 'Элемент заказа'
         verbose_name_plural = 'Элементы заказа'
-        unique_together = ['order', 'service']
     
     def __str__(self):
         return f"{self.service.name} x{self.quantity}"

@@ -106,6 +106,12 @@
         section { margin: 40px 0; }
         section h2 { font-size: 2rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #007bff; color: #2c3e50; }
         
+        /* Definition lists - inline style */
+        dl dt { font-weight: bold; display: inline; }
+        dl dt::after { content: " "; }
+        dl dd { display: inline; margin: 0; }
+        dl dd::after { content: ""; display: block; margin-bottom: 8px; }
+        
         /* Partners */
         .partners { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; }
         .partners a { padding: 15px; background: white; border: 1px solid #dee2e6; border-radius: 8px; transition: transform 0.2s; }

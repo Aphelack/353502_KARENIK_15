@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.name }} - Медицинский центр{% endblock %}
+
+{% block meta_description %}{{ service.description|truncatewords:20 }}{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>{{ service.name }}</h1>
+        <p><strong>Категория:</strong> 
+            <a href="{% url 'service_category' service.category.id %}">{{ service.category.name }}</a>
+        </p>
+    </header>
+    
+    <section class="card">
+        <h2>Описание услуги</h2>
+        <p>{{ service.description }}</p>
+        
+        <dl>
+            <dt>Продолжительность:</dt>
+            <dd>{{ service.duration }}</dd>
+            
+            <dt>Цена:</dt>
+            <dd><strong>{{ service.price }} <abbr title="Белорусский рубль">BYN</abbr></strong></dd>
+        </dl>
+        
+        <nav>
+            <a href="{% url 'order_service' service.id %}" class="btn">
+                Записаться на прием
+            </a>
+            <a href="{% url 'service_list' %}" class="btn">
+                ← Вернуться к списку услуг
+            </a>
+        </nav>
+    </section>
+    
+    {% if related_services %}
+    <section>
+        <h2>Похожие услуги</h2>
+        <div class="grid-3">
+            {% for related in related_services %}
+            <div class="card">
+                <h3>{{ related.name }}</h3>
+                <p>{{ related.description|truncatewords:15 }}</p>
+                <dl>
+                    <dt>Цена:</dt>
+                    <dd>{{ related.price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+                </dl>
+                <a href="{% url 'service_detail' related.id %}" class="btn">Подробнее</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</article>
+{% endblock %}

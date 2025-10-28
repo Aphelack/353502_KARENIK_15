@@ -4,10 +4,12 @@
 
 {% block content %}
 <section>
-    <h2>Личный кабинет</h2>
+    <h2>Кабинет клиента</h2>
     
     <article class="card">
         <h3>Личная информация</h3>
+        <p>Добро пожаловать, {{ user.username }}!</p>
+        
         <dl>
             <dt>Имя:</dt>
             <dd>{{ user.first_name|default:"-" }}</dd>
@@ -15,8 +17,8 @@
             <dt>Фамилия:</dt>
             <dd>{{ user.last_name|default:"-" }}</dd>
             
-            <dt>Email:</dt>
-            <dd>{{ user.email }}</dd>
+            <dt>Адрес:</dt>
+            <dd>{{ user_profile.address|default:"-" }}</dd>
             
             <dt>Дата рождения:</dt>
             <dd>
@@ -27,12 +29,18 @@
                 {% endif %}
             </dd>
             
-            <dt>Адрес:</dt>
-            <dd>{{ user_profile.address|default:"-" }}</dd>
+            <dt>Логин:</dt>
+            <dd>{{ user.username }}</dd>
+            
+            <dt>Email:</dt>
+            <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
             
             {% if client %}
             <dt>Номер медицинской карты:</dt>
             <dd>{{ client.medical_card_number|default:"-" }}</dd>
+            
+            <dt>Предпочитаемый язык:</dt>
+            <dd>{{ client.preferred_language }}</dd>
             {% endif %}
         </dl>
     </article>
@@ -42,17 +50,20 @@
         
         {% if messages %}
             {% for message in messages %}
-                <div role="alert">{{ message }}</div>
+                <div role="alert">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
         
-        {% if appointments %}
         <table>
+            <caption>Список записей на прием к врачам</caption>
             <thead>
                 <tr>
                     <th scope="col" id="date">Дата и время</th>
                     <th scope="col" id="doctor">Врач</th>
                     <th scope="col" id="service">Услуга</th>
+                    <th scope="col" id="notes">Заметки</th>
                     <th scope="col" id="actions">Действия</th>
                 </tr>
             </thead>
@@ -64,27 +75,43 @@
                     </td>
                     <td headers="doctor">
                         {% if app.doctor %}
-                            <a href="{% url 'doctor_detail' app.doctor.id %}">{{ app.doctor.full_name }}</a>
+                            <a href="{% url 'doctor_detail' app.doctor.id %}">
+                                {{ app.doctor.full_name }}
+                            </a>
                         {% else %}
-                            -
+                            <em>Не назначен</em>
                         {% endif %}
                     </td>
                     <td headers="service">{{ app.service.name }}</td>
+                    <td headers="notes">{{ app.notes|default:"-" }}</td>
                     <td headers="actions">
-                        <a href="{% url 'edit_appointment' app.id %}" class="btn">Изменить</a>
-                        <a href="{% url 'delete_appointment' app.id %}" class="btn">Удалить</a>
+                        <nav>
+                            <a href="{% url 'edit_appointment' app.id %}" class="btn">
+                                Изменить
+                            </a>
+                            <a href="{% url 'delete_appointment' app.id %}" class="btn">
+                                Удалить
+                            </a>
+                        </nav>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <p>Нет записей</p>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <p>Нет записей</p>
-        {% endif %}
         
         <nav>
-            <a href="{% url 'service_list' %}" class="btn">Записаться на услугу</a>
-            <a href="{% url 'account_logout' %}" class="btn">Выйти</a>
+            <a href="{% url 'service_list' %}" class="btn">
+                Записаться на новую услугу
+            </a>
+            <a href="{% url 'account_logout' %}" class="btn">
+                Выйти
+            </a>
         </nav>
     </article>
 </section>
