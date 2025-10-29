@@ -14,11 +14,15 @@ def client_detail(request, pk):
 
 @login_required
 def client_cabinet(request):
-    client = getattr(request.user, 'client_profile', None)
-    if not client:
-        return render(request, 'no_access.html')
-    appointments = Appointment.objects.filter(client=client).order_by('appointment_date')
+    # Check if user has client role
     user_profile = getattr(request.user, 'profile', None)
+    if not user_profile or user_profile.role != 'client':
+        return render(request, 'no_access.html')
+    
+    # Get or create ClientProfile
+    client, created = ClientProfile.objects.get_or_create(user=request.user)
+    
+    appointments = Appointment.objects.filter(client=client).order_by('appointment_date')
     
     return render(request, 'clients/client_cabinet.html', {
         'appointments': appointments,

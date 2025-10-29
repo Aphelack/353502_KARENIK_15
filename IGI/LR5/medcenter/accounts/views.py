@@ -44,31 +44,6 @@ def client_cabinet(request):
     return render(request, 'clients/client_cabinet.html', context)
 
 
-@doctor_required
-def doctor_cabinet(request):
-    """Doctor dashboard view."""
-    from doctors.models import DoctorProfile
-    from appointments.models import Appointment
-    from services.models import Service
-    
-    # Get doctor profile
-    doctor_profile = getattr(request.user, 'doctor_profile', None)
-    
-    # Get appointments for this doctor
-    appointments = Appointment.objects.filter(doctor=doctor_profile).order_by('appointment_date') if doctor_profile else []
-    
-    # Get services not yet added to this doctor
-    services = Service.objects.exclude(doctors=doctor_profile) if doctor_profile else Service.objects.none()
-    
-    context = {
-        'user_profile': request.user.profile,
-        'doctor': doctor_profile,
-        'appointments': appointments,
-        'available_services': services,
-    }
-    return render(request, 'doctors/doctor_cabinet.html', context)
-
-
 @admin_required
 def admin_cabinet(request):
     """Admin dashboard view."""
@@ -83,6 +58,38 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         # Always redirect to the cabinet_redirect view which handles role-based routing
         return reverse('cabinet_redirect')
+
+
+class ClientLoginView(LoginView):
+    template_name = "account/client_login.html"
+
+    def get_success_url(self):
+        return reverse('cabinet_redirect')
+    
+    def form_valid(self, form):
+        # Check if user has client role
+        user = form.user
+        if hasattr(user, 'profile') and user.profile.role == 'client':
+            return super().form_valid(form)
+        else:
+            form.add_error(None, 'Этот аккаунт не является аккаунтом клиента.')
+            return self.form_invalid(form)
+
+
+class DoctorLoginView(LoginView):
+    template_name = "account/doctor_login.html"
+
+    def get_success_url(self):
+        return reverse('cabinet_redirect')
+    
+    def form_valid(self, form):
+        # Check if user has doctor role
+        user = form.user
+        if hasattr(user, 'profile') and user.profile.role == 'doctor':
+            return super().form_valid(form)
+        else:
+            form.add_error(None, 'Этот аккаунт не является аккаунтом врача.')
+            return self.form_invalid(form)
 
 
 def no_access(request):

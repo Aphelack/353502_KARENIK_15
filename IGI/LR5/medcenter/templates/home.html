@@ -40,11 +40,11 @@
     <h2>Наши услуги</h2>
     <div class="grid-3">
         {% for category in categories %}
-            <article class="card">
+            <article class="card" itemscope itemtype="https://schema.org/MedicalProcedure">
                 <img src="{% static 'images/news_default.svg' %}" alt="{{ category.name }}">
-                <h3>{{ category.name }}</h3>
-                <p>{{ category.description|truncatewords:15 }}</p>
-                <a href="{% url 'service_list' %}?category={{ category.id }}" class="btn">Подробнее</a>
+                <h3 itemprop="name">{{ category.name }}</h3>
+                <p itemprop="description">{{ category.description|truncatewords:15 }}</p>
+                <a href="{% url 'service_list' %}?category={{ category.id }}" class="btn" itemprop="url">Подробнее</a>
             </article>
         {% endfor %}
     </div>
@@ -60,16 +60,16 @@
     <h2>Последние новости</h2>
     <div class="grid-3">
         {% for news in latest_news %}
-            <article class="card">
+            <article class="card" itemscope itemtype="https://schema.org/NewsArticle">
                 {% if news.image %}
-                    <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" itemprop="image">
                 {% else %}
-                    <img src="{% static 'images/news_default.svg' %}" alt="{{ news.title }}">
+                    <img src="{% static 'images/news_default.svg' %}" alt="{{ news.title }}" itemprop="image">
                 {% endif %}
-                <h3>{{ news.title }}</h3>
-                <p><small><time datetime="{{ news.published_at|date:'c' }}">{{ news.published_at|date:'d.m.Y' }}</time></small></p>
-                <p>{{ news.summary|truncatewords:20 }}</p>
-                <a href="{{ news.get_absolute_url }}" class="btn">Читать далее</a>
+                <h3 itemprop="headline">{{ news.title }}</h3>
+                <p><small><time datetime="{{ news.published_at|date:'c' }}" itemprop="datePublished">{{ news.published_at|date:'d.m.Y' }}</time></small></p>
+                <p itemprop="description">{{ news.summary|truncatewords:20 }}</p>
+                <a href="{{ news.get_absolute_url }}" class="btn" itemprop="url">Читать далее</a>
             </article>
         {% endfor %}
     </div>
@@ -85,11 +85,13 @@
     <h2>Наши партнеры</h2>
     <div class="partners">
         {% for partner in partners %}
-            <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}">
+            <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}" itemscope itemtype="https://schema.org/Organization">
+                <meta itemprop="name" content="{{ partner.name }}">
+                <meta itemprop="url" content="{{ partner.website }}">
                 {% if partner.logo %}
-                    <img src="{{ partner.logo.url }}" alt="{{ partner.name }}">
+                    <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" itemprop="logo">
                 {% else %}
-                    <img src="{% static 'images/partner1.svg' %}" alt="{{ partner.name }}">
+                    <img src="{% static 'images/partner1.svg' %}" alt="{{ partner.name }}" itemprop="logo">
                 {% endif %}
             </a>
         {% endfor %}

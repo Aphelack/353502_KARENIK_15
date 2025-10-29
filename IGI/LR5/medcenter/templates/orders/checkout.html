@@ -5,35 +5,42 @@
 {% block meta_description %}Оформление заказа медицинских услуг{% endblock %}
 
 {% block content %}
-<section>
+<section itemscope itemtype="https://schema.org/Order">
     <h2>Оформление заказа</h2>
     
     <article class="card">
         <h3>Услуги в заказе</h3>
         {% for item in cart.items.all %}
-        <dl>
-            <dt>Услуга:</dt>
-            <dd>{{ item.service.name }} × {{ item.quantity }}</dd>
-            
-            {% if item.doctor %}
-            <dt>Врач:</dt>
-            <dd>{{ item.doctor.full_name }}</dd>
-            {% endif %}
-            
-            {% if item.appointment_time %}
-            <dt>Время:</dt>
-            <dd><time datetime="{{ item.appointment_time|date:'c' }}">{{ item.appointment_time|date:"d.m.Y H:i" }}</time></dd>
-            {% endif %}
-            
-            <dt>Стоимость:</dt>
-            <dd>{{ item.total_price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
-        </dl>
+        <div itemscope itemtype="https://schema.org/MedicalProcedure">
+            <dl>
+                <dt>Услуга:</dt>
+                <dd itemprop="name">{{ item.service.name }} × {{ item.quantity }}</dd>
+                
+                {% if item.doctor %}
+                <dt>Врач:</dt>
+                <dd itemprop="performer" itemscope itemtype="https://schema.org/Physician">
+                    <span itemprop="name">{{ item.doctor.full_name }}</span>
+                </dd>
+                {% endif %}
+                
+                {% if item.appointment_time %}
+                <dt>Время:</dt>
+                <dd><time datetime="{{ item.appointment_time|date:'c' }}">{{ item.appointment_time|date:"d.m.Y H:i" }}</time></dd>
+                {% endif %}
+                
+                <dt>Стоимость:</dt>
+                <dd itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                    <span itemprop="price">{{ item.total_price }}</span> 
+                    <abbr title="Белорусский рубль" itemprop="priceCurrency" content="BYN">BYN</abbr>
+                </dd>
+            </dl>
+        </div>
         {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}
         
         <dl>
             <dt><strong>Итого к оплате:</strong></dt>
-            <dd><strong>{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></strong></dd>
+            <dd itemprop="totalPrice"><strong>{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></strong></dd>
         </dl>
     </article>
     

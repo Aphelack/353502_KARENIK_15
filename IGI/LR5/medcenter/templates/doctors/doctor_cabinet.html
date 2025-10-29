@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-    <h2>Кабинет врача</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Кабинет врача</h2>
+        <a href="{% url 'statistics' %}" style="padding: 10px 20px; background: #2c3e50; color: white; text-decoration: none; border-radius: 4px;">
+            📊 Статистика сайта
+        </a>
+    </div>
     <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
         <h5>Личная информация</h5>
         <p>Добро пожаловать, {{ user.username }}!</p>

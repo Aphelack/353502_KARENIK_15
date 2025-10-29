@@ -112,6 +112,20 @@
         dl dd { display: inline; margin: 0; }
         dl dd::after { content: ""; display: block; margin-bottom: 8px; }
         
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        table caption { font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; text-align: left; }
+        table thead { background: #f8f9fa; }
+        table th { padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; font-weight: bold; }
+        table td { padding: 10px; border-bottom: 1px solid #dee2e6; }
+        table tbody tr:hover { background: #f8f9fa; }
+        table tbody tr:last-child td { border-bottom: none; }
+        
+        /* Figure */
+        figure { margin: 20px 0; text-align: center; }
+        figure img { max-width: 100%; height: auto; border: 1px solid #dee2e6; border-radius: 4px; }
+        figcaption { margin-top: 10px; font-style: italic; color: #666; font-size: 0.9rem; }
+        
         /* Partners */
         .partners { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; }
         .partners a { padding: 15px; background: white; border: 1px solid #dee2e6; border-radius: 8px; transition: transform 0.2s; }
@@ -147,22 +161,27 @@
     </script>
     {% block head %}{% endblock %}
 </head>
-<body>
+<body itemscope itemtype="https://schema.org/MedicalOrganization">
     <!-- Skip navigation link for accessibility -->
     <a href="#main-content" class="visually-hidden-focusable">Перейти к основному содержанию</a>
+    
+    <meta itemprop="name" content="Медицинский центр">
+    <meta itemprop="description" content="Медицинский центр предоставляет качественные медицинские услуги">
+    <meta itemprop="url" content="{{ request.build_absolute_uri }}">
     
     <!-- Header -->
     <header role="banner">
         <nav role="navigation" aria-label="Главное меню">
-            <a href="{% url 'home' %}">
-                <img src="{% static 'images/logo.svg' %}" alt="Логотип медицинского центра">
-                <span>Медицинский центр</span>
+            <a href="{% url 'home' %}" itemprop="url">
+                <img src="{% static 'images/logo.svg' %}" alt="Логотип медицинского центра" itemprop="logo">
+                <span itemprop="name">Медицинский центр</span>
             </a>
             
             <ul>
                 <li><a href="{% url 'home' %}">Главная</a></li>
                 <li><a href="{% url 'service_list' %}">Услуги</a></li>
                 <li><a href="{% url 'news_list' %}">Новости</a></li>
+                <li><a href="{% url 'statistics' %}">Статистика</a></li>
                 <li>
                     <a href="{% url 'company_info' %}">О компании</a>
                     <ul>
@@ -251,10 +270,10 @@
                 </div>
                 <div>
                     <h6>Контакты</h6>
-                    <address>
-                        <p>г. Минск, ул. Примерная, 1</p>
-                        <p><a href="tel:+375123456789">+375 (12) 345-67-89</a></p>
-                        <p><a href="mailto:info@medcenter.by">info@medcenter.by</a></p>
+                    <address itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <p><span itemprop="addressLocality">г. Минск</span>, <span itemprop="streetAddress">ул. Примерная, 1</span></p>
+                        <p><a href="tel:+375123456789" itemprop="telephone">+375 (12) 345-67-89</a></p>
+                        <p><a href="mailto:info@medcenter.by" itemprop="email">info@medcenter.by</a></p>
                     </address>
                 </div>
                 <div>
