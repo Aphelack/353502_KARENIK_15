@@ -71,7 +71,7 @@
                     </td>
                     <td headers="service">{{ app.service.name }}</td>
                     <td headers="actions">
-                        <a href="{% url 'edit_appointment' app.id %}" class="btn">Изменить</a>
+                        {% comment %} <a href="{% url 'edit_appointment' app.id %}" class="btn">Изменить</a> {% endcomment %}
                         <a href="{% url 'delete_appointment' app.id %}" class="btn">Удалить</a>
                     </td>
                 </tr>

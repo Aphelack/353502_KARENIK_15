@@ -228,7 +228,7 @@ class Command(BaseCommand):
         
         # Partners
         partners_data = [
-            ("Партнер 1", "https://partner1.example.com", "Описание партнера 1"),
+            ("Партнер 1", "https://google.com", "Описание партнера 1"),
             ("Партнер 2", "https://partner2.example.com", "Описание партнера 2"),
         ]
         

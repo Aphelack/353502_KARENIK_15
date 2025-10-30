@@ -86,8 +86,8 @@
                     <td headers="notes">{{ app.notes|default:"-" }}</td>
                     <td headers="actions">
                         <nav>
-                            <a href="{% url 'edit_appointment' app.id %}" class="btn">
-                                Изменить
+                            {% comment %} <a href="{% url 'edit_appointment' app.id %}" class="btn">
+                                Изменить {% endcomment %}
                             </a>
                             <a href="{% url 'delete_appointment' app.id %}" class="btn">
                                 Удалить

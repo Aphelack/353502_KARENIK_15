@@ -91,17 +91,22 @@ def statistics(request):
         appointments_data.append(count)
     
     # Create appointments chart
-    fig1, ax1 = plt.subplots(figsize=(8, 5))
+    fig1, ax1 = plt.subplots(figsize=(10, 6))
     ax1.plot(months_data, appointments_data, marker='o', linewidth=2, markersize=8, color='#007bff')
     ax1.set_xlabel('Месяц', fontsize=12)
     ax1.set_ylabel('Количество записей', fontsize=12)
     ax1.set_title('Записи на прием (последние 6 месяцев)', fontsize=14, fontweight='bold')
     ax1.grid(True, alpha=0.3)
+    # improve layout and label visibility
+    plt.setp(ax1.get_xticklabels(), rotation=45, ha='right')
+    fig1.subplots_adjust(bottom=0.22)
+    fig1.tight_layout(pad=0.6)
     
-    # Save to base64
+    # Save to base64 using fig.savefig to avoid global state
     buffer1 = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(buffer1, format='png', dpi=100, bbox_inches='tight')
+    # Ensure layout is rendered before saving to get correct bounding boxes
+    fig1.canvas.draw()
+    fig1.savefig(buffer1, format='png', dpi=150, bbox_inches='tight', pad_inches=0.15)
     buffer1.seek(0)
     chart1_base64 = base64.b64encode(buffer1.read()).decode()
     plt.close(fig1)
@@ -124,14 +129,22 @@ def statistics(request):
             payment_labels.append(pm['payment_method'])  # Fallback
     
     if payment_values and len(payment_values) == len(payment_labels):
-        fig2, ax2 = plt.subplots(figsize=(7, 5))
-        ax2.pie(payment_values, labels=payment_labels, autopct='%1.1f%%', 
+        fig2, ax2 = plt.subplots(figsize=(8, 6))
+        # Make pie circular and avoid clipped labels
+        ax2.axis('equal')
+        wedges, texts, autotexts = ax2.pie(payment_values, labels=payment_labels, autopct='%1.1f%%', 
                 startangle=90, colors=payment_colors[:len(payment_values)])
+        # improve text readability
+        plt.setp(texts, fontsize=10)
+        plt.setp(autotexts, fontsize=9)
         ax2.set_title('Способы оплаты заказов', fontsize=14, fontweight='bold')
-        
+        fig2.subplots_adjust(left=0.12, right=0.95)
+        fig2.tight_layout(pad=0.6)
+
         buffer2 = io.BytesIO()
-        plt.tight_layout()
-        plt.savefig(buffer2, format='png', dpi=100, bbox_inches='tight')
+        # Draw canvas so pie labels and autotexts are included in tight bbox
+        fig2.canvas.draw()
+        fig2.savefig(buffer2, format='png', dpi=150, bbox_inches='tight', pad_inches=0.15)
         buffer2.seek(0)
         chart2_base64 = base64.b64encode(buffer2.read()).decode()
         plt.close(fig2)
@@ -144,23 +157,28 @@ def statistics(request):
     rating_values = [r['count'] for r in ratings]
     
     if rating_values:
-        fig3, ax3 = plt.subplots(figsize=(8, 5))
+        fig3, ax3 = plt.subplots(figsize=(10, 6))
         bars = ax3.bar(rating_labels, rating_values, color='#28a745', alpha=0.7)
         ax3.set_xlabel('Оценка', fontsize=12)
         ax3.set_ylabel('Количество отзывов', fontsize=12)
         ax3.set_title('Распределение оценок в отзывах', fontsize=14, fontweight='bold')
         ax3.grid(True, axis='y', alpha=0.3)
-        
+
         # Add value labels on bars
         for bar in bars:
             height = bar.get_height()
             ax3.text(bar.get_x() + bar.get_width()/2., height,
                     f'{int(height)}',
                     ha='center', va='bottom', fontsize=10)
-        
+
+        # Improve layout so labels and ticks are not cut
+        fig3.subplots_adjust(bottom=0.18)
+        fig3.tight_layout(pad=0.6)
+
         buffer3 = io.BytesIO()
-        plt.tight_layout()
-        plt.savefig(buffer3, format='png', dpi=100, bbox_inches='tight')
+        # Ensure layout is finalized so bar labels aren't clipped
+        fig3.canvas.draw()
+        fig3.savefig(buffer3, format='png', dpi=150, bbox_inches='tight', pad_inches=0.15)
         buffer3.seek(0)
         chart3_base64 = base64.b64encode(buffer3.read()).decode()
         plt.close(fig3)
