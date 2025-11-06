@@ -1,0 +1,464 @@
+/*
+ * Company Info Page Styles
+ * Includes: Logo transformation, certificate styling, history timeline
+ */
+
+/* ============================================
+   LOGO TRANSFORMATION
+   ============================================ */
+.company-logo-container {
+    text-align: center;
+    padding: 40px;
+    margin: 40px 0;
+}
+
+.company-logo {
+    max-width: 300px;
+    height: auto;
+    transition: all 0.6s ease;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+}
+
+.company-logo:hover {
+    /* Transformation functions */
+    transform: rotate(360deg) scale(1.2);
+    filter: drop-shadow(0 10px 30px rgba(52, 152, 219, 0.4));
+}
+
+/* Alternative transformations */
+.company-logo.skew-effect:hover {
+    transform: skewX(5deg) skewY(5deg) scale(1.1);
+}
+
+.company-logo.perspective-effect {
+    perspective: 1000px;
+}
+
+.company-logo.perspective-effect:hover {
+    transform: rotateY(180deg);
+}
+
+/* ============================================
+   CERTIFICATE STYLING
+   ============================================ */
+.certificate-container {
+    margin: 60px auto;
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+}
+
+.certificate {
+    /* Background with gradient */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    
+    /* Multiple background images */
+    background-image: 
+        url('/static/images/certificate-seal.svg'),
+        url('/static/images/certificate-pattern.svg'),
+        linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background-position: 
+        bottom 20px right 20px,
+        center,
+        center;
+    background-repeat: no-repeat, repeat, no-repeat;
+    background-size: 80px, 50px, cover;
+    
+    /* Border images from graphic file */
+    border: 20px solid transparent;
+    border-image: url('/static/images/certificate-border.svg') 30 round;
+    
+    /* Vendor prefixes for border-image */
+    -webkit-border-image: url('/static/images/certificate-border.svg') 30 round;
+    -moz-border-image: url('/static/images/certificate-border.svg') 30 round;
+    -o-border-image: url('/static/images/certificate-border.svg') 30 round;
+    
+    padding: 60px;
+    position: relative;
+    
+    /* Box shadow for depth */
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.2),
+        inset 0 0 100px rgba(255, 255, 255, 0.5);
+    
+    /* Border radius */
+    border-radius: 15px;
+    
+    /* z-index layering */
+    z-index: 2;
+}
+
+/* Decorative corners using ::before and ::after */
+.certificate::before {
+    content: '🏆';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2.5rem;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.certificate::after {
+    content: '⭐';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2.5rem;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+/* Certificate header */
+.certificate-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 3;
+}
+
+.certificate-title {
+    /* Font configuration */
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    
+    /* Text shadow */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Certificate body */
+.certificate-body {
+    margin: 40px 0;
+    position: relative;
+    z-index: 3;
+}
+
+.certificate-text {
+    font-size: 1.1rem;
+    line-height: 2;
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.certificate-recipient {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--secondary-color);
+    margin: 30px 0;
+    font-family: var(--font-heading);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-color);
+    text-decoration-thickness: 3px;
+}
+
+/* Certificate footer */
+.certificate-footer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 3;
+}
+
+.certificate-signature {
+    text-align: center;
+}
+
+.signature-line {
+    width: 200px;
+    height: 2px;
+    background: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.signature-text {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.certificate-seal {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 5px solid #daa520;
+    box-shadow: 0 5px 15px rgba(218, 165, 32, 0.5);
+    position: relative;
+}
+
+.certificate-seal::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    border: 2px dashed #daa520;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+/* ============================================
+   COMPANY HISTORY TIMELINE
+   ============================================ */
+.history-section {
+    margin: 60px 0;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.timeline {
+    position: relative;
+    padding: 40px 0;
+    list-style: none;
+}
+
+/* Vertical line */
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--secondary-color) 0%, var(--accent-color) 100%);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+    width: 50%;
+}
+
+/* Alternate sides */
+.timeline-item:nth-child(odd) {
+    left: 0;
+    padding-right: 60px;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+    padding-left: 60px;
+    text-align: left;
+}
+
+/* Timeline marker */
+.timeline-marker {
+    position: absolute;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 0 0 4px var(--secondary-color);
+}
+
+.timeline-item:nth-child(odd) .timeline-marker {
+    right: -15px;
+}
+
+.timeline-item:nth-child(even) .timeline-marker {
+    left: -15px;
+}
+
+/* Timeline content */
+.timeline-content {
+    background: var(--light-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(52, 152, 219, 0.2);
+}
+
+.timeline-year {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+}
+
+.timeline-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* ============================================
+   COMPANY REQUISITES
+   ============================================ */
+.requisites-section {
+    margin: 60px 0;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.requisites-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--secondary-color);
+    padding-bottom: 15px;
+}
+
+.requisites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.requisite-item {
+    padding: 20px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.requisite-label {
+    /* Special font for labels */
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.requisite-value {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* ============================================
+   VIDEO/AUDIO CUSTOM STYLES
+   ============================================ */
+.media-section {
+    margin: 60px 0;
+}
+
+.custom-video,
+.custom-audio {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: block;
+}
+
+.custom-video {
+    background: #000;
+}
+
+/* Custom video controls styling */
+.custom-video::-webkit-media-controls-panel {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.custom-video::-webkit-media-controls-play-button {
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+}
+
+.custom-audio {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-bg) 100%);
+    padding: 20px;
+}
+
+/* Media container */
+.media-container {
+    position: relative;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.media-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.media-description {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+    .certificate {
+        padding: 30px 20px;
+        border-width: 10px;
+    }
+    
+    .certificate-title {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+    
+    .certificate-footer {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+    
+    /* Stack timeline vertically on mobile */
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-item,
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        width: 100%;
+        left: 0;
+        padding-left: 80px;
+        padding-right: 0;
+        text-align: left;
+    }
+    
+    .timeline-marker,
+    .timeline-item:nth-child(odd) .timeline-marker,
+    .timeline-item:nth-child(even) .timeline-marker {
+        left: 15px;
+        right: auto;
+    }
+    
+    .company-logo {
+        max-width: 200px;
+    }
+}

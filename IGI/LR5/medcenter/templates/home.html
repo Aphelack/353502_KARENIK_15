@@ -5,6 +5,10 @@
 
 {% block meta_description %}Медицинский центр - современное медицинское оборудование, квалифицированные врачи, качественное обслуживание{% endblock %}
 
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <!-- Hero Banner -->
@@ -38,12 +42,12 @@
 {% if categories %}
 <section>
     <h2>Наши услуги</h2>
-    <div class="grid-3">
+    <div class="services-grid">
         {% for category in categories %}
-            <article class="card" itemscope itemtype="https://schema.org/MedicalProcedure">
-                <img src="{% static 'images/surgery-operation-surgeon-operating-room-svgrepo-com.svg' %}" alt="{{ category.name }}">
-                <h3 itemprop="name">{{ category.name }}</h3>
-                <p itemprop="description">{{ category.description|truncatewords:15 }}</p>
+            <article class="service-card" itemscope itemtype="https://schema.org/MedicalProcedure">
+                <div class="service-icon">🏥</div>
+                <h3 class="service-title" itemprop="name">{{ category.name }}</h3>
+                <p class="service-description" itemprop="description">{{ category.description|truncatewords:15 }}</p>
                 <a href="{% url 'service_list' %}?category={{ category.id }}" class="btn" itemprop="url">Подробнее</a>
             </article>
         {% endfor %}
@@ -53,6 +57,31 @@
     </p>
 </section>
 {% endif %}
+
+<!-- Animation: Person walking to medical center -->
+<section>
+    <h2>Наша миссия - ваше здоровье</h2>
+    <div class="animation-container">
+        <div class="ground"></div>
+        <div class="medical-building"></div>
+        
+        <!-- Person with cane (injured) -->
+        <div class="person-injured">
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+            <div class="cane"></div>
+        </div>
+        
+        <!-- Healthy person (after treatment) -->
+        <div class="person-healthy">
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 20px; font-style: italic; color: var(--text-light);">
+        Мы заботимся о вашем здоровье - приходите к нам и уходите здоровыми!
+    </p>
+</section>
 
 <!-- Latest News -->
 {% if latest_news %}
@@ -81,19 +110,22 @@
 
 <!-- Partners -->
 {% if partners %}
-<section>
-    <h2>Наши партнеры</h2>
-    <div class="partners">
+<section class="partners-section">
+    <h2 style="color: white; text-align: center;">Наши партнеры</h2>
+    <div class="partners-grid">
         {% for partner in partners %}
-            <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}" itemscope itemtype="https://schema.org/Organization">
-                <meta itemprop="name" content="{{ partner.name }}">
-                <meta itemprop="url" content="{{ partner.website }}">
-                {% if partner.logo %}
-                    <img src="{% static partner.logo.url %}" alt="{{ partner.name }}" itemprop="logo">
-                {% else %}
-                    <img src="{% static 'images/partner1.svg' %}" alt="{{ partner.name }}" itemprop="logo">
-                {% endif %}
-            </a>
+            <div class="partner-circle">
+                <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}" itemscope itemtype="https://schema.org/Organization">
+                    <meta itemprop="name" content="{{ partner.name }}">
+                    <meta itemprop="url" content="{{ partner.website }}">
+                    {% if partner.logo %}
+                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="partner-logo" itemprop="logo">
+                    {% else %}
+                        <img src="{% static 'images/partner1.svg' %}" alt="{{ partner.name }}" class="partner-logo" itemprop="logo">
+                    {% endif %}
+                </a>
+                <span class="partner-name">{{ partner.name }}</span>
+            </div>
         {% endfor %}
     </div>
 </section>
@@ -102,29 +134,35 @@
 <!-- Features Section -->
 <section>
     <h2>Почему выбирают нас</h2>
-    <div class="grid-3">
-        <article class="card">
-            <h3>🏥 Современное оборудование</h3>
+    <div class="features-grid">
+        <article class="feature-card">
+            <div class="feature-icon">🏥</div>
+            <h3 class="feature-title">Современное оборудование</h3>
             <p>Мы используем новейшее медицинское оборудование для точной диагностики и эффективного лечения.</p>
         </article>
-        <article class="card">
-            <h3>👨‍⚕️ Опытные врачи</h3>
+        <article class="feature-card">
+            <div class="feature-icon">👨‍⚕️</div>
+            <h3 class="feature-title">Опытные врачи</h3>
             <p>Наша команда состоит из высококвалифицированных специалистов с многолетним опытом работы.</p>
         </article>
-        <article class="card">
-            <h3>⏰ Удобный график</h3>
+        <article class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">Удобный график</h3>
             <p>Мы работаем 7 дней в неделю, чтобы вы могли получить помощь в удобное для вас время.</p>
         </article>
-        <article class="card">
-            <h3>💰 Доступные цены</h3>
+        <article class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3 class="feature-title">Доступные цены</h3>
             <p>Качественная медицинская помощь по разумным ценам. Регулярные акции и спецпредложения.</p>
         </article>
-        <article class="card">
-            <h3>🎯 Индивидуальный подход</h3>
+        <article class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Индивидуальный подход</h3>
             <p>Мы учитываем особенности каждого пациента и разрабатываем персональный план лечения.</p>
         </article>
-        <article class="card">
-            <h3>📱 Онлайн-запись</h3>
+        <article class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3 class="feature-title">Онлайн-запись</h3>
             <p>Запишитесь на прием онлайн в любое время - это быстро и удобно.</p>
         </article>
     </div>
@@ -157,10 +195,15 @@
 {% endif %}
 
 <!-- Call to Action -->
-<section class="banner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-    <h2 style="color: white;">Запишитесь на прием прямо сейчас!</h2>
-    <p style="color: #f0f0f0;">Наши специалисты готовы помочь вам в любое удобное время</p>
-    <a href="{% url 'service_list' %}" style="background: white; color: #667eea;">Записаться на прием</a>
+<section class="cta-section">
+    <h2 class="cta-title">Запишитесь на прием прямо сейчас!</h2>
+    <p class="cta-text">Наши специалисты готовы помочь вам в любое удобное время</p>
+    <a href="{% url 'service_list' %}" class="cta-button">Записаться на прием</a>
 </section>
+
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner"></div>
+</div>
 
 {% endblock %}

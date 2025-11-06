@@ -1,0 +1,4 @@
+staticfiles
+**/pycache__/
+*.py[cod]
+__pycache__/
