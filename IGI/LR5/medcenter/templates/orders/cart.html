@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина - Медицинский центр{% endblock %}
+
+{% block meta_description %}Корзина заказов медицинского центра{% endblock %}
+
+{% block content %}
+<section itemscope itemtype="https://schema.org/Order">
+    <h2>Корзина</h2>
+    
+    {% if cart.items.all %}
+        {% for item in cart.items.all %}
+        <article class="card" itemscope itemtype="https://schema.org/MedicalProcedure">
+            <h3 itemprop="name">{{ item.service.name }}</h3>
+            
+            <dl>
+                {% if item.doctor %}
+                <dt>Врач:</dt>
+                <dd itemprop="performer" itemscope itemtype="https://schema.org/Physician">
+                    <span itemprop="name">{{ item.doctor.full_name }}</span>
+                </dd>
+                {% endif %}
+                
+                {% if item.appointment_time %}
+                <dt>Время приема:</dt>
+                <dd><time datetime="{{ item.appointment_time|date:'c' }}" itemprop="procedureType">{{ item.appointment_time|date:"d.m.Y H:i" }}</time></dd>
+                {% endif %}
+                
+                <dt>Цена:</dt>
+                <dd itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                    <span itemprop="price">{{ item.service.price }}</span> 
+                    <abbr title="Белорусский рубль" itemprop="priceCurrency" content="BYN">BYN</abbr>
+                </dd>
+                
+                <dt>Количество:</dt>
+                <dd>{{ item.quantity }}</dd>
+                
+                <dt>Итого:</dt>
+                <dd>{{ item.total_price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+            </dl>
+            
+            <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn" onclick="return confirm('Удалить из корзины?')">Удалить</button>
+            </form>
+        </article>
+        {% endfor %}
+        
+        <article class="card">
+            <h3>Итого</h3>
+            <dl>
+                <dt>Общая стоимость:</dt>
+                <dd itemprop="totalPrice">{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+            </dl>
+            
+            <nav>
+                <a href="{% url 'service_list' %}" class="btn">Продолжить выбор</a>
+                <a href="{% url 'checkout' %}" class="btn">Оформить заказ</a>
+            </nav>
+        </article>
+    {% else %}
+        <article class="card">
+            <h3>Корзина пуста</h3>
+            <p>Добавьте услуги из каталога</p>
+            <nav>
+                <a href="{% url 'service_list' %}" class="btn">Перейти к услугам</a>
+            </nav>
+        </article>
+    {% endif %}
+</section>
+{% endblock %}

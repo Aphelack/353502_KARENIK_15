@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - Медицинский центр{% endblock %}
+
+{% block meta_description %}Медицинский центр - современное медицинское оборудование, квалифицированные врачи, качественное обслуживание{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Banners -->
+<section>
+    {% if banners %}
+        <div>
+            {% for banner in banners %}
+                <div>
+                    {% if banner.image %}
+                        <img src="{{ banner.image.url }}" alt="{{ banner.title }}" width="100%">
+                    {% else %}
+                        <img src="{% static 'images/banner1.png' %}" alt="{{ banner.title }}" width="100%">
+                    {% endif %}
+                    <div>
+                        <h2>{{ banner.title }}</h2>
+                        {% if banner.subtitle %}
+                            <p>{{ banner.subtitle }}</p>
+                        {% endif %}
+                        {% if banner.link_url and banner.link_text %}
+                            <a href="{{ banner.link_url }}">{{ banner.link_text }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div>
+            <h1>Добро пожаловать в наш медицинский центр</h1>
+            <p>Современное медицинское оборудование, квалифицированные врачи, индивидуальный подход к каждому пациенту.</p>
+            <a href="{% url 'service_list' %}">Наши услуги</a>
+        </div>
+    {% endif %}
+</section>
+
+<!-- Services Catalog -->
+<section>
+    <h2>Наши услуги</h2>
+    
+    {% if categories %}
+        <div>
+            {% for category in categories %}
+                <article>
+                    <h3>{{ category.name }}</h3>
+                    {% if category.description %}
+                        <p>{{ category.description|truncatewords:20 }}</p>
+                    {% endif %}
+                    <p>{{ category.services.count }} услуг{{ category.services.count|pluralize:"а,и,и" }}</p>
+                    
+                    <!-- Sample services -->
+                    {% if category.services.all %}
+                        <ul>
+                            {% for service in category.services.all|slice:":3" %}
+                                <li>
+                                    <a href="{% url 'service_detail' service.id %}">{{ service.name }}</a>
+                                    <small>({{ service.price }} руб.)</small>
+                                </li>
+                            {% endfor %}
+                            {% if category.services.count > 3 %}
+                                <li>и еще {{ category.services.count|add:"-3" }}...</li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                    <a href="{% url 'service_category' category.id %}">Смотреть все услуги</a>
+                </article>
+            {% endfor %}
+        </div>
+        
+        <div>
+            <a href="{% url 'service_list' %}">Все услуги</a>
+        </div>
+    {% else %}
+        <p>Каталог услуг в разработке.</p>
+    {% endif %}
+</section>
+
+<!-- Latest News -->
+{% if latest_news %}
+<section>
+    <h2>Последние новости</h2>
+    <a href="{% url 'news_list' %}">Все новости</a>
+    
+    <div>
+        {% for news in latest_news %}
+            <article>
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" width="100%">
+                {% endif %}
+                <h3>
+                    <a href="{{ news.get_absolute_url }}">{{ news.title }}</a>
+                </h3>
+                <p>{{ news.summary }}</p>
+                {% if news.category %}
+                    <p><span>{{ news.category.name }}</span></p>
+                {% endif %}
+                <p>
+                    <small>{{ news.published_at|date:"j F Y" }} - {{ news.author.get_full_name|default:news.author.username }}</small>
+                </p>
+                <a href="{{ news.get_absolute_url }}">Читать далее</a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Partners -->
+{% if partners %}
+    <section>
+        <h2>Наши партнеры</h2>
+        
+        <div>
+            {% for partner in partners %}
+                <div>
+                    <a href="{{ partner.website }}" target="_blank" rel="noopener" title="{{ partner.name }}">
+                        {% if partner.logo %}
+                            <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" height="60">
+                        {% else %}
+                            <img src="{% static 'images/partner1.png' %}" alt="{{ partner.name }}" height="60">
+                        {% endif %}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+<!-- Features Section -->
+<section>
+    <div>
+        <h3>Квалифицированные врачи</h3>
+        <p>Наши специалисты имеют высшую категорию и богатый опыт работы</p>
+    </div>
+    <div>
+        <h3>Современное оборудование</h3>
+        <p>Используем новейшие технологии для точной диагностики и лечения</p>
+    </div>
+    <div>
+        <h3>Удобное время работы</h3>
+        <p>Работаем 7 дней в неделю для вашего удобства</p>
+    </div>
+</section>
+
+<!-- Fun Content Section -->
+{% if joke or quote %}
+<section>
+    {% if joke %}
+    <div>
+        <h3>Шутка дня</h3>
+        <p><strong>{{ joke.setup }}</strong></p>
+        <p><em>{{ joke.punchline }}</em></p>
+    </div>
+    {% endif %}
+    
+    {% if quote %}
+    <div>
+        <h3>Цитата дня</h3>
+        <blockquote>
+            <p>"{{ quote.body }}"</p>
+            <footer>{{ quote.author }}</footer>
+        </blockquote>
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section>
+    <div>
+        <h3>Запишитесь на прием прямо сейчас</h3>
+        <p>Получите квалифицированную медицинскую помощь от наших специалистов</p>
+        {% if user.is_authenticated and user.profile.is_client %}
+            <a href="{% url 'service_list' %}">Записаться на прием</a>
+        {% else %}
+            <a href="{% url 'client_register' %}">Стать пациентом</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

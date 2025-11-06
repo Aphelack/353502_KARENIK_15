@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Подтверждение записи</h2>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <strong>Услуга:</strong> {{ service.name }}
+        </li>
+        <li class="list-group-item">
+            <strong>Врач:</strong>
+            <a href="{% url 'doctor_detail' doctor.id %}">
+                {{ doctor.user.get_full_name }}
+            </a>
+        </li>
+        <li class="list-group-item">
+            <strong>Цена:</strong> {{ service.price }} BYN
+        </li>
+        <li class="list-group-item">
+            <strong>Дата:</strong> {{ appointment_date|date:"d.m.Y" }}
+        </li>
+        <li class="list-group-item">
+            <strong>Время:</strong> {{ appointment_date|time:"H:i" }}
+        </li>
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Подтвердить запись</button>
+        <a href="{% url 'order_service' service.id %}" class="btn btn-secondary ms-2">Назад</a>
+    </form>
+</div>
+{% endblock %}

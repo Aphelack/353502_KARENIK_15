@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ term.term }} - Медицинский глоссарий{% endblock %}
+
+{% block content %}
+<div>
+    <a href="{% url 'glossary_list' %}">← Вернуться к глоссарию</a>
+</div>
+
+<h1>{{ term.term }}</h1>
+
+{% if term.category %}
+<p><strong>Категория:</strong> {{ term.category.name }}</p>
+{% endif %}
+
+<div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0;">
+    <h2>Определение</h2>
+    <p>{{ term.definition|linebreaks }}</p>
+</div>
+
+<p><small>Добавлено: {{ term.created_at|date:"d.m.Y" }}</small></p>
+
+{% if related_terms %}
+<div style="margin-top: 30px;">
+    <h3>Связанные термины</h3>
+    <ul>
+        {% for related in related_terms %}
+        <li>
+            <a href="{% url 'term_detail' related.pk %}">{{ related.term }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

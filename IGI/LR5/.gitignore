@@ -1,0 +1,12 @@
+djungo_venv/
+.vscode/
+
+*.pyc
+
+*.pyo
+
+.venv/
+
+*.md
+
+medcenter/db.sqlite3

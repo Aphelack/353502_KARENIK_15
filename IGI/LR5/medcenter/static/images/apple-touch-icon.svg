@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" fill="#0d6efd" rx="20"/>
+  <text x="90" y="80" font-family="Arial, sans-serif" font-size="42" fill="white" text-anchor="middle" font-weight="bold">MC</text>
+  <text x="90" y="110" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Medical Center</text>
+</svg>

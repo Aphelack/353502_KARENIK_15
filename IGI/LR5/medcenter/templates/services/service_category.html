@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    background-color: #181a1b;
+    color: #f1f1f1;
+}
+.category-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+.category-header {
+    background: #23272b;
+    border-radius: 18px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.category-header h1 {
+    color: #ffe082;
+    margin-bottom: 1rem;
+}
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.service-card {
+    background: #23272b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.service-card h4 {
+    color: #ffe082;
+    margin-bottom: 0.75rem;
+}
+.service-card .description {
+    color: #ccc;
+    margin-bottom: 1rem;
+    min-height: 60px;
+}
+.service-card .price {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+.service-card .actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-primary {
+    background: #ffe082;
+    color: #23272b;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    transition: background 0.2s;
+    flex: 1;
+}
+.btn-primary:hover {
+    background: #ffd54f;
+    color: #181a1b;
+}
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: background 0.2s;
+}
+.btn-secondary:hover {
+    background: #5a6268;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+.pagination a, .pagination span {
+    background: #23272b;
+    color: #f1f1f1;
+    border: 1px solid #444;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+}
+.pagination a:hover {
+    background: #ffe082;
+    color: #23272b;
+}
+.pagination .current {
+    background: #ffe082;
+    color: #23272b;
+}
+h1 {
+    color: #ffe082;
+}
+</style>
+
+<div class="category-container">
+    <div class="category-header">
+        <h1>{{ category.name }}</h1>
+        <p class="mb-0">{{ category.description }}</p>
+    </div>
+    
+    {% if page_obj %}
+    <div class="services-grid">
+        {% for service in page_obj %}
+        <div class="service-card">
+            <h4>{{ service.name }}</h4>
+            <p class="description">{{ service.description|truncatewords:20 }}</p>
+            <div class="price">{{ service.price }} BYN</div>
+            <div class="actions">
+                <a href="{% url 'service_detail' service.id %}" class="btn btn-secondary">
+                    Подробнее
+                </a>
+                {% if user.is_authenticated and user.profile.is_client %}
+                <a href="{% url 'order_service' service.id %}" class="btn btn-primary" style="flex: 1;">
+                    Записаться
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+        
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="text-center py-5">
+        <h3>В этой категории пока нет услуг</h3>
+        <a href="{% url 'service_list' %}" class="btn btn-primary mt-3">Посмотреть все услуги</a>
+    </div>
+    {% endif %}
+    
+    <a href="{% url 'service_list' %}" class="btn btn-secondary mt-3">← Вернуться ко всем услугам</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

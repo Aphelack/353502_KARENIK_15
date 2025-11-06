@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Категории услуг - Медицинский центр{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Категории услуг</h2>
+    
+    {% for category in categories %}
+    <article class="card">
+        <h3>{{ category.name }}</h3>
+        
+        {% with services=category.services.all %}
+            {% if services %}
+                <ul>
+                    {% for service in services %}
+                    <li>
+                        <strong>{{ service.name }}</strong> — {{ service.price }} <abbr title="Белорусский рубль">BYN</abbr>
+                        <nav>
+                            <a href="{% url 'order_service' service.id %}" class="btn">Записаться</a>
+                        </nav>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Нет услуг в этой категории.</p>
+            {% endif %}
+        {% endwith %}
+    </article>
+    {% endfor %}
+    
+    <nav>
+        <a href="{% url 'client_cabinet' %}" class="btn">
+            ← Назад в кабинет
+        </a>
+    </nav>
+</section>
+{% endblock %}

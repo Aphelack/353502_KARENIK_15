@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика - Медицинский центр{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Статистика сайта</h2>
+    
+    <article class="card">
+        <h3>Общие показатели</h3>
+        <dl>
+            <dt>Всего записей на прием:</dt>
+            <dd><strong>{{ total_appointments }}</strong></dd>
+            
+            <dt>Всего заказов:</dt>
+            <dd><strong>{{ total_orders }}</strong></dd>
+            
+            <dt>Всего отзывов:</dt>
+            <dd><strong>{{ total_reviews }}</strong></dd>
+            
+            <dt>Зарегистрировано клиентов:</dt>
+            <dd><strong>{{ total_clients }}</strong></dd>
+            
+            <dt>Зарегистрировано врачей:</dt>
+            <dd><strong>{{ total_doctors }}</strong></dd>
+        </dl>
+    </article>
+    
+    <article class="card">
+        <h3>Графики и диаграммы</h3>
+        
+        {% if chart1 %}
+        <figure>
+            <img src="data:image/png;base64,{{ chart1 }}" alt="График записей на прием">
+            <figcaption>Динамика записей на прием за последние 6 месяцев</figcaption>
+        </figure>
+        {% endif %}
+        
+        <div class="grid-2">
+            {% if chart2 %}
+            <figure>
+                <img src="data:image/png;base64,{{ chart2 }}" alt="Диаграмма способов оплаты">
+                <figcaption>Распределение способов оплаты</figcaption>
+            </figure>
+            {% endif %}
+            
+            {% if chart3 %}
+            <figure>
+                <img src="data:image/png;base64,{{ chart3 }}" alt="Диаграмма оценок">
+                <figcaption>Распределение оценок в отзывах</figcaption>
+            </figure>
+            {% endif %}
+        </div>
+    </article>
+    
+    <article class="card">
+        <h3>Календарь - {{ month_name }} {{ current_year }}</h3>
+        
+        <table>
+            <caption>Календарь на текущий месяц</caption>
+            <thead>
+                <tr>
+                    {% for day_name in weekday_names %}
+                    <th scope="col" id="day_{{ forloop.counter }}">{{ day_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in month_calendar %}
+                <tr>
+                    {% for day in week %}
+                    <td headers="day_{{ forloop.counter }}">
+                        {% if day == 0 %}
+                            <span></span>
+                        {% elif day == current_day %}
+                            <strong>{{ day }}</strong>
+                        {% else %}
+                            {{ day }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+</section>
+{% endblock %}

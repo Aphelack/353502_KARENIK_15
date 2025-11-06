@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - Медицинский центр{% endblock %}
+
+{% block meta_description %}Медицинский центр - современное медицинское оборудование, квалифицированные врачи, качественное обслуживание{% endblock %}
+
+{% block content %}
+
+<!-- Hero Banner -->
+<section class="banner">
+    {% if banners %}
+        {% for banner in banners %}
+            {% if forloop.first %}
+                {% if banner.image %}
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                {% else %}
+                    <img src="{% static 'images/banner1.svg' %}" alt="{{ banner.title }}">
+                {% endif %}
+                <h2>{{ banner.title }}</h2>
+                {% if banner.subtitle %}
+                    <p>{{ banner.subtitle }}</p>
+                {% endif %}
+                {% if banner.link_url and banner.link_text %}
+                    <a href="{{ banner.link_url }}">{{ banner.link_text }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <img src="{% static 'images/banner1.svg' %}" alt="Медицинский центр">
+        <h2>Добро пожаловать в наш медицинский центр</h2>
+        <p>Современное медицинское оборудование, квалифицированные врачи, индивидуальный подход к каждому пациенту.</p>
+        <a href="{% url 'service_list' %}">Наши услуги</a>
+    {% endif %}
+</section>
+
+<!-- Services Catalog -->
+{% if categories %}
+<section>
+    <h2>Наши услуги</h2>
+    <div class="grid-3">
+        {% for category in categories %}
+            <article class="card" itemscope itemtype="https://schema.org/MedicalProcedure">
+                <img src="{% static 'images/surgery-operation-surgeon-operating-room-svgrepo-com.svg' %}" alt="{{ category.name }}">
+                <h3 itemprop="name">{{ category.name }}</h3>
+                <p itemprop="description">{{ category.description|truncatewords:15 }}</p>
+                <a href="{% url 'service_list' %}?category={{ category.id }}" class="btn" itemprop="url">Подробнее</a>
+            </article>
+        {% endfor %}
+    </div>
+    <p style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'service_list' %}" class="btn" style="font-size: 1.1rem; padding: 12px 40px;">Все услуги</a>
+    </p>
+</section>
+{% endif %}
+
+<!-- Latest News -->
+{% if latest_news %}
+<section>
+    <h2>Последние новости</h2>
+    <div class="grid-3">
+        {% for news in latest_news %}
+            <article class="card" itemscope itemtype="https://schema.org/NewsArticle">
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" itemprop="image">
+                {% else %}
+                    <img src="{% static 'images/news_default.svg' %}" alt="{{ news.title }}" itemprop="image">
+                {% endif %}
+                <h3 itemprop="headline">{{ news.title }}</h3>
+                <p><small><time datetime="{{ news.published_at|date:'c' }}" itemprop="datePublished">{{ news.published_at|date:'d.m.Y' }}</time></small></p>
+                <p itemprop="description">{{ news.summary|truncatewords:20 }}</p>
+                <a href="{{ news.get_absolute_url }}" class="btn" itemprop="url">Читать далее</a>
+            </article>
+        {% endfor %}
+    </div>
+    <p style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'news_list' %}" class="btn" style="font-size: 1.1rem; padding: 12px 40px;">Все новости</a>
+    </p>
+</section>
+{% endif %}
+
+<!-- Partners -->
+{% if partners %}
+<section>
+    <h2>Наши партнеры</h2>
+    <div class="partners">
+        {% for partner in partners %}
+            <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}" itemscope itemtype="https://schema.org/Organization">
+                <meta itemprop="name" content="{{ partner.name }}">
+                <meta itemprop="url" content="{{ partner.website }}">
+                {% if partner.logo %}
+                    <img src="{% static partner.logo.url %}" alt="{{ partner.name }}" itemprop="logo">
+                {% else %}
+                    <img src="{% static 'images/partner1.svg' %}" alt="{{ partner.name }}" itemprop="logo">
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Features Section -->
+<section>
+    <h2>Почему выбирают нас</h2>
+    <div class="grid-3">
+        <article class="card">
+            <h3>🏥 Современное оборудование</h3>
+            <p>Мы используем новейшее медицинское оборудование для точной диагностики и эффективного лечения.</p>
+        </article>
+        <article class="card">
+            <h3>👨‍⚕️ Опытные врачи</h3>
+            <p>Наша команда состоит из высококвалифицированных специалистов с многолетним опытом работы.</p>
+        </article>
+        <article class="card">
+            <h3>⏰ Удобный график</h3>
+            <p>Мы работаем 7 дней в неделю, чтобы вы могли получить помощь в удобное для вас время.</p>
+        </article>
+        <article class="card">
+            <h3>💰 Доступные цены</h3>
+            <p>Качественная медицинская помощь по разумным ценам. Регулярные акции и спецпредложения.</p>
+        </article>
+        <article class="card">
+            <h3>🎯 Индивидуальный подход</h3>
+            <p>Мы учитываем особенности каждого пациента и разрабатываем персональный план лечения.</p>
+        </article>
+        <article class="card">
+            <h3>📱 Онлайн-запись</h3>
+            <p>Запишитесь на прием онлайн в любое время - это быстро и удобно.</p>
+        </article>
+    </div>
+</section>
+
+<!-- External Content -->
+{% if joke or quote %}
+<section>
+    <h2>Немного юмора и мудрости</h2>
+    <div class="grid-2">
+        {% if joke %}
+            <article class="card">
+                <h3>😄 Шутка дня</h3>
+                <p><strong>{{ joke.setup }}</strong></p>
+                <p>{{ joke.punchline }}</p>
+            </article>
+        {% endif %}
+        
+        {% if quote %}
+            <article class="card">
+                <h3>💭 Цитата дня</h3>
+                <blockquote>
+                    <p>"{{ quote.content }}"</p>
+                    <footer>— {{ quote.author }}</footer>
+                </blockquote>
+            </article>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="banner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <h2 style="color: white;">Запишитесь на прием прямо сейчас!</h2>
+    <p style="color: #f0f0f0;">Наши специалисты готовы помочь вам в любое удобное время</p>
+    <a href="{% url 'service_list' %}" style="background: white; color: #667eea;">Записаться на прием</a>
+</section>
+
+{% endblock %}
