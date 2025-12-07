@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ news.title }} - Новости{% endblock %}
+{% block title %}{{ news.title }} - News{% endblock %}
 
 {% block content %}
+<div lang="en">
+    <h1>{{ news.title }}</h1>
+</div>
+
 <div>
-    <a href="{% url 'news_list' %}">← Вернуться к списку новостей</a>
+    <a href="{% url 'news_list' %}">← Back to News List</a>
 </div>
 
 <article>
@@ -42,7 +46,7 @@
 
 {% if related_news %}
 <div style="margin-top: 40px;">
-    <h3>Похожие новости</h3>
+    <h3>Related News</h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
         {% for item in related_news %}
         <div style="border: 1px solid #ddd; padding: 15px;">
@@ -53,7 +57,7 @@
             {% endif %}
             <h4>{{ item.title }}</h4>
             <p><small>{{ item.published_at|date:"d.m.Y" }}</small></p>
-            <p><a href="{% url 'news_detail' item.slug %}">Читать →</a></p>
+            <p><a href="{% url 'news_detail' item.slug %}">Read More →</a></p>
         </div>
         {% endfor %}
     </div>

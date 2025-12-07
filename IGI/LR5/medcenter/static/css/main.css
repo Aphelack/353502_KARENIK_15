@@ -51,7 +51,7 @@ body {
     font-family: var(--font-main);
     line-height: 1.8;
     color: var(--text-color);
-    background: url('/static/images/background-pattern.svg') repeat;
+    background: url('/static/images/background.jpeg') repeat;
     background-color: #f5f7fa;
     background-attachment: fixed;
 }
@@ -383,7 +383,6 @@ table {
     width: 100%;
     border-collapse: collapse; /* Remove double lines */
     margin: 2rem 0;
-    background-color: white;
     box-shadow: var(--shadow);
     border-radius: 8px;
     overflow: hidden;
@@ -400,12 +399,12 @@ table caption {
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 1px;
+    border-color: blue;
 }
 
 /* Table header */
 thead {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-bg) 100%);
-    color: white;
 }
 
 th {
@@ -415,12 +414,16 @@ th {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     vertical-align: middle;
+    border-color: red;
 }
 
 td {
     padding: 12px 15px;
     border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+
     vertical-align: top;
+    border-color: red;
 }
 
 /* Empty cells styling */
@@ -691,4 +694,113 @@ h2 ~ p {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+
+/* ============================================
+   PRELOADER STYLES - FIXED VERSION
+   ============================================ */
+
+.preloader {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+}
+
+.preloader.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.preloader-content {
+    text-align: center !important;
+    color: white !important;
+}
+
+/* Медицинский спиннер */
+.medical-spinner {
+    width: 80px !important;
+    height: 80px !important;
+    position: relative !important;
+    margin: 0 auto 20px !important;
+}
+
+.medical-spinner::before,
+.medical-spinner::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background: white !important;
+    border-radius: 2px !important;
+    animation: pulse 1.5s ease-in-out infinite !important;
+}
+
+.medical-spinner::before {
+    width: 60px !important;
+    height: 8px !important;
+}
+
+.medical-spinner::after {
+    width: 8px !important;
+    height: 60px !important;
+    animation-delay: 0.75s !important;
+}
+
+.loading-text {
+    font-size: 1.2rem !important;
+    font-weight: 300 !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 20px !important;
+    color: white !important;
+}
+
+.loading-progress {
+    width: 200px !important;
+    height: 4px !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 2px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+}
+
+.progress-bar {
+    height: 100% !important;
+    width: 0% !important;
+    background: linear-gradient(90deg, #3498db, #27ae60) !important;
+    border-radius: 2px !important;
+    animation: loadingProgress 3s ease-in-out infinite !important;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+@keyframes loadingProgress {
+    0% {
+        width: 0%;
+    }
+    50% {
+        width: 70%;
+    }
+    100% {
+        width: 100%;
+    }
 }

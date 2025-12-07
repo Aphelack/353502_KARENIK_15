@@ -129,7 +129,7 @@
 
 /* Requirements section with float */
 .vacancy-requirements {
-    float: left;
+    float: right;
     width: 48%;
     margin-right: 4%;
     background: var(--light-bg);

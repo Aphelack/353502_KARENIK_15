@@ -62,20 +62,27 @@
 <section>
     <h2>Наша миссия - ваше здоровье</h2>
     <div class="animation-container">
-        <div class="ground"></div>
-        <div class="medical-building"></div>
+        <!-- Фоновые элементы -->
+        <div class="sun"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
         
-        <!-- Person with cane (injured) -->
-        <div class="person-injured">
+        <div class="ground"></div>
+        
+        <!-- Медицинское здание -->
+        <div class="medical-building">
+            <div class="window"></div>
+            <div class="window"></div>
+            <div class="window"></div>
+            <div class="window"></div>
+            <div class="door"></div>
+        </div>
+        
+        <!-- ОДИН человек который входит и выходит -->
+        <div class="person">
             <div class="person-head"></div>
             <div class="person-body"></div>
             <div class="cane"></div>
-        </div>
-        
-        <!-- Healthy person (after treatment) -->
-        <div class="person-healthy">
-            <div class="person-head"></div>
-            <div class="person-body"></div>
         </div>
     </div>
     <p style="text-align: center; margin-top: 20px; font-style: italic; color: var(--text-light);">
@@ -202,8 +209,6 @@
 </section>
 
 <!-- Preloader -->
-<div class="preloader">
-    <div class="spinner"></div>
-</div>
+<!-- Preloader -->
 
 {% endblock %}

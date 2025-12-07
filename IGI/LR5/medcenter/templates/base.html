@@ -58,6 +58,23 @@
     {% block head %}{% endblock %}
 </head>
 <body itemscope itemtype="https://schema.org/MedicalOrganization">
+    <div class="preloader" id="preloader">
+    <div class="preloader-content">
+        <!-- Вариант 1: Медицинский крест -->
+        <div class="medical-spinner"></div>
+        
+        <!-- Вариант 2: Сердечный ритм (раскомментируйте для использования) -->
+        <!-- <div class="heartbeat-loader"></div> -->
+        
+        <!-- Вариант 3: Медицинский символ (раскомментируйте для использования) -->
+        <!-- <div class="caduceus-loader"></div> -->
+        
+        <div class="loading-text">Загрузка медицинского центра</div>
+        <div class="loading-progress">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
     <!-- Skip navigation link for accessibility -->
     <a href="#main-content" class="visually-hidden-focusable">Перейти к основному содержанию</a>
     
@@ -197,7 +214,56 @@
     </footer>
 
     <!-- Main JavaScript -->
+        <!-- Main JavaScript -->
     <script src="{% static 'js/main.js' %}"></script>
+    
+    <!-- Preloader Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preloader = document.getElementById('preloader');
+        console.log('Preloader element found:', !!preloader);
+        
+        if (preloader) {
+            // Убедимся что прелоадер видим
+            preloader.style.display = 'flex';
+            preloader.style.opacity = '1';
+            preloader.style.visibility = 'visible';
+            
+            // Скрываем когда страница полностью загружена
+            window.addEventListener('load', function() {
+                console.log('Page fully loaded, hiding preloader...');
+                
+                // Минимальное время показа - 1.5 секунды
+                setTimeout(function() {
+                    preloader.classList.add('hidden');
+                    
+                    // Полностью удаляем через 0.5 секунды
+                    setTimeout(function() {
+                        preloader.style.display = 'none';
+                        console.log('Preloader completely hidden');
+                    }, 500);
+                    
+                }, 1500);
+            });
+            
+            // Fallback - скрыть через 5 секунд на всякий случай
+            setTimeout(function() {
+                if (preloader.style.display !== 'none') {
+                    console.log('Fallback: hiding preloader after 5 seconds');
+                    preloader.classList.add('hidden');
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }, 5000);
+        } else {
+            console.error('Preloader element not found!');
+        }
+    });
+    </script>
+    
     {% block extra_js %}{% endblock %}
+</body>
+</html>
 </body>
 </html>

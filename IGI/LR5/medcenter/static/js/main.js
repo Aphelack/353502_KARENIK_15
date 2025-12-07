@@ -1,194 +1,104 @@
 /**
- * Main JavaScript for Medical Center
- * Handles interactive features like FAQ accordion, animations, etc.
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-    // FAQ Accordion functionality
-    initFAQAccordion();
-    
-    // Smooth scroll for anchor links
-    initSmoothScroll();
-    
-    // Fixed navigation on scroll
-    initFixedNav();
-    
-    // Preloader
-    initPreloader();
-    
-    // Copy promo code functionality
-    initPromoCopy();
-});
-
-/**
- * FAQ Accordion - Toggle questions and answers
- */
-function initFAQAccordion() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        
-        if (question) {
-            question.addEventListener('click', function() {
-                // Close all other items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-                
-                // Toggle current item
-                item.classList.toggle('active');
-            });
-        }
-    });
-}
-
-/**
- * Smooth scroll for anchor links
- */
-function initSmoothScroll() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            
-            if (href !== '#' && href !== '#main-content') {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
-        });
-    });
-}
-
-/**
- * Fixed navigation on scroll
- */
-function initFixedNav() {
-    const header = document.querySelector('header');
-    
-    if (header) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-                document.body.classList.add('has-fixed-nav');
-            } else {
-                header.classList.remove('scrolled');
-                document.body.classList.remove('has-fixed-nav');
-            }
-        });
-    }
-}
-
-/**
- * Preloader functionality
+ * Preloader functionality with medical theme
  */
 function initPreloader() {
-    const preloader = document.querySelector('.preloader');
+    const preloader = document.getElementById('preloader');
+    const progressBar = document.querySelector('.progress-bar');
     
-    if (preloader) {
-        // Show preloader when page is loading
-        window.addEventListener('load', function() {
-            preloader.classList.remove('active');
-        });
-        
-        // Show preloader on AJAX requests (if using fetch)
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-            preloader.classList.add('active');
-            return originalFetch.apply(this, args).finally(() => {
-                preloader.classList.remove('active');
-            });
-        };
+    if (!preloader) return;
+    
+    // Функция для скрытия прелоадера
+    function hidePreloader() {
+        preloader.classList.add('hidden');
+        // Полное удаление из DOM после анимации
+        setTimeout(() => {
+            preloader.style.display = 'none';
+            document.body.classList.remove('preloader-active');
+        }, 500);
     }
-}
-
-/**
- * Copy promo code to clipboard
- */
-function initPromoCopy() {
-    const copyButtons = document.querySelectorAll('.copy-btn');
     
-    copyButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const promoCode = this.closest('.promo-code-display').querySelector('.promo-code');
+    // Функция для обновления прогресса
+    function updateProgress(progress) {
+        if (progressBar) {
+            progressBar.style.width = progress + '%';
+        }
+    }
+    
+    // Симуляция прогресса загрузки
+    function simulateProgress() {
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 100) progress = 100;
+            updateProgress(progress);
             
-            if (promoCode) {
-                const text = promoCode.textContent;
-                
-                // Copy to clipboard
-                navigator.clipboard.writeText(text).then(() => {
-                    // Change button text temporarily
-                    const originalText = this.textContent;
-                    this.textContent = 'Скопировано!';
-                    this.style.background = '#27ae60';
-                    
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.background = '';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                    alert('Не удалось скопировать промокод');
-                });
+            if (progress === 100) {
+                clearInterval(progressInterval);
+                setTimeout(hidePreloader, 300);
             }
-        });
-    });
-}
-
-/**
- * Rating stars interaction
- */
-function initRatingStars() {
-    const ratingInputs = document.querySelectorAll('.rating-input');
+        }, 200);
+    }
     
-    ratingInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            const rating = this.value;
-            console.log('Rating selected:', rating);
-        });
-    });
-}
-
-/**
- * Form validation helper
- */
-function validateForm(form) {
-    const requiredFields = form.querySelectorAll('[required]');
-    let isValid = true;
+    // Показываем прелоадер при начале загрузки
+    document.body.classList.add('preloader-active');
     
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            isValid = false;
-            field.classList.add('error');
+    // Основной обработчик - когда вся страница загружена
+    window.addEventListener('load', function() {
+        // Если страница загрузилась быстро, показываем прелоадер минимум 1.5 секунды
+        const minDisplayTime = 1500;
+        const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+        
+        if (loadTime < minDisplayTime) {
+            const remainingTime = minDisplayTime - loadTime;
+            simulateProgress();
+            setTimeout(hidePreloader, remainingTime);
         } else {
-            field.classList.remove('error');
+            simulateProgress();
         }
     });
     
-    return isValid;
+    // Fallback - скрыть прелоадер через 5 секунд на всякий случай
+    setTimeout(hidePreloader, 5000);
+    
+    // Показывать прелоадер при AJAX запросах (опционально)
+    interceptFetchRequests();
 }
 
 /**
- * Mobile menu toggle
+ * Intercept fetch requests to show preloader
  */
-function initMobileMenu() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('header nav > ul');
+function interceptFetchRequests() {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
     
-    if (menuToggle && nav) {
-        menuToggle.addEventListener('click', function() {
-            nav.classList.toggle('active');
-            this.classList.toggle('active');
+    const originalFetch = window.fetch;
+    let activeRequests = 0;
+    
+    window.fetch = function(...args) {
+        activeRequests++;
+        showPreloader();
+        
+        return originalFetch.apply(this, args).finally(() => {
+            activeRequests--;
+            if (activeRequests === 0) {
+                setTimeout(hidePreloader, 500);
+            }
         });
+    };
+    
+    function showPreloader() {
+        preloader.style.display = 'flex';
+        preloader.classList.remove('hidden');
+        document.body.classList.add('preloader-active');
+    }
+    
+    function hidePreloader() {
+        preloader.classList.add('hidden');
+        setTimeout(() => {
+            if (activeRequests === 0) {
+                preloader.style.display = 'none';
+                document.body.classList.remove('preloader-active');
+            }
+        }, 500);
     }
 }

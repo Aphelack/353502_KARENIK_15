@@ -159,10 +159,17 @@
     {% if quote %}
     <div>
         <h3>Цитата дня</h3>
-        <blockquote>
+        <q>
             <p>"{{ quote.body }}"</p>
             <footer>{{ quote.author }}</footer>
-        </blockquote>
+        </q>
+    </div>
+    <div lang = "en">
+        <h3>Citate</h3>
+        <q>
+            <p>"{{ quote.body }}"</p>
+            <footer>{{ quote.author }}</footer>
+        </q>
     </div>
     {% endif %}
 </section>

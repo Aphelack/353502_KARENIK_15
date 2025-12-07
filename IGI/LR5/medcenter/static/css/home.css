@@ -216,6 +216,14 @@ body.has-fixed-nav {
    ANIMATION - Person Walking to Medical Center
    ============================================ */
 
+/* ============================================
+   MEDICAL ANIMATION STYLES
+   ============================================ */
+
+/* ============================================
+   SINGLE PERSON MEDICAL ANIMATION
+   ============================================ */
+
 .animation-container {
     position: relative;
     width: 100%;
@@ -227,170 +235,410 @@ body.has-fixed-nav {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Medical center building */
-.medical-building {
-    position: absolute;
-    right: 100px;
-    bottom: 50px;
-    width: 200px;
-    height: 150px;
-    background: white;
-    border: 3px solid var(--primary-color);
-    border-radius: 10px 10px 0 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.medical-building::before {
-    content: '+';
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem;
-    color: var(--accent-color);
-    font-weight: bold;
-}
-
-.medical-building::after {
-    content: 'МЕДЦЕНТР';
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-weight: bold;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-/* Ground */
+/* Земля */
 .ground {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50px;
-    background: #8BC34A;
-    border-top: 3px solid #689F38;
-}
-
-/* Person with cane (injured) */
-.person-injured {
-    position: absolute;
-    left: -100px;
-    bottom: 50px;
-    width: 60px;
-    height: 100px;
-    animation: walk-to-building 10s ease-in-out forwards;
-}
-
-/* Person body */
-.person-body {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
     height: 60px;
-    background: #3498db;
-    border-radius: 20px 20px 0 0;
+    background: linear-gradient(to bottom, #8B4513, #A0522D);
+    border-top: 3px solid #654321;
 }
 
-/* Person head */
-.person-head {
+/* Медицинское здание */
+.medical-building {
     position: absolute;
     bottom: 60px;
+    left: 50px;
+    width: 120px;
+    height: 180px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid #2c3e50;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Крыша и крест */
+.medical-building::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -5px;
+    width: 130px;
+    height: 25px;
+    background: #e74c3c;
+    clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+}
+
+.medical-building::after {
+    content: '➕';
+    position: absolute;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 30px;
+    font-size: 24px;
+    color: #e74c3c;
+    animation: crossGlow 2s ease-in-out 2;
+}
+
+@keyframes crossGlow {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+/* Окна */
+.medical-building .window {
+    position: absolute;
+    width: 20px;
     height: 30px;
-    background: #f4c2a5;
+    background: #3498db;
+    border: 2px solid #2c3e50;
+    border-radius: 3px;
+}
+
+.medical-building .window:nth-child(1) { top: 40px; left: 20px; }
+.medical-building .window:nth-child(2) { top: 40px; right: 20px; }
+.medical-building .window:nth-child(3) { top: 90px; left: 20px; }
+.medical-building .window:nth-child(4) { top: 90px; right: 20px; }
+
+/* Дверь */
+.door {
+    position: absolute;
+    bottom: 0;
+    left: 45px;
+    width: 30px;
+    height: 50px;
+    background: #8B4513;
+    border: 2px solid #654321;
+    border-radius: 5px 5px 0 0;
+}
+
+/* ОДИН ЧЕЛОВЕК с разными состояниями */
+.person {
+    position: absolute;
+    bottom: 60px;
+    left: -190px;
+}
+
+/* Голова и тело */
+.person-head {
+    width: 25px;
+    height: 25px;
+    background: #FFD700;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    position: relative;
+}
+
+.person-body {
+    width: 30px;
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+}
+
+/* Трость (появляется только при входе) */
+.cane {
+    position: absolute;
+    bottom: -40px;
+    right: -5px;
+    width: 5px;
+    height: 60px;
+    background: #8B4513;
+    transform: rotate(-15deg);
+    border-radius: 2px;
+    opacity: 0;
+}
+
+.cane::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -3px;
+    width: 11px;
+    height: 10px;
+    background: #8B4513;
     border-radius: 50%;
 }
 
-/* Walking cane */
+/* АНИМАЦИИ ДЛЯ ОДНОГО ЧЕЛОВЕКА */
+
+/* Вход в здание С тростью */
+@keyframes enterWithCane {
+    /* Подход к зданию */
+    0% {
+        left: 300px;    /* Человек начинается слева за экраном */
+        transform: scale(0.9);
+    }
+    30% {
+        left: 2000px;     /* Подходит ближе к зданию */
+        transform: scale(1);
+    }
+    /* Пауза перед входом */
+    40% {
+        left: 150px;     /* Стоит перед зданием */
+    }
+    /* Вход в здание */
+    60% {
+        left: 100px;     /* Заходит в здание (к двери) */
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        left: 50px;     /* Полностью внутри здания */
+        opacity: 0;
+    }
+}
+
+/* Выход из здания БЕЗ трости */
+@keyframes exitWithoutCane {
+    /* Выход из здания */
+    0% {
+        left: 70px;
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    20% {
+        left: 100px;     /* Выходим из двери */
+        opacity: 1;
+        transform: scale(1);
+    }
+    /* Пауза после выхода */
+    30% {
+        left: 150px;
+        transform: scale(1);
+    }
+    /* Уход дальше налево */
+    50% {
+        left: 175px;
+        transform: translateY(-5px) scale(1.05);
+    }
+    70% {
+        left: 200px;
+        opacity: 1;
+    }
+    100% {
+        left: 250px;
+        opacity: 0;
+    }
+}
+
+/* Анимация трости */
+@keyframes caneAppear {
+    0%, 40% { opacity: 1; }
+    60%, 100% { opacity: 0; }
+}
+
+/* Анимация цвета тела */
+@keyframes bodyColorChange {
+    0%, 40% { background: #3498db; } /* Синий - болен */
+    60%, 100% { background: #27ae60; } /* Зеленый - здоров */
+}
+
+/* Анимация походки */
+@keyframes walking {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Анимация радости (после лечения) */
+@keyframes happyJump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Применение анимаций к одному человеку */
+.person {
+    animation: 
+        enterWithCane 4s ease-in-out forwards,
+        exitWithoutCane 4s ease-in-out 4s forwards;
+}
+
+.person-body {
+    animation: 
+        bodyColorChange 8s ease-in-out forwards,
+        walking 0.5s ease-in-out infinite;
+}
+
 .cane {
+    animation: caneAppear 8s ease-in-out forwards;
+}
+
+/* После выхода добавляем радостные движения */
+.person {
+    animation: 
+        enterWithCane 4s ease-in-out forwards,
+        exitWithoutCane 4s ease-in-out 4s forwards;
+}
+
+/* Когда человек выходит - он подпрыгивает от радости */
+
+
+/* Облака для фона */
+.cloud {
     position: absolute;
-    bottom: 10px;
-    left: 0;
-    width: 3px;
+    background: white;
+    border-radius: 50px;
+    animation: cloudMove 20s linear infinite;
+}
+
+.cloud::before {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud:nth-child(1) {
+    width: 80px;
+    height: 30px;
+    top: 50px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.cloud:nth-child(1)::before {
+    width: 40px;
+    height: 40px;
+    top: -20px;
+    left: 10px;
+}
+
+.cloud:nth-child(2) {
+    width: 100px;
+    height: 35px;
+    top: 80px;
+    left: -150px;
+    animation-delay: 7s;
+}
+
+@keyframes cloudMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 200px)); }
+}
+
+/* Солнце */
+.sun {
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #FFD700, #FFA500);
+    border-radius: 50%;
+    animation: sunGlow 4s ease-in-out infinite;
+}
+
+@keyframes sunGlow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Облака для фона */
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    animation: cloudMove 20s linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud:nth-child(1) {
+    width: 80px;
+    height: 30px;
+    top: 50px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.cloud:nth-child(1)::before {
+    width: 40px;
+    height: 40px;
+    top: -20px;
+    left: 10px;
+}
+
+.cloud:nth-child(1)::after {
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    right: 10px;
+}
+
+.cloud:nth-child(2) {
+    width: 100px;
+    height: 35px;
+    top: 80px;
+    left: -150px;
+    animation-delay: 5s;
+}
+
+.cloud:nth-child(2)::before {
+    width: 45px;
+    height: 45px;
+    top: -22px;
+    left: 15px;
+}
+
+.cloud:nth-child(2)::after {
+    width: 55px;
+    height: 55px;
+    top: -28px;
+    right: 15px;
+}
+
+@keyframes cloudMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 200px)); }
+}
+
+/* Солнце */
+.sun {
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #FFD700, #FFA500);
+    border-radius: 50%;
+    animation: sunGlow 4s ease-in-out infinite;
+}
+
+@keyframes sunGlow {
+    0%, 100% { 
+        box-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500;
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 30px #FFD700, 0 0 60px #FFA500;
+        transform: scale(1.1);
+    }
+}
+
+/* Дверь здания */
+.door {
+    position: absolute;
+    bottom: 0;
+    left: 45px;
+    width: 30px;
     height: 50px;
     background: #8B4513;
-    transform-origin: top;
-    animation: cane-movement 0.5s infinite;
+    border: 2px solid #654321;
+    border-radius: 5px 5px 0 0;
+    animation: doorOpen 1s ease-in-out 2.5s forwards;
 }
 
-/* Healthy person (after treatment) */
-.person-healthy {
-    position: absolute;
-    right: -100px;
-    bottom: 50px;
-    width: 60px;
-    height: 100px;
-    opacity: 0;
-    animation: walk-from-building 8s ease-in-out 10s forwards;
+@keyframes doorOpen {
+    0% { transform: rotateY(0); }
+    100% { transform: rotateY(60deg); }
 }
-
-/* Keyframes for injured person walking to building */
-@keyframes walk-to-building {
-    0% {
-        left: -100px;
-        transform: rotate(0deg);
-    }
-    50% {
-        left: calc(50% - 200px);
-        transform: rotate(2deg);
-    }
-    75% {
-        left: calc(50% - 100px);
-        transform: rotate(-2deg);
-    }
-    100% {
-        left: calc(100% - 350px);
-        transform: rotate(0deg);
-        opacity: 0;
-    }
-}
-
-/* Keyframes for healthy person walking from building */
-@keyframes walk-from-building {
-    0% {
-        right: -100px;
-        opacity: 0;
-    }
-    10% {
-        right: 50px;
-        opacity: 1;
-    }
-    100% {
-        right: calc(100% + 100px);
-        opacity: 1;
-    }
-}
-
-/* Cane movement animation (limping effect) */
-@keyframes cane-movement {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(10deg);
-    }
-}
-
-/* Body limping animation */
-@keyframes limp {
-    0%, 100% {
-        transform: translateY(0) translateX(-50%);
-    }
-    50% {
-        transform: translateY(-5px) translateX(-50%);
-    }
-}
-
-.person-injured .person-body {
-    animation: limp 0.8s infinite;
-}
-
 /* ============================================
    CALL TO ACTION SECTION
    ============================================ */

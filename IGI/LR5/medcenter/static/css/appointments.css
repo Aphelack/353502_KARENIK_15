@@ -1,0 +1,402 @@
+/*
+ * Appointments & Order Service Page Styles
+ * Beautiful time slot selection interface
+ */
+
+/* ============================================
+   ORDER SERVICE CONTAINER
+   ============================================ */
+.order-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.order-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.order-header h1 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 2rem;
+}
+
+.order-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* ============================================
+   SERVICE INFO CARD
+   ============================================ */
+.service-info-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 5px solid #667eea;
+}
+
+.service-info-card h2 {
+    color: var(--color-primary);
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.service-info-card dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-sm) var(--spacing-md);
+    margin: 0;
+}
+
+.service-info-card dt {
+    font-weight: 600;
+    color: var(--color-gray-dark);
+}
+
+.service-info-card dd {
+    margin: 0;
+    color: var(--color-dark);
+}
+
+.service-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+/* ============================================
+   TIME SLOT SELECTION
+   ============================================ */
+.slot-selection-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.slot-selection-card h3 {
+    color: var(--color-primary);
+    margin-top: 0;
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+/* Date Group */
+.date-group {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--color-gray-light);
+}
+
+.date-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.date-group h4 {
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: var(--border-radius);
+    display: inline-block;
+}
+
+.date-group h4 time {
+    font-weight: 600;
+}
+
+/* Time Slots Grid */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+/* Time Slot Button - Available */
+.time-slot {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.time-slot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.time-slot:hover::before {
+    left: 100%;
+}
+
+.time-slot:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+.time-slot:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.time-slot:focus {
+    outline: 3px solid rgba(102, 126, 234, 0.5);
+    outline-offset: 2px;
+}
+
+.time-slot time {
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: block;
+}
+
+/* Time Slot Button - Disabled/Busy */
+.time-slot:disabled,
+.time-slot[disabled] {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    border: 2px dashed #ddd;
+}
+
+.time-slot:disabled::before {
+    display: none;
+}
+
+.time-slot:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.time-slot:disabled time {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* Busy indicator */
+.time-slot:disabled::after {
+    content: ' 🔒';
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.order-navigation {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: white;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--color-primary);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.back-button::before {
+    content: '←';
+    font-size: 1.5em;
+}
+
+.back-button:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateX(-5px);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.no-slots {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-gray);
+}
+
+.no-slots::before {
+    content: '📅';
+    font-size: 4rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.no-slots p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .order-container {
+        padding: var(--spacing-md);
+    }
+    
+    .order-header {
+        padding: var(--spacing-lg);
+    }
+    
+    .order-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .time-slots {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    
+    .service-info-card dl {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xs);
+    }
+    
+    .service-info-card dt {
+        font-weight: 700;
+        margin-top: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .time-slot {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.time-slot.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.time-slot.loading::after {
+    content: '⏳';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ============================================
+   SUCCESS/CONFIRMATION STYLES
+   ============================================ */
+.confirmation-card {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+.confirmation-card h2 {
+    color: white;
+    margin-top: 0;
+}
+
+.confirmation-card::before {
+    content: '✓';
+    font-size: 4rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+.time-slot:focus-visible {
+    outline: 3px solid #667eea;
+    outline-offset: 3px;
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .time-slot:not(:disabled) {
+        background: white;
+        color: black;
+        border: 1px solid #ddd;
+    }
+    
+    .order-header,
+    .confirmation-card {
+        background: white;
+        color: black;
+        border: 2px solid #ddd;
+    }
+    
+    .back-button {
+        display: none;
+    }
+}
