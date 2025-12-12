@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Вакансии - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>Открытые вакансии</h1>
+
+<div>
+    <a href="{% url 'company_info' %}">← Вернуться к информации о компании</a>
+</div>
+
+{% if page_obj %}
+    <div style="margin-top: 30px;">
+        {% for vacancy in page_obj %}
+        <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+            <h2>{{ vacancy.title }}</h2>
+            
+            {% if vacancy.salary_min or vacancy.salary_max %}
+            <p style="font-size: 1.2em; color: #28a745;">
+                <strong>Зарплата:</strong>
+                {% if vacancy.salary_min and vacancy.salary_max %}
+                    {{ vacancy.salary_min }} - {{ vacancy.salary_max }} BYN
+                {% elif vacancy.salary_min %}
+                    от {{ vacancy.salary_min }} BYN
+                {% else %}
+                    до {{ vacancy.salary_max }} BYN
+                {% endif %}
+            </p>
+            {% endif %}
+            
+            <div style="margin: 15px 0;">
+                <h3>Описание</h3>
+                {{ vacancy.description|linebreaks }}
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <h3>Требования</h3>
+                {{ vacancy.requirements|linebreaks }}
+            </div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                <p><strong>Контакты для связи:</strong></p>
+                <p>Email: <a href="mailto:{{ vacancy.contact_email }}">{{ vacancy.contact_email }}</a></p>
+                {% if vacancy.contact_phone %}
+                <p>Телефон: <a href="tel:{{ vacancy.contact_phone }}">{{ vacancy.contact_phone }}</a></p>
+                {% endif %}
+            </div>
+            
+            <p style="margin-top: 15px;">
+                <a href="{% url 'vacancy_detail' vacancy.pk %}">Подробнее →</a>
+            </p>
+            
+            <p><small>Опубликовано: {{ vacancy.created_at|date:"d.m.Y" }}</small></p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div style="margin-top: 30px; text-align: center;">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <p>Актуальных вакансий нет.</p>
+{% endif %}
+{% endblock %}

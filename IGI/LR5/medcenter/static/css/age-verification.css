@@ -1,0 +1,256 @@
+/* Age Verification Styles - Lab 3, Task 7 */
+
+.age-verification-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.age-verification-card {
+    background: var(--card-bg, #fff);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verification-icon {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.age-verification-card h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+    color: var(--text-primary, #333);
+    font-size: 2rem;
+}
+
+.age-verification-card > p {
+    text-align: center;
+    color: var(--text-secondary, #666);
+    margin-bottom: 30px;
+}
+
+.age-form {
+    margin-bottom: 20px;
+}
+
+.age-form .form-group {
+    margin-bottom: 20px;
+}
+
+.age-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+}
+
+.age-form input[type="date"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--border-color, #ddd);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.age-form input[type="date"]:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.btn-verify {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-verify:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-verify:active {
+    transform: translateY(0);
+}
+
+/* Verification Result */
+.verification-result {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 15px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.verification-result.success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+.verification-result.warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.verification-result.error {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+}
+
+.result-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.verification-result h3 {
+    text-align: center;
+    margin: 0 0 15px 0;
+    font-size: 1.8rem;
+}
+
+.verification-result p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.verification-result p strong {
+    font-weight: 700;
+}
+
+.day-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 1.2rem !important;
+}
+
+.age-badge {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 10px 25px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    width: 100%;
+}
+
+.age-badge.minor {
+    background: rgba(255, 255, 255, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.warning-message {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.6;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .age-verification-card {
+        padding: 30px 20px;
+    }
+
+    .verification-icon {
+        font-size: 3rem;
+    }
+
+    .age-verification-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .verification-result h3 {
+        font-size: 1.5rem;
+    }
+
+    .verification-result p {
+        font-size: 1rem;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .age-verification-wrapper {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+}

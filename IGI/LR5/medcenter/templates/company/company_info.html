@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}О компании - Медицинский центр{% endblock %}
+
+{% block content %}
+<section itemscope itemtype="https://schema.org/MedicalOrganization">
+    <h2 itemprop="name">О компании</h2>
+
+    {% if company_info %}
+    <article class="card">
+        {% if company_info.logo %}
+        <figure>
+            <img src="{{ company_info.logo.url }}" alt="{{ company_info.name }}" itemprop="logo">
+        </figure>
+        {% endif %}
+
+        <h3>{{ company_info.name }}</h3>
+        
+        <div itemprop="description">
+            {{ company_info.description|linebreaks }}
+        </div>
+
+        <section>
+            <h3>Видео о нас</h3>
+            <figure>
+                <video controls width="100%" preload="metadata" itemprop="video" itemscope itemtype="https://schema.org/VideoObject">
+                    <source src="{% static 'videos/company_intro.mp4' %}" type="video/mp4">
+                    <p>Ваш браузер не поддерживает HTML5 видео. <a href="{% static 'videos/company_intro.mp4' %}" download>Скачать видео</a></p>
+                </video>
+                <a href="{% static 'videos/company_intro.mp4' %}" download>Скачать видео</a></p>
+                <figcaption>Видео презентация медицинского центра</figcaption>
+            </figure>
+        </section>
+    </article>
+
+    <article class="card">
+        <h3>Контактная информация</h3>
+        <dl itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+            <dt>Адрес:</dt>
+            <dd itemprop="streetAddress">{{ company_info.address|linebreaks }}</dd>
+            
+            <dt>Телефон:</dt>
+            <dd><a href="tel:{{ company_info.phone }}" itemprop="telephone">{{ company_info.phone }}</a></dd>
+            
+            <dt>Email:</dt>
+            <dd><a href="mailto:{{ company_info.email }}" itemprop="email">{{ company_info.email }}</a></dd>
+            
+            {% if company_info.website %}
+            <dt>Веб-сайт:</dt>
+            <dd><a href="{{ company_info.website }}" target="_blank" rel="noopener noreferrer" itemprop="url">{{ company_info.website }}</a></dd>
+            {% endif %}
+        </dl>
+    </article>
+
+    <article class="card">
+        <h3>Реквизиты</h3>
+        <dl>
+            <dt>Регистрационный номер:</dt>
+            <dd>{{ company_info.registration_number }}</dd>
+            
+            <dt>Налоговый номер:</dt>
+            <dd>{{ company_info.tax_number }}</dd>
+            
+            <dt>Банковский счет:</dt>
+            <dd>{{ company_info.bank_account }}</dd>
+            
+            <dt>Название банка:</dt>
+            <dd>{{ company_info.bank_name }}</dd>
+        </dl>
+    </article>
+
+    <article class="card">
+        <h3>Сертификация</h3>
+        <blockquote>
+            {{ company_info.certificate_text|linebreaks }}
+        </blockquote>
+    </article>
+
+    <nav class="card">
+        <h3>Полезные ссылки</h3>
+        <ul>
+            <li><a href="{% url 'company_history' %}">История компании</a></li>
+            <li><a href="{% url 'contacts' %}">Наши сотрудники</a></li>
+            <li><a href="{% url 'vacancies' %}">Вакансии</a></li>
+            <li><a href="{% url 'service_list' %}">Наши услуги</a></li>
+        </ul>
+    </nav>
+    {% else %}
+    <article class="card">
+        <p>Информация о компании пока не добавлена.</p>
+    </article>
+    {% endif %}
+</section>
+{% endblock %}

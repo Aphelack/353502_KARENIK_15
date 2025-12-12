@@ -1,0 +1,503 @@
+/*
+ * Statistics Page Styles
+ * Includes comprehensive table styling with pseudoclasses
+ */
+
+/* ============================================
+   STATISTICS CONTAINER
+   ============================================ */
+.statistics-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.statistics-header {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    color: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.statistics-title {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+}
+
+/* ============================================
+   TABLE STYLING WITH PSEUDOCLASSES
+   ============================================ */
+.stats-table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    overflow-x: auto;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse; /* Remove double borders */
+    margin: 20px 0;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Caption styling - positioned above table */
+.stats-table caption {
+    caption-side: top;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 20px;
+    background: var(--primary-color);
+    color: white;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Table header */
+.stats-table thead {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-bg) 100%);
+    color: white;
+}
+
+.stats-table th {
+    padding: 18px 15px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    vertical-align: middle;
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+/* First header column */
+.stats-table th:first-child {
+    padding-left: 25px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+/* Last header column */
+.stats-table th:last-child {
+    text-align: right;
+    padding-right: 25px;
+}
+
+/* Table body cells */
+.stats-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+    font-size: 1rem;
+}
+
+/* Horizontal alignment */
+.stats-table td:first-child {
+    padding-left: 25px;
+    font-weight: 600;
+    color: var(--primary-color);
+    vertical-align: middle;
+}
+
+.stats-table td:last-child {
+    text-align: right;
+    padding-right: 25px;
+    vertical-align: middle;
+}
+
+/* Vertical alignment examples */
+.stats-table td.align-top {
+    vertical-align: top;
+}
+
+.stats-table td.align-middle {
+    vertical-align: middle;
+}
+
+.stats-table td.align-bottom {
+    vertical-align: bottom;
+}
+
+/* Empty cells styling */
+.stats-table td:empty,
+.stats-table td.empty {
+    background-color: #f8f9fa;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0, 0, 0, 0.03) 10px,
+        rgba(0, 0, 0, 0.03) 20px
+    );
+    position: relative;
+}
+
+.stats-table td:empty::after,
+.stats-table td.empty::after {
+    content: '—';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* Striped rows - nth-child for odd/even */
+.stats-table tbody tr:nth-child(odd) {
+    background-color: rgba(236, 240, 241, 0.3);
+}
+
+.stats-table tbody tr:nth-child(even) {
+    background-color: white;
+}
+
+/* Every 3rd row highlight */
+.stats-table tbody tr:nth-child(3n) {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* First row in tbody */
+.stats-table tbody tr:first-child {
+    border-top: 3px solid var(--secondary-color);
+}
+
+/* Last row in tbody */
+.stats-table tbody tr:last-child td {
+    border-bottom: 3px solid var(--primary-color);
+    font-weight: 600;
+}
+
+/* Hover effect on rows */
+.stats-table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.15);
+    cursor: pointer;
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific column styling with nth-child */
+.stats-table tbody td:nth-child(2) {
+    font-weight: 500;
+}
+
+.stats-table tbody td:nth-child(3) {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+/* Status indicators */
+.stats-table .status-active {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.stats-table .status-inactive {
+    color: var(--text-light);
+}
+
+.stats-table .status-pending {
+    color: var(--warning-color);
+    font-weight: bold;
+}
+
+.stats-table .status-danger {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* Number formatting */
+.stats-table .number {
+    font-family: var(--font-mono);
+    text-align: right;
+}
+
+.stats-table .positive {
+    color: var(--success-color);
+}
+
+.stats-table .negative {
+    color: var(--danger-color);
+}
+
+/* ============================================
+   SUMMARY CARDS
+   ============================================ */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin: 40px 0;
+}
+
+.summary-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.summary-card:nth-child(1) {
+    border-top: 4px solid #3498db;
+}
+
+.summary-card:nth-child(2) {
+    border-top: 4px solid #27ae60;
+}
+
+.summary-card:nth-child(3) {
+    border-top: 4px solid #f39c12;
+}
+
+.summary-card:nth-child(4) {
+    border-top: 4px solid #e74c3c;
+}
+
+.summary-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.summary-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-family: var(--font-heading);
+    margin-bottom: 10px;
+}
+
+.summary-label {
+    font-size: 1rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-change {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.summary-change.positive {
+    color: var(--success-color);
+}
+
+.summary-change.negative {
+    color: var(--danger-color);
+}
+
+/* ============================================
+   CHARTS SECTION
+   ============================================ */
+.charts-section {
+    margin: 60px 0;
+}
+
+.chart-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}
+
+.chart-title {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--light-bg);
+}
+
+.chart-placeholder {
+    width: 100%;
+    height: 400px;
+    background: var(--light-bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* ============================================
+   FILTERS & CONTROLS
+   ============================================ */
+.stats-controls {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.control-select,
+.control-input {
+    padding: 10px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.control-select:focus,
+.control-input:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.control-btn {
+    padding: 10px 25px;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
+}
+
+.control-btn:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   EXPORT SECTION
+   ============================================ */
+.export-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 40px 0;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.export-title {
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.export-btn {
+    padding: 10px 20px;
+    background: var(--light-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.export-btn:hover {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 992px) {
+    .stats-table {
+        font-size: 0.9rem;
+    }
+    
+    .stats-table th,
+    .stats-table td {
+        padding: 12px 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .statistics-header {
+        padding: 40px 20px;
+    }
+    
+    .statistics-title {
+        font-size: 2rem;
+    }
+    
+    .stats-table-container {
+        padding: 15px;
+    }
+    
+    .stats-table {
+        font-size: 0.85rem;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .control-btn {
+        width: 100%;
+    }
+    
+    .export-section {
+        flex-direction: column;
+    }
+    
+    .export-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .export-btn {
+        justify-content: center;
+    }
+}

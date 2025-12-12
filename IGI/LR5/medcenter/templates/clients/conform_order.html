@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Подтверждение записи - Медицинский центр{% endblock %}
+
+{% block content %}
+<section>
+    <article class="card">
+        <h2>Подтверждение записи</h2>
+        
+        <dl>
+            <dt>Услуга:</dt>
+            <dd>{{ service.name }}</dd>
+            
+            <dt>Врач:</dt>
+            <dd>
+                <a href="{% url 'doctor_detail' doctor.id %}">
+                    {{ doctor.user.get_full_name }}
+                </a>
+            </dd>
+            
+            <dt>Цена:</dt>
+            <dd>{{ service.price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+            
+            <dt>Дата и время:</dt>
+            <dd><time datetime="{{ appointment_date|date:'c' }}">{{ appointment_date|date:"d.m.Y H:i" }}</time></dd>
+        </dl>
+        
+        <form method="post">
+            {% csrf_token %}
+            <nav>
+                <a href="{% url 'order_service' service.id %}" class="btn">← Назад</a>
+                <button type="submit" class="btn">Подтвердить и добавить в корзину</button>
+            </nav>
+        </form>
+    </article>
+</section>
+{% endblock %}

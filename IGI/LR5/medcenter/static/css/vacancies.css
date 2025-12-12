@@ -1,0 +1,442 @@
+/*
+ * Vacancies Page Styles
+ * Uses float and clear for layout
+ */
+
+/* ============================================
+   VACANCIES CONTAINER
+   ============================================ */
+.vacancies-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.vacancies-header {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.vacancies-title {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.vacancies-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.95;
+}
+
+/* ============================================
+   VACANCY CARDS - FLOAT LAYOUT
+   ============================================ */
+.vacancy-list {
+    margin: 40px 0;
+}
+
+.vacancy-item {
+    background: white;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.vacancy-item:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Float layout for vacancy image */
+.vacancy-image-container {
+    float: left;
+    width: 250px;
+    height: 250px;
+    margin-right: 25px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.vacancy-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.vacancy-item:hover .vacancy-image {
+    transform: scale(1.1);
+}
+
+/* Content area with float */
+.vacancy-content {
+    padding: 25px;
+    overflow: hidden; /* Contains floated elements */
+}
+
+/* Clear floats */
+.vacancy-item::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.vacancy-header {
+    margin-bottom: 20px;
+}
+
+.vacancy-position {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+}
+
+.vacancy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light);
+}
+
+.meta-icon {
+    color: var(--secondary-color);
+}
+
+.vacancy-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Requirements section with float */
+.vacancy-requirements {
+    float: right;
+    width: 48%;
+    margin-right: 4%;
+    background: var(--light-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Responsibilities section with float */
+.vacancy-responsibilities {
+    float: left;
+    width: 48%;
+    background: var(--light-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.requirements-title,
+.responsibilities-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.requirements-list,
+.responsibilities-list {
+    list-style: none;
+    padding: 0;
+}
+
+.requirements-list li,
+.responsibilities-list li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+}
+
+.requirements-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.responsibilities-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+/* Conditions section */
+.vacancy-conditions {
+    clear: both;
+    background: rgba(52, 152, 219, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.conditions-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.conditions-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.condition-item {
+    padding: 8px 15px;
+    background: white;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Footer with apply button */
+.vacancy-footer {
+    clear: both;
+    padding: 20px 25px;
+    background: var(--light-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.vacancy-salary {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--success-color);
+}
+
+.vacancy-apply-btn {
+    padding: 12px 35px;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.vacancy-apply-btn:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+/* ============================================
+   FILTERS SIDEBAR - FLOAT LAYOUT
+   ============================================ */
+.vacancies-layout {
+    overflow: hidden; /* Clear floats */
+}
+
+.vacancies-sidebar {
+    float: right;
+    width: 280px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+.vacancies-main {
+    overflow: hidden; /* Creates new block formatting context */
+}
+
+.sidebar-widget {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.widget-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--light-bg);
+}
+
+.filter-option {
+    margin-bottom: 15px;
+}
+
+.filter-checkbox {
+    margin-right: 10px;
+}
+
+.filter-label {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* ============================================
+   STATS SECTION
+   ============================================ */
+.vacancy-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin: 50px 0;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: var(--success-color);
+    font-family: var(--font-heading);
+    display: block;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-top: 10px;
+}
+
+/* ============================================
+   APPLICATION BENEFITS
+   ============================================ */
+.benefits-section {
+    margin: 60px 0;
+    padding: 50px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 20px;
+}
+
+.benefits-title {
+    font-size: 2rem;
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    font-family: var(--font-heading);
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.benefit-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.benefit-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.benefit-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.benefit-description {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 992px) {
+    .vacancies-sidebar {
+        float: none;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 30px;
+    }
+    
+    .vacancy-requirements,
+    .vacancy-responsibilities {
+        float: none;
+        width: 100%;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .vacancy-image-container {
+        float: none;
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+    }
+    
+    .vacancy-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .vacancies-header {
+        padding: 40px 20px;
+    }
+    
+    .vacancies-title {
+        font-size: 2rem;
+    }
+    
+    .benefits-section {
+        padding: 30px 20px;
+    }
+}

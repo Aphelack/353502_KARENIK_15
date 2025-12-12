@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Кабинет врача</h2>
+        <a href="{% url 'statistics' %}" style="padding: 10px 20px; background: #2c3e50; color: white; text-decoration: none; border-radius: 4px;">
+            📊 Статистика сайта
+        </a>
+    </div>
+    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+        <h5>Личная информация</h5>
+        <p>Добро пожаловать, {{ user.username }}!</p>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Имя: {{ user.first_name|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Фамилия: {{ user.last_name|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Телефон: {{ user_profile.phone|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Адрес: {{ user_profile.address|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Дата рождения: {{ user_profile.birth_date|date:"d.m.Y"|default:"-" }}</li>
+            {% if doctor %}
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Специализация: {{ doctor.specialization|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Категория: {{ doctor.category|default:"-" }}</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Опыт работы: {{ doctor.experience_years }} лет</li>
+            <li style="padding: 10px; border-bottom: 1px solid #eee;">Стоимость консультации: {{ doctor.consultation_price }} BYN</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+        <h3>Расписание</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #2c3e50; color: white;">
+                        <th style="padding: 10px; text-align: left;">Дата и время</th>
+                        <th style="padding: 10px; text-align: left;">Пациент</th>
+                        <th style="padding: 10px; text-align: left;">Услуга</th>
+                        <th style="padding: 10px; text-align: left;">Заметки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in appointments %}
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 10px;">{{ app.appointment_date|date:"d.m.Y H:i" }}</td>
+                        <td style="padding: 10px;">
+                            {% if app.client %}
+                                <a href="{% url 'client_detail' app.client.id %}">
+                                    {{ app.client.full_name }}
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td style="padding: 10px;">{{ app.service.name }}</td>
+                        <td style="padding: 10px;">{{ app.notes|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="padding: 20px; text-align: center;">Нет записей</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if doctor %}
+    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px;">
+        <h3>Оказываемые услуги</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for service in doctor.services.all %}
+                <li style="padding: 10px; border-bottom: 1px solid #eee;">{{ service.name }} — {{ service.price }} BYN</li>
+            {% empty %}
+                <li style="padding: 10px;">Нет выбранных услуг</li>
+            {% endfor %}
+        </ul>
+
+        <h4 style="margin-top: 20px;">Добавить услугу</h4>
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: 10px;">
+                <select name="service_id" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" required>
+                    <option value="" disabled selected>Выберите услугу...</option>
+                    {% for service in available_services %}
+                        <option value="{{ service.id }}">{{ service.name }} — {{ service.price }} BYN</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Добавить
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <div>
+        <a href="{% url 'account_logout' %}" style="display: inline-block; padding: 10px 20px; background: #dc3545; color: white; text-decoration: none; border-radius: 4px;">
+            Выйти
+        </a>
+    </div>
+</div>
+{% endblock %}

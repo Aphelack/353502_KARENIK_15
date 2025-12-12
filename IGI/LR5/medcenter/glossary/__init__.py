@@ -1,0 +1,1 @@
+# Glossary app for FAQ and terms

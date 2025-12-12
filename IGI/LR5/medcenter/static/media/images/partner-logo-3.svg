@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 200 100">
+  <rect width="200" height="100" fill="#f8f9fa"/>
+  <rect x="10" y="10" width="180" height="80" fill="none" stroke="#dee2e6" stroke-width="2"/>
+  <text x="100" y="55" font-family="Arial, sans-serif" font-size="24" fill="#495057" text-anchor="middle" font-weight="bold">Partner 3</text>
+</svg>

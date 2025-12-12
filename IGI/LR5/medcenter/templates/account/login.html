@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <article class="card" style="max-width: 400px; margin: 50px auto;">
+        <h2>Вход в систему</h2>
+        
+        <p>Выберите тип вашего аккаунта:</p>
+        
+        <nav>
+            <a href="{% url 'client_login' %}" class="btn">Войти как клиент</a>
+            <a href="{% url 'doctor_login' %}" class="btn">Войти как врач</a>
+        </nav>
+        
+        <hr>
+        
+        <p>Нет аккаунта?</p>
+        <nav>
+            <a href="{% url 'client_register' %}">Регистрация клиента</a>
+            <a href="{% url 'doctor_register' %}">Регистрация врача</a>
+        </nav>
+    </article>
+</section>
+{% endblock %}

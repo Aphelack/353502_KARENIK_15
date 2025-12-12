@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Оформление заказа - Медицинский центр{% endblock %}
+
+{% block meta_description %}Оформление заказа медицинских услуг{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Оформление заказа</h2>
+    
+    <div class="grid-2">
+        <article>
+            <h3>Информация о заказе</h3>
+            <form method="post">
+                {% csrf_token %}
+                
+                <fieldset>
+                    <legend>Детали заказа</legend>
+                    
+                    <label for="id_notes">Примечания (необязательно)</label>
+                    <textarea id="id_notes" name="notes" rows="3" 
+                              placeholder="Дополнительная информация или пожелания"></textarea>
+                    
+                    <label for="id_promo_code">Промокод (необязательно)</label>
+                    <input type="text" id="id_promo_code" 
+                           name="code" placeholder="Введите промокод">
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Способ оплаты</legend>
+                    
+                    <div>
+                        <input type="radio" id="payment_cash" name="payment_method" 
+                               value="cash" checked>
+                        <label for="payment_cash">
+                            Наличные
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <input type="radio" id="payment_card" name="payment_method" 
+                               value="card">
+                        <label for="payment_card">
+                            Банковская карта
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <input type="radio" id="payment_transfer" name="payment_method" 
+                               value="bank_transfer">
+                        <label for="payment_transfer">
+                            Банковский перевод
+                        </label>
+                    </div>
+                </fieldset>
+                
+                <nav>
+                    <a href="{% url 'cart' %}" class="btn">← Вернуться в корзину</a>
+                    <button type="submit" class="btn">Подтвердить и оплатить</button>
+                </nav>
+            </form>
+        </article>
+        
+        <aside>
+            <div class="card">
+                <h3>Сводка заказа</h3>
+                
+                {% for item in cart.items.all %}
+                <div>
+                    <p>
+                        <strong>{{ item.service.name }}</strong> × {{ item.quantity }}
+                    </p>
+                    {% if item.doctor %}
+                    <p><small>Врач: {{ item.doctor.full_name }}</small></p>
+                    {% endif %}
+                    {% if item.appointment_time %}
+                    <p><small>Время: <time datetime="{{ item.appointment_time|date:'c' }}">{{ item.appointment_time|date:"d.m.Y H:i" }}</time></small></p>
+                    {% endif %}
+                    <p><strong>{{ item.total_price }} <abbr title="Белорусский рубль">BYN</abbr></strong></p>
+                </div>
+                <hr>
+                {% endfor %}
+                
+                <dl>
+                    <dt>Подытог:</dt>
+                    <dd>{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></dd>
+                    
+                    <dt><strong>Итого:</strong></dt>
+                    <dd><strong>{{ cart.total_price }} <abbr title="Белорусский рубль">BYN</abbr></strong></dd>
+                </dl>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

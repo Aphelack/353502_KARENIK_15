@@ -1,0 +1,8 @@
+<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="certpattern" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse">
+      <circle cx="12.5" cy="12.5" r="3" fill="#e0e0e0"/>
+    </pattern>
+  </defs>
+  <rect width="50" height="50" fill="url(#certpattern)"/>
+</svg>

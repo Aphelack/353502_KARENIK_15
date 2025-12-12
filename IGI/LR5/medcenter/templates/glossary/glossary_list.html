@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Медицинский глоссарий - Медицинский центр{% endblock %}
+
+{% block content %}
+<h1>Медицинский глоссарий</h1>
+
+<div>
+    <!-- Search form -->
+    <form method="get" action="{% url 'glossary_list' %}">
+        <input type="text" name="search" placeholder="Поиск терминов..." value="{{ search_query|default:'' }}">
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+<div>
+    <!-- Letter filter -->
+    <h3>Алфавит:</h3>
+    <div>
+        {% for letter in first_letters %}
+        <a href="{% url 'glossary_list' %}?letter={{ letter }}" style="margin: 0 5px;">{{ letter }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<div>
+    <!-- Category filter -->
+    <h3>Категории:</h3>
+    <ul>
+        <li><a href="{% url 'glossary_list' %}">Все категории</a></li>
+        {% for category in categories %}
+        <li>
+            <a href="{% url 'glossary_list' %}?category={{ category.id }}">
+                {{ category.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div>
+    {% if search_query %}
+    <p>Результаты поиска для: <strong>{{ search_query }}</strong></p>
+    {% endif %}
+
+    {% if current_letter %}
+    <p>Термины на букву: <strong>{{ current_letter }}</strong></p>
+    {% endif %}
+
+    {% if page_obj %}
+        {% for term in page_obj %}
+        <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px;">
+            <h3>{{ term.term }}</h3>
+            {% if term.category %}
+            <p><small>Категория: {{ term.category.name }}</small></p>
+            {% endif %}
+            <p>{{ term.definition }}</p>
+            <p><a href="{% url 'term_detail' term.pk %}">Подробнее</a></p>
+        </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div>
+            {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_letter %}&letter={{ current_letter }}{% endif %}">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_letter %}&letter={{ current_letter }}{% endif %}">Предыдущая</a>
+            {% endif %}
+
+            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_letter %}&letter={{ current_letter }}{% endif %}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_letter %}&letter={{ current_letter }}{% endif %}">Последняя</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% else %}
+        <p>Термины не найдены.</p>
+    {% endif %}
+</div>
+{% endblock %}

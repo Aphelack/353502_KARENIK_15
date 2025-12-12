@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}JavaScript Demo{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/slider.css' %}">
+<link rel="stylesheet" href="{% static 'css/employee-table.css' %}">
+<link rel="stylesheet" href="{% static 'css/form-generator.css' %}">
+<link rel="stylesheet" href="{% static 'css/service-catalog.css' %}">
+<link rel="stylesheet" href="{% static 'css/age-verification.css' %}">
+<link rel="stylesheet" href="{% static 'css/class-inheritance.css' %}">
+<link rel="stylesheet" href="{% static 'css/apis-demo.css' %}">
+<link rel="stylesheet" href="{% static 'css/chartjs-visualization.css' %}">
+<link rel="stylesheet" href="{% static 'css/scroll-animations.css' %}">
+<style>
+    body {
+        padding-top: 80px;
+    }
+
+    .lab-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--header-bg, #fff);
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .lab-nav ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 20px;
+        gap: 15px;
+        overflow-x: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .lab-nav a {
+        padding: 10px 20px;
+        background: var(--accent-color, #4a90e2);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .lab-nav a:hover {
+        background: var(--accent-hover, #357abd);
+        transform: translateY(-2px);
+    }
+
+    .lab-section {
+        margin: 40px 0;
+        padding: 40px 20px;
+        background: var(--bg-secondary, #f5f5f5);
+        border-radius: 12px;
+    }
+
+    .lab-section h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: var(--text-primary, #333);
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+<nav class="lab-nav">
+    <ul>
+        <li><a href="#task1">Слайдер</a></li>
+        <li><a href="#task3">Сотрудники</a></li>
+        <li><a href="#task4">Генератор форм</a></li>
+        <li><a href="#task5">Каталог услуг</a></li>
+        <li><a href="#task7">Проверка возраста</a></li>
+        <li><a href="#task8">Наследование</a></li>
+        <li><a href="#task9">API</a></li>
+        <li><a href="#task10">Chart.js</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1 style="text-align: center; margin: 40px 0;">JavaScript Demo</h1>
+
+    <!-- Task 1: Image Slider -->
+    <section id="task1" class="lab-section">
+        <h2>Задание 1: Слайдер изображений</h2>
+        <div id="sliderContainer"></div>
+        <div style="margin-top: 20px; text-align: center;">
+            <label>
+                Задержка (секунды): 
+                <input type="number" id="sliderDelay" value="5" min="1" max="10" style="width: 80px;" />
+            </label>
+            <button id="updateSliderDelay" style="margin-left: 10px; padding: 8px 16px;">Применить</button>
+        </div>
+    </section>
+
+    <!-- Task 3: Employee Table -->
+    <section id="task3" class="lab-section">
+        <h2>Задание 3: Таблица сотрудников</h2>
+        <div id="employeeTableContainer"></div>
+    </section>
+
+    <!-- Task 4: Form Generator -->
+    <section id="task4" class="lab-section">
+        <h2>Задание 4: Генератор элементов формы</h2>
+        <div id="formGeneratorContainer"></div>
+    </section>
+
+    <!-- Task 5: Services Catalog -->
+    <section id="task5" class="lab-section">
+        <h2>Задание 5: Пагинация каталога услуг</h2>
+        <div id="servicesCatalogContainer"></div>
+    </section>
+
+    <!-- Task 7: Age Verification -->
+    <section id="task7" class="lab-section">
+        <h2>Задание 7: Проверка возраста</h2>
+        <div id="ageVerificationContainer"></div>
+    </section>
+
+    <!-- Task 8: Class Inheritance -->
+    <section id="task8" class="lab-section">
+        <h2>Задание 8: Наследование классов</h2>
+        <div id="classInheritanceContainer"></div>
+    </section>
+
+    <!-- Task 9: Additional APIs -->
+    <section id="task9" class="lab-section">
+        <h2>Задание 9: Дополнительные API</h2>
+        <div id="apisContainer"></div>
+    </section>
+
+    <!-- Task 10: Chart.js -->
+    <section id="task10" class="lab-section">
+        <h2>Задание 10: Графики с Chart.js</h2>
+        <div id="chartContainer"></div>
+    </section>
+
+    <!-- Task 11: Scroll Animations -->
+    <section id="task11" class="lab-section">
+        <h2>Задание 11: Анимация при скроллинге</h2>
+        <p style="text-align: center; margin-bottom: 20px; font-size: 1.2rem;">
+            Прокрутите страницу вниз, чтобы увидеть медицинские анимации ⬇️
+        </p>
+        
+        <!-- Medical Parallax Animation Section -->
+        <div id="medicalScrollAnimation" style="position: relative; height: 600px; overflow: hidden; background: linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%); border-radius: 12px;">
+            <!-- Sky background -->
+            <div id="sky" style="position: absolute; width: 100%; height: 100%; background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%);"></div>
+            
+            <!-- Clouds -->
+            <div id="cloud1" style="position: absolute; top: 50px; left: 20%; font-size: 3rem;">☁️</div>
+            <div id="cloud2" style="position: absolute; top: 100px; right: 30%; font-size: 2.5rem;">☁️</div>
+            
+            <!-- Hospital building (left side) -->
+            <div id="hospital" style="position: absolute; bottom: 0; left: 10%; width: 200px; height: 250px; background: white; border: 3px solid #333; border-radius: 8px 8px 0 0;">
+                <div style="position: absolute; top: 20px; left: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 80px; left: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 80px; right: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; background: #8b4513; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-size: 3rem;">🏥</div>
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: red;">➕</div>
+            </div>
+            
+            <!-- Ground -->
+            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: #4caf50;"></div>
+            <div style="position: absolute; bottom: 50px; left: 0; width: 100%; height: 10px; background: #666;"></div>
+            
+            <!-- Ambulance -->
+            <div id="ambulance" style="position: absolute; bottom: 60px; right: -10%; font-size: 4rem; transition: none;">🚑</div>
+            
+            <!-- Pills falling -->
+            <div id="pills1" style="position: absolute; top: -50px; left: 40%; font-size: 2rem;">💊</div>
+            <div id="pills2" style="position: absolute; top: -100px; left: 60%; font-size: 2rem;">💊</div>
+            <div id="pills3" style="position: absolute; top: -150px; left: 80%; font-size: 2rem;">💊</div>
+            
+            <!-- Heartbeat line -->
+            <div id="heartbeat" style="position: absolute; top: 30px; left: 10%; right: 10%; height: 60px; background: rgba(255,255,255,0.8); border: 2px solid red; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                ❤️ <span style="margin-left: 10px; font-family: monospace; color: red;">───╱╲───</span>
+            </div>
+            
+            <!-- Sick person (left) and Healthy person (right) -->
+            <div id="sickPerson" style="position: absolute; bottom: 60px; left: 5%; font-size: 5rem; opacity: 1;">🤒</div>
+            <div id="healthyPerson" style="position: absolute; bottom: 60px; right: 5%; font-size: 5rem; opacity: 0;">😊</div>
+            
+            <!-- Medical text -->
+            <div id="medicalText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-weight: bold; text-align: center; z-index: 10;">
+                Ваше здоровье - наша забота
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: var(--bg-secondary); border-radius: 8px;">
+            <h3>Описание анимации:</h3>
+            <ul style="line-height: 2;">
+                <li>☁️ Облака движутся в разные стороны</li>
+                <li>🚑 Скорая помощь приезжает к больнице</li>
+                <li>💊 Лекарства падают сверху</li>
+                <li>🤒➡️😊 Больной человек выздоравливает</li>
+                <li>❤️ Пульс показывает здоровье</li>
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/slider.js' %}?v=3"></script>
+<script src="{% static 'js/employee-table.js' %}?v=3"></script>
+<script src="{% static 'js/form-generator.js' %}?v=3"></script>
+<script src="{% static 'js/service-catalog.js' %}?v=3"></script>
+<script src="{% static 'js/age-verification.js' %}?v=3"></script>
+<script src="{% static 'js/class-inheritance.js' %}?v=3"></script>
+<script src="{% static 'js/apis-demo.js' %}?v=3"></script>
+<script src="{% static 'js/chartjs-visualization.js' %}?v=3"></script>
+    <script src="{% static 'js/scroll-animations.js' %}?v=5"></script><script>
+// Initialize slider with sample images
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = new ImageSlider('#sliderContainer', {
+        loop: true,
+        navs: true,
+        pags: true,
+        auto: true,
+        stopMouseHover: true,
+        delay: 5
+    });
+
+    // Add sample slides
+    slider.addSlide('/static/images/banner1.svg', 'Современное оборудование', '/services/');
+    slider.addSlide('/static/images/banner-2.svg', 'Квалифицированные врачи', '/doctors/');
+    slider.addSlide('/static/images/banner-3.svg', 'Комфортные условия', '/company/info/');
+
+    // Update slider delay
+    document.getElementById('updateSliderDelay').addEventListener('click', function() {
+        const delay = parseInt(document.getElementById('sliderDelay').value);
+        slider.updateDelay(delay);
+        alert(`Задержка обновлена: ${delay} секунд`);
+    });
+
+    // Smooth scrolling for navigation
+    document.querySelectorAll('.lab-nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

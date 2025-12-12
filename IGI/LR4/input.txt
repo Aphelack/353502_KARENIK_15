@@ -1,0 +1,5 @@
+Hello there! How are you doing today? I hope everything is fine. 
+This is a test input file. It contains multiple sentences, some of which are declarative, 
+some are interrogative, and some are exclamatory! Let's see how well the analyzer works. 
+Here are some phone numbers: 291234567, 298765432, and 291112223. 
+Also, some smileys: :) :( ;) :D. And some words: apple, banana, cherry.

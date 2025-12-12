@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="{% block meta_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}медицинский центр, врачи, медицинские услуги, здоровье{% endblock %}">
+    <meta name="author" content="{% block meta_author %}Медицинский центр{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="{% block og_title %}{{ title|default:'Медицинский центр' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'images/logo.svg' %}{% endblock %}">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ title|default:'Медицинский центр' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Медицинский центр - качественное медицинское обслуживание{% endblock %}">
+    
+    <title>{% block title %}Медицинский центр{% endblock %}</title>
+    
+    <!-- Favicon -->
+    {% load static %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.svg' %}">
+    
+    <!-- Main CSS Files -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    
+    <!-- Page-specific CSS -->
+    {% block page_css %}{% endblock %}
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalOrganization",
+        "name": "Медицинский центр",
+        "description": "Медицинский центр предоставляет качественные медицинские услуги",
+        "url": "{{ request.build_absolute_uri }}",
+        "telephone": "+375-XX-XXX-XX-XX",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Минск",
+            "addressCountry": "BY"
+        }
+    }
+    </script>
+    {% block head %}{% endblock %}
+</head>
+<body itemscope itemtype="https://schema.org/MedicalOrganization">
+    <div class="preloader" id="preloader">
+    <div class="preloader-content">
+        <!-- Вариант 1: Медицинский крест -->
+        <div class="medical-spinner"></div>
+        
+        <!-- Вариант 2: Сердечный ритм (раскомментируйте для использования) -->
+        <!-- <div class="heartbeat-loader"></div> -->
+        
+        <!-- Вариант 3: Медицинский символ (раскомментируйте для использования) -->
+        <!-- <div class="caduceus-loader"></div> -->
+        
+        <div class="loading-text">Загрузка медицинского центра</div>
+        <div class="loading-progress">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
+    <!-- Skip navigation link for accessibility -->
+    <a href="#main-content" class="visually-hidden-focusable">Перейти к основному содержанию</a>
+    
+    <meta itemprop="name" content="Медицинский центр">
+    <meta itemprop="description" content="Медицинский центр предоставляет качественные медицинские услуги">
+    <meta itemprop="url" content="{{ request.build_absolute_uri }}">
+    
+    <!-- Header -->
+    <header role="banner">
+        <nav role="navigation" aria-label="Главное меню">
+            <a href="{% url 'home' %}" itemprop="url">
+                <img src="{% static 'images/logo.svg' %}" alt="Логотип медицинского центра" itemprop="logo">
+                <span itemprop="name">Медицинский центр</span>
+            </a>
+            
+            <ul>
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li><a href="{% url 'service_list' %}">Услуги</a></li>
+                <li><a href="{% url 'news_list' %}">Новости</a></li>
+                <li><a href="{% url 'statistics' %}">Статистика</a></li>
+                <li><a href="{% url 'demo' %}">Demo</a></li>
+                <li>
+                    <a href="{% url 'company_info' %}">О компании</a>
+                    <ul>
+                        <li><a href="{% url 'company_info' %}">О нас</a></li>
+                        <li><a href="{% url 'company_history' %}">История</a></li>
+                        <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                        <li><a href="{% url 'vacancies' %}">Вакансии</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url 'faq_list' %}">FAQ</a></li>
+                <li><a href="{% url 'reviews_list' %}">Отзывы</a></li>
+                
+                {% if user.is_authenticated %}
+                    <li>
+                        <a href="#">{{ user.username }}</a>
+                        <ul>
+                            {% if user.profile.is_client %}
+                                <li><a href="{% url 'client_cabinet' %}">Личный кабинет</a></li>
+                                <li>
+                                    <a href="{% url 'cart' %}">Корзина
+                                    {% if user.cart.items_count %}
+                                        ({{ user.cart.items_count }})
+                                    {% endif %}
+                                    </a>
+                                </li>
+                            {% elif user.profile.is_doctor %}
+                                <li><a href="{% url 'doctor_cabinet' %}">Кабинет врача</a></li>
+                            {% elif user.profile.is_admin %}
+                                <li><a href="{% url 'admin:index' %}">Админ панель</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'account_logout' %}">Выход</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'account_login' %}">Вход</a></li>
+                    <li>
+                        <a href="#">Регистрация</a>
+                        <ul>
+                            <li><a href="{% url 'client_register' %}">Как клиент</a></li>
+                            <li><a href="{% url 'doctor_register' %}">Как врач</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb navigation -->
+    {% block breadcrumb %}{% endblock %}
+    
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages" role="alert">
+            {% for message in messages %}
+                <div>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- Main content -->
+    <main id="main-content" role="main">
+        <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div>
+            <div>
+                <div>
+                    <h5>Медицинский центр</h5>
+                    <p>Качественное медицинское обслуживание для вашего здоровья.</p>
+                </div>
+                <div>
+                    <h6>Быстрые ссылки</h6>
+                    <ul>
+                        <li><a href="{% url 'service_list' %}">Услуги</a></li>
+                        <li><a href="{% url 'news_list' %}">Новости</a></li>
+                        <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                        <li><a href="{% url 'privacy_policy' %}">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Контакты</h6>
+                    <address itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <p><span itemprop="addressLocality">г. Минск</span>, <span itemprop="streetAddress">ул. Примерная, 1</span></p>
+                        <p><a href="tel:+375123456789" itemprop="telephone">+375 (12) 345-67-89</a></p>
+                        <p><a href="mailto:info@medcenter.by" itemprop="email">info@medcenter.by</a></p>
+                    </address>
+                </div>
+                <div>
+                    <h6>Социальные сети</h6>
+                    <div>
+                        <a href="#" aria-label="Facebook">Facebook</a>
+                        <a href="#" aria-label="Instagram">Instagram</a>
+                        <a href="#" aria-label="Telegram">Telegram</a>
+                        <a href="#" aria-label="VK">VK</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div>
+                    <p>&copy; {% now "Y" %} Медицинский центр. Все права защищены.</p>
+                </div>
+                <div>
+                    <small>
+                        Время: <time datetime="{% now 'c' %}">{% now 'j F Y H:i' %}</time>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript -->
+        <!-- Main JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <!-- Preloader Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preloader = document.getElementById('preloader');
+        console.log('Preloader element found:', !!preloader);
+        
+        if (preloader) {
+            // Убедимся что прелоадер видим
+            preloader.style.display = 'flex';
+            preloader.style.opacity = '1';
+            preloader.style.visibility = 'visible';
+            
+            // Скрываем когда страница полностью загружена
+            window.addEventListener('load', function() {
+                console.log('Page fully loaded, hiding preloader...');
+                
+                // Минимальное время показа - 500ms (reduced for faster display)
+                setTimeout(function() {
+                    preloader.classList.add('hidden');
+                    
+                    // Полностью удаляем через 0.3 секунды
+                    setTimeout(function() {
+                        preloader.style.display = 'none';
+                        console.log('Preloader completely hidden');
+                    }, 300);
+                    
+                }, 500);
+            });
+            
+            // Fallback - скрыть через 5 секунд на всякий случай
+            setTimeout(function() {
+                if (preloader.style.display !== 'none') {
+                    console.log('Fallback: hiding preloader after 5 seconds');
+                    preloader.classList.add('hidden');
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }, 5000);
+        } else {
+            console.error('Preloader element not found!');
+        }
+    });
+    </script>
+    
+    <!-- Theme Switcher (Global) -->
+    <script src="{% static 'js/theme-switcher.js' %}" defer></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

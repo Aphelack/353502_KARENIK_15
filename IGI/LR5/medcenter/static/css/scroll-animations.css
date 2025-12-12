@@ -1,0 +1,506 @@
+/* Scroll Animations Styles - Lab 3, Task 11 */
+
+/* Medical Parallax Section */
+.medical-parallax-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+    z-index: 1;
+}
+
+.parallax-gradient {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 200px;
+    width: 100%;
+    background: linear-gradient(to top, var(--bg-primary, #fff), transparent);
+    z-index: 100;
+}
+
+.parallax-layer {
+    position: absolute;
+    pointer-events: none;
+}
+
+.hospital-building {
+    top: 20%;
+    left: 10%;
+    width: 300px;
+    height: auto;
+    z-index: 3;
+    opacity: 0.9;
+}
+
+.parallax-text {
+    position: relative;
+    color: white;
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 700;
+    text-align: center;
+    z-index: 50;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    padding: 0 20px;
+}
+
+.heartbeat-icon {
+    top: 15%;
+    right: 15%;
+    font-size: 5rem;
+    z-index: 4;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.pills-icon {
+    top: 60%;
+    left: 20%;
+    font-size: 4rem;
+    z-index: 4;
+}
+
+.ambulance-icon {
+    bottom: 25%;
+    left: 5%;
+    font-size: 6rem;
+    z-index: 5;
+}
+
+.doctor-icon {
+    bottom: 0;
+    right: 10%;
+    font-size: 15rem;
+    z-index: 10;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .parallax-text {
+        font-size: clamp(2rem, 6vw, 4rem);
+    }
+    
+    .doctor-icon {
+        font-size: 10rem;
+        right: 5%;
+    }
+    
+    .ambulance-icon {
+        font-size: 4rem;
+    }
+    
+    .heartbeat-icon {
+        font-size: 3rem;
+    }
+}
+
+/* Animated Elements Container for scroll reveal */
+.scroll-animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* Medical Icons */
+.animated-element {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.animated-element.visible {
+    opacity: 0.7;
+}
+
+/* Positioning for medical icons */
+.heart-icon {
+    top: 10%;
+    left: 15%;
+}
+
+.pill-icon {
+    top: 20%;
+    right: 20%;
+}
+
+.syringe-icon {
+    top: 35%;
+    left: 5%;
+}
+
+.cross-icon {
+    top: 50%;
+    right: 10%;
+}
+
+.stethoscope-icon {
+    top: 65%;
+    left: 25%;
+}
+
+.ambulance-icon {
+    top: 75%;
+    right: 15%;
+}
+
+.hospital-icon {
+    top: 85%;
+    left: 10%;
+}
+
+.doctor-icon {
+    top: 40%;
+    right: 30%;
+}
+
+/* Animation Keyframes */
+
+/* Float Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animated-element[data-animation="float"].visible {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Rotate Animation */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animated-element[data-animation="rotate"].visible {
+    animation: rotate 4s linear infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.animated-element[data-animation="pulse"].visible {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-30px);
+    }
+}
+
+.animated-element[data-animation="bounce"].visible {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+/* Slide In Animations */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 0.7;
+    }
+}
+
+.animated-element[data-animation="slide-in-left"].visible {
+    animation: slideInLeft 1s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 0.7;
+    }
+}
+
+.animated-element[data-animation="slide-in-right"].visible {
+    animation: slideInRight 1s ease-out forwards;
+}
+
+/* Scale Up Animation */
+@keyframes scaleUp {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+}
+
+.animated-element[data-animation="scale-up"].visible {
+    animation: scaleUp 0.8s ease-out forwards;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.7;
+    }
+}
+
+.animated-element[data-animation="fade-in"].visible {
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+/* Page Scroll Reveal Effects */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Reveal from different directions */
+.scroll-reveal.from-left {
+    transform: translateX(-50px) translateY(0);
+}
+
+.scroll-reveal.from-left.revealed {
+    transform: translateX(0) translateY(0);
+}
+
+.scroll-reveal.from-right {
+    transform: translateX(50px) translateY(0);
+}
+
+.scroll-reveal.from-right.revealed {
+    transform: translateX(0) translateY(0);
+}
+
+/* Stagger animations */
+.scroll-reveal:nth-child(1) { transition-delay: 0.1s; }
+.scroll-reveal:nth-child(2) { transition-delay: 0.2s; }
+.scroll-reveal:nth-child(3) { transition-delay: 0.3s; }
+.scroll-reveal:nth-child(4) { transition-delay: 0.4s; }
+.scroll-reveal:nth-child(5) { transition-delay: 0.5s; }
+.scroll-reveal:nth-child(6) { transition-delay: 0.6s; }
+
+/* Parallax Background */
+.parallax-bg {
+    transition: transform 0.3s ease-out;
+}
+
+/* Special effects for medical theme */
+.medical-icon {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.medical-icon:hover {
+    filter: drop-shadow(0 6px 12px rgba(74, 144, 226, 0.4));
+    cursor: default;
+}
+
+/* Animated background gradient */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animated-gradient {
+    background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* Scroll Progress Indicator */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4a90e2, #667eea);
+    z-index: 9999;
+    transition: width 0.2s ease;
+}
+
+/* Floating Action Button with scroll animation */
+.fab-scroll {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: var(--accent-color, #4a90e2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: all;
+}
+
+.fab-scroll.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.fab-scroll:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .animated-element {
+        font-size: 2rem;
+        opacity: 0.5;
+    }
+
+    .scroll-animation-container {
+        display: none; /* Hide floating icons on mobile for better performance */
+    }
+
+    .fab-scroll {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .animated-element,
+    .scroll-reveal,
+    .parallax-bg {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .scroll-animation-container {
+        display: none;
+    }
+}
+
+/* Performance optimization */
+.animated-element,
+.scroll-reveal {
+    will-change: transform, opacity;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .animated-element.visible {
+    opacity: 0.6;
+}
+
+[data-theme="dark"] .medical-icon {
+    filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.1));
+}
+
+/* Custom scroll animations for specific sections */
+.hero-section {
+    animation: fadeInUp 1.2s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card hover effects enhanced with scroll */
+.card-3d-effect {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-3d-effect.revealed {
+    transform: perspective(1000px) rotateY(0deg);
+}
+
+/* Wave animation for decorative elements */
+@keyframes wave {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-20px);
+    }
+}
+
+.wave-element {
+    animation: wave 3s ease-in-out infinite;
+}
