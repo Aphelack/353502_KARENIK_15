@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { ingredientsAPI, pizzasAPI, aiAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { formatPrice } from '../utils/helpers';
@@ -302,7 +303,9 @@ function PizzaCustomizer() {
               {aiAnalysis && (
                 <div className="ai-analysis">
                   <h3>AI Analysis:</h3>
-                  <p>{aiAnalysis}</p>
+                  <div className="markdown-content">
+                    <ReactMarkdown>{aiAnalysis}</ReactMarkdown>
+                  </div>
                 </div>
               )}
             </>

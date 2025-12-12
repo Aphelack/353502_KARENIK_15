@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { pizzasAPI, aiAPI } from '../utils/api';
 import './HomePage.css';
 
@@ -79,10 +80,8 @@ function HomePage() {
         dietary: 'none',
       });
       
-      // Extract just a brief recommendation
-      const text = response.data.recommendation;
-      const brief = text.substring(0, 200) + '...';
-      setAiRecommendation(brief);
+      // Set full markdown recommendation
+      setAiRecommendation(response.data.recommendation);
     } catch (error) {
       console.error('AI recommendation error:', error);
     }
@@ -144,7 +143,9 @@ function HomePage() {
         <section className="ai-section">
           <h2>🤖 AI Chef's Recommendation</h2>
           <div className="ai-card">
-            <p>{aiRecommendation}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{aiRecommendation}</ReactMarkdown>
+            </div>
             <Link to="/menu" className="btn btn-secondary">
               Explore Full Menu
             </Link>

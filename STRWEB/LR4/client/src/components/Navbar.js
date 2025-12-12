@@ -68,6 +68,9 @@ function Navbar({ timezone }) {
           <li>
             <Link to="/menu" onClick={handleLinkClick}>Menu</Link>
           </li>
+          <li>
+            <Link to="/recognize" onClick={handleLinkClick}>🔍 AI Recognition</Link>
+          </li>
           {user && (
             <>
               <li>

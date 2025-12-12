@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { pizzasAPI, ordersAPI, aiAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { formatPrice, calculatePizzaPrice, isValidPhone } from '../utils/helpers';
@@ -173,7 +174,9 @@ function PizzaDetailPage() {
           {aiSuggestions && (
             <div className="ai-suggestions">
               <h3>🤖 AI Pairing Suggestions:</h3>
-              <p>{aiSuggestions}</p>
+              <div className="markdown-content">
+                <ReactMarkdown>{aiSuggestions}</ReactMarkdown>
+              </div>
             </div>
           )}
 

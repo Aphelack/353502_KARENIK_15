@@ -1,7 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { authMiddleware, optionalAuth } = require('../middleware/auth');
+
+// Configure multer for memory storage
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 const genAI = new GoogleGenerativeAI(process.env.API_Key);
 
@@ -18,14 +32,25 @@ Available ingredients: ${ingredients ? ingredients.join(', ') : 'standard pizza 
 Customer preferences: ${preferences || 'balanced flavors'}
 Dietary restrictions: ${dietary || 'none'}
 
-Please provide:
-1. A creative pizza name
-2. A brief description (2-3 sentences)
-3. Recommended cooking temperature and time
-4. Flavor profile
-5. Pairing suggestions (drinks/sides)
+Provide your recommendation in clean markdown format:
 
-Format the response as JSON with keys: name, description, cookingTemp, cookingTime, flavorProfile, pairings`;
+# [Creative Pizza Name]
+
+## Description
+(2-3 sentences describing the pizza)
+
+## Cooking Instructions
+- **Temperature:** 
+- **Time:** 
+
+## Flavor Profile
+(Describe the taste experience)
+
+## Perfect Pairings
+- **Drinks:** 
+- **Sides:** 
+
+Use proper markdown formatting with headers, bold text, and lists.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -58,14 +83,24 @@ router.post('/analyze-ingredients', optionalAuth, async (req, res) => {
 
     const prompt = `As a culinary expert, analyze this pizza ingredient combination: ${ingredients.join(', ')}
 
-Provide:
-1. Compatibility score (1-10)
-2. Flavor harmony analysis
-3. Suggestions for improvement
-4. Potential allergen warnings
-5. Nutritional insights
+Provide your analysis in clean markdown format with the following sections:
 
-Be concise and practical.`;
+## Compatibility Score
+(Rate 1-10)
+
+## Flavor Harmony Analysis
+(Describe how flavors work together)
+
+## Suggestions for Improvement
+(Bullet points with specific recommendations)
+
+## Potential Allergen Warnings
+(List any allergens present)
+
+## Nutritional Insights
+(Key nutritional information)
+
+Be concise and practical. Use proper markdown formatting with headers, lists, and bold text where appropriate.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -139,17 +174,28 @@ router.post('/dietary-suggestions', optionalAuth, async (req, res) => {
 
     const prompt = `As a nutritionist specializing in Italian cuisine, suggest 3 pizza options for someone with:
 
-Diet type: ${dietType || 'no restrictions'}
-Allergies: ${allergies ? allergies.join(', ') : 'none'}
-Calorie limit per serving: ${calorieLimit || 'no limit'}
+**Diet type:** ${dietType || 'no restrictions'}  
+**Allergies:** ${allergies ? allergies.join(', ') : 'none'}  
+**Calorie limit per serving:** ${calorieLimit || 'no limit'}
 
-For each pizza suggestion, provide:
-1. Name
-2. Main ingredients
-3. Estimated calories
-4. Why it fits their requirements
+Provide your suggestions in clean markdown format:
 
-Be practical and focus on commonly available ingredients.`;
+## Pizza Suggestion 1: [Name]
+- **Main Ingredients:** 
+- **Estimated Calories:** 
+- **Why It Fits:** 
+
+## Pizza Suggestion 2: [Name]
+- **Main Ingredients:** 
+- **Estimated Calories:** 
+- **Why It Fits:** 
+
+## Pizza Suggestion 3: [Name]
+- **Main Ingredients:** 
+- **Estimated Calories:** 
+- **Why It Fits:** 
+
+Be practical and focus on commonly available ingredients. Use proper markdown formatting.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -213,6 +259,63 @@ Provide a helpful response:`;
     console.error('AI Chat error:', error);
     res.status(500).json({ 
       message: 'Failed to process chat', 
+      error: error.message 
+    });
+  }
+});
+
+// Recognize ingredients from image
+router.post('/recognize-ingredients', optionalAuth, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image file provided' });
+    }
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
+
+    // Convert buffer to base64
+    const imageBase64 = req.file.buffer.toString('base64');
+    
+    const imagePart = {
+      inlineData: {
+        data: imageBase64,
+        mimeType: req.file.mimetype
+      }
+    };
+
+    const prompt = `Analyze this image and identify any pizza ingredients visible. 
+
+Provide your analysis in clean markdown format:
+
+## Identified Ingredients
+(List all pizza-related ingredients you can see with bullet points)
+
+## Confidence Level
+(Rate your confidence: High/Medium/Low)
+
+## Suggested Pizza Types
+(Based on the ingredients, suggest 2-3 pizza types that could be made)
+
+## Additional Notes
+(Any other observations about freshness, quality, or preparation suggestions)
+
+Be specific and practical. Focus only on ingredients that would be suitable for pizza.`;
+
+    const result = await model.generateContent([prompt, imagePart]);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({
+      success: true,
+      analysis: text,
+      imageSize: req.file.size,
+      mimeType: req.file.mimetype,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('AI Image Recognition error:', error);
+    res.status(500).json({ 
+      message: 'Failed to recognize ingredients from image', 
       error: error.message 
     });
   }

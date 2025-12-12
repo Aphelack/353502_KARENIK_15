@@ -54,6 +54,13 @@ export const aiAPI = {
   generateDescription: (data) => api.post('/ai/generate-description', data),
   getDietarySuggestions: (data) => api.post('/ai/dietary-suggestions', data),
   chat: (message, context) => api.post('/ai/chat', { message, context }),
+  recognizeIngredients: (imageFile) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    return api.post('/ai/recognize-ingredients', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
 };
 
 // Auth API

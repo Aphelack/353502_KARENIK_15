@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import MenuPage from './pages/MenuPage';
 import PizzaDetailPage from './pages/PizzaDetailPage';
 import PizzaCustomizer from './components/PizzaCustomizer';
+import IngredientRecognition from './components/IngredientRecognition';
 import OrdersPage from './pages/OrdersPage';
 import OrderTracker from './components/OrderTracker';
 import LoginPage from './pages/LoginPage';
@@ -42,6 +43,7 @@ function AppContent() {
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/pizza/:id" element={<PizzaDetailPage />} />
             <Route path="/customize" element={<PizzaCustomizer />} />
+            <Route path="/recognize" element={<IngredientRecognition />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/auth/yandex/callback" element={<YandexCallbackPage />} />
