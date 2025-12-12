@@ -202,3 +202,8 @@ def statistics(request):
     }
     
     return render(request, 'statistics.html', context)
+
+
+def demo(request):
+    """JavaScript Demo Page."""
+    return render(request, 'demo.html')

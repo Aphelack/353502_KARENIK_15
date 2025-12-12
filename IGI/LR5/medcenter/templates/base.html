@@ -33,6 +33,7 @@
     <!-- Main CSS Files -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
     
     <!-- Page-specific CSS -->
     {% block page_css %}{% endblock %}
@@ -95,6 +96,7 @@
                 <li><a href="{% url 'service_list' %}">Услуги</a></li>
                 <li><a href="{% url 'news_list' %}">Новости</a></li>
                 <li><a href="{% url 'statistics' %}">Статистика</a></li>
+                <li><a href="{% url 'demo' %}">Demo</a></li>
                 <li>
                     <a href="{% url 'company_info' %}">О компании</a>
                     <ul>
@@ -262,8 +264,9 @@
     });
     </script>
     
+    <!-- Theme Switcher (Global) -->
+    <script src="{% static 'js/theme-switcher.js' %}" defer></script>
+    
     {% block extra_js %}{% endblock %}
-</body>
-</html>
 </body>
 </html>

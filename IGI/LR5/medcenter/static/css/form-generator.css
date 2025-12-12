@@ -1,0 +1,323 @@
+/* Form Element Generator Styles - Lab 3, Task 4 */
+
+.form-generator-wrapper {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 30px;
+    background: var(--card-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.generator-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.generator-header h2 {
+    margin: 0 0 10px 0;
+    color: var(--text-primary, #333);
+}
+
+.generator-header p {
+    margin: 0;
+    color: var(--text-secondary, #666);
+}
+
+.generator-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.add-checkbox-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: var(--accent-color, #4a90e2);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-checkbox-control:hover {
+    background: var(--accent-hover, #357abd);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.add-checkbox-control input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Checkbox Configurator */
+.checkbox-configurator {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 12px;
+    border: 2px solid var(--accent-color, #4a90e2);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.checkbox-configurator h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--accent-color, #4a90e2);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.config-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.config-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.config-field label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+}
+
+.config-field input[type="text"] {
+    padding: 10px;
+    border: 2px solid var(--border-color, #ddd);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.config-field input[type="text"]:focus {
+    border-color: var(--accent-color, #4a90e2);
+    outline: none;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background: var(--bg-tertiary, #e0e0e0);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.config-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-create,
+.btn-cancel-config {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-create {
+    background: var(--success-color, #4caf50);
+    color: white;
+}
+
+.btn-create:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.btn-cancel-config {
+    background: var(--bg-tertiary, #e0e0e0);
+    color: var(--text-primary, #333);
+}
+
+.btn-cancel-config:hover {
+    background: #d0d0d0;
+}
+
+/* Generated Elements */
+.generated-elements h3 {
+    margin-bottom: 20px;
+    color: var(--text-primary, #333);
+}
+
+.elements-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.no-elements {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary, #666);
+    font-style: italic;
+}
+
+.element-card {
+    position: relative;
+    padding: 20px;
+    background: white;
+    border: 2px solid var(--border-color, #ddd);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.element-card:hover {
+    border-color: var(--accent-color, #4a90e2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.element-preview {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 8px;
+}
+
+.preview-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.preview-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.required-mark {
+    color: var(--error-color, #f44336);
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.element-info {
+    margin-bottom: 10px;
+}
+
+.info-row {
+    padding: 5px 0;
+    color: var(--text-secondary, #666);
+}
+
+.info-row strong {
+    color: var(--text-primary, #333);
+}
+
+.info-row code {
+    padding: 2px 6px;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: var(--accent-color, #4a90e2);
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    margin: 0 3px;
+    background: var(--accent-color, #4a90e2);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: var(--error-color, #f44336);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #d32f2f;
+    transform: scale(1.1);
+}
+
+.btn-delete svg {
+    stroke: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-generator-wrapper {
+        padding: 20px;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .elements-container {
+        grid-template-columns: 1fr;
+    }
+
+    .add-checkbox-control {
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .element-card {
+    background: var(--bg-secondary, #2d2d2d);
+}
+
+[data-theme="dark"] .checkbox-label {
+    background: var(--bg-tertiary, #3d3d3d);
+}

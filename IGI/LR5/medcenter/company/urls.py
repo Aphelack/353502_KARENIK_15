@@ -8,4 +8,7 @@ urlpatterns = [
     path('vacancies/', views.vacancies, name='vacancies'),
     path('vacancies/<int:pk>/', views.vacancy_detail, name='vacancy_detail'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    
+    # API endpoints
+    path('api/contacts/', views.contacts_api, name='contacts_api'),
 ]

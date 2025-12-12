@@ -1,0 +1,279 @@
+/* Chart.js Visualization Styles - Lab 3, Task 10 */
+
+.chartjs-wrapper {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 30px;
+    background: var(--card-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chartjs-wrapper h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+    color: var(--text-primary, #333);
+    font-size: 2rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-secondary, #666);
+    margin-bottom: 30px;
+}
+
+/* Chart Controls */
+.chart-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 12px;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-group label {
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    font-size: 0.9rem;
+}
+
+.control-group input {
+    padding: 10px;
+    border: 2px solid var(--border-color, #ddd);
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 150px;
+}
+
+.control-group input:focus {
+    border-color: var(--accent-color, #4a90e2);
+    outline: none;
+}
+
+.btn-generate,
+.btn-download {
+    padding: 12px 24px;
+    background: var(--accent-color, #4a90e2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-generate:hover,
+.btn-download:hover {
+    background: var(--accent-hover, #357abd);
+    transform: translateY(-2px);
+}
+
+.btn-download {
+    background: var(--success-color, #4caf50);
+}
+
+.btn-download:hover {
+    background: #45a049;
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    height: 500px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Legend */
+.chart-legend {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 12px;
+}
+
+.chart-legend h3 {
+    margin: 0 0 20px 0;
+    color: var(--text-primary, #333);
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    color: var(--text-primary, #333);
+}
+
+.legend-color {
+    width: 40px;
+    height: 20px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.annotation {
+    margin: 15px 0;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color, #4a90e2);
+    color: var(--text-primary, #333);
+    line-height: 1.6;
+}
+
+.annotation strong {
+    color: var(--accent-color, #4a90e2);
+}
+
+/* Data Table */
+.data-table-container {
+    margin-top: 30px;
+}
+
+.data-table-container h3 {
+    margin: 0 0 15px 0;
+    color: var(--text-primary, #333);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.data-table thead {
+    background: var(--accent-color, #4a90e2);
+    color: white;
+}
+
+.data-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.data-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color, #ddd);
+    color: var(--text-primary, #333);
+}
+
+.data-table tbody tr:hover {
+    background: var(--bg-secondary, #f5f5f5);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Scrollable table on small screens */
+.data-table-container {
+    overflow-x: auto;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .chart-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-group {
+        width: 100%;
+    }
+
+    .control-group input {
+        width: 100%;
+    }
+
+    .btn-generate,
+    .btn-download {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .chart-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chartjs-wrapper {
+        padding: 20px;
+    }
+
+    .chartjs-wrapper h2 {
+        font-size: 1.5rem;
+    }
+
+    .chart-container {
+        height: 350px;
+        padding: 10px;
+    }
+
+    .legend-item {
+        font-size: 0.95rem;
+    }
+
+    .data-table {
+        font-size: 0.85rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 10px 8px;
+    }
+}
+
+/* Animation for chart appearance */
+.chart-container canvas {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .chart-container {
+    background: var(--bg-secondary, #2d2d2d);
+}
+
+[data-theme="dark"] .data-table {
+    background: var(--bg-secondary, #2d2d2d);
+}
+
+[data-theme="dark"] .data-table thead {
+    background: var(--accent-color, #64b5f6);
+}

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from .models import CompanyInfo, CompanyHistory, Partner, Contact, Vacancy
 
 
@@ -77,3 +78,22 @@ def vacancy_detail(request, pk):
 def privacy_policy(request):
     """Display privacy policy page."""
     return render(request, 'company/privacy_policy.html')
+
+
+def contacts_api(request):
+    """API endpoint for employee/contact data."""
+    contacts = Contact.objects.filter(is_public=True).order_by('position', 'last_name')
+    
+    contacts_data = []
+    for contact in contacts:
+        contacts_data.append({
+            'id': contact.id,
+            'first_name': contact.first_name,
+            'last_name': contact.last_name,
+            'position': contact.get_position_display(),
+            'email': contact.email,
+            'phone': contact.phone,
+            'photo_url': contact.photo.url if contact.photo else None,
+        })
+    
+    return JsonResponse({'employees': contacts_data})
