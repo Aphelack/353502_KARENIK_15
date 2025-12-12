@@ -100,11 +100,6 @@ class EmployeeTable {
                     </form>
                 </div>
 
-                <div class="preloader" id="preloader" style="display: none;">
-                    <div class="spinner"></div>
-                    <p>Загрузка...</p>
-                </div>
-
                 <div class="table-container">
                     <table class="employee-table" id="employeeTable">
                         <thead>
@@ -287,48 +282,55 @@ class EmployeeTable {
         }
     }
 
-    showPreloader(show = true) {
-        document.getElementById('preloader').style.display = show ? 'flex' : 'none';
-    }
-
     async loadEmployeesFromServer() {
-        this.showPreloader(true);
+        console.log('Starting to load employees...');
         
         try {
-            // Simulate server request
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
+            console.log('Fetching from API: /company/api/contacts/');
             // Try to fetch from Django backend
             const response = await fetch('/company/api/contacts/');
+            console.log('Response status:', response.status, 'OK:', response.ok);
+            
             if (response.ok) {
                 const data = await response.json();
-                this.employees = data;
+                console.log('Received data:', data);
+                // API now returns array directly
+                if (Array.isArray(data) && data.length > 0) {
+                    this.employees = data;
+                    console.log('Loaded employees from API:', this.employees.length);
+                } else {
+                    console.log('API returned empty or invalid data, using sample');
+                    this.employees = this.getSampleData();
+                }
             } else {
+                console.log('API returned error status:', response.status);
                 // Fallback to sample data
                 this.employees = this.getSampleData();
             }
         } catch (error) {
+            console.error('Error fetching employees:', error);
             console.log('Using sample data');
             this.employees = this.getSampleData();
         } finally {
-            this.showPreloader(false);
+            console.log('Finally block: rendering');
             this.filteredEmployees = [...this.employees];
+            console.log('Calling render with', this.filteredEmployees.length, 'employees');
             this.render();
         }
     }
 
     getSampleData() {
         return [
-            { id: 1, firstName: 'Иван', lastName: 'Иванов', position: 'Врач-терапевт', phone: '+375 (29) 111-22-33', email: 'ivanov@med.by', photoUrl: 'http://example.com/photo1.html', description: 'Специалист по терапии' },
-            { id: 2, firstName: 'Петр', lastName: 'Петров', position: 'Хирург', phone: '8 (029) 2223344', email: 'petrov@med.by', photoUrl: 'https://example.com/photo2.php', description: 'Опытный хирург' },
-            { id: 3, firstName: 'Мария', lastName: 'Сидорова', position: 'Медсестра', phone: '80293334455', email: 'sidorova@med.by', photoUrl: 'http://example.com/photo3.html', description: 'Медицинская сестра' },
-            { id: 4, firstName: 'Анна', lastName: 'Иванова', position: 'Педиатр', phone: '+375 (29) 444 55 66', email: 'anna@med.by', photoUrl: 'https://example.com/photo4.php', description: 'Детский врач' },
-            { id: 5, firstName: 'Сергей', lastName: 'Козлов', position: 'Кардиолог', phone: '8 (029) 5556677', email: 'kozlov@med.by', photoUrl: 'http://example.com/photo5.html', description: 'Специалист по сердцу' },
-            { id: 6, firstName: 'Елена', lastName: 'Смирнова', position: 'Офтальмолог', phone: '+375 (29) 666-77-88', email: 'smirnova@med.by', photoUrl: 'https://example.com/photo6.php', description: 'Глазной врач' },
-            { id: 7, firstName: 'Дмитрий', lastName: 'Волков', position: 'Стоматолог', phone: '80297778899', email: 'volkov@med.by', photoUrl: 'http://example.com/photo7.html', description: 'Зубной врач' },
-            { id: 8, firstName: 'Ольга', lastName: 'Новикова', position: 'Гинеколог', phone: '8 (029) 8889900', email: 'novikova@med.by', photoUrl: 'https://example.com/photo8.php', description: 'Женский врач' },
-            { id: 9, firstName: 'Алексей', lastName: 'Морозов', position: 'Невролог', phone: '+375 (29) 999 00 11', email: 'morozov@med.by', photoUrl: 'http://example.com/photo9.html', description: 'Невролог' },
-            { id: 10, firstName: 'Татьяна', lastName: 'Лебедева', position: 'Эндокринолог', phone: '+375 (29) 000-11-22', email: 'lebedeva@med.by', photoUrl: 'https://example.com/photo10.php', description: 'Специалист по гормонам' }
+            { id: 1, firstName: 'Иван', lastName: 'Иванов', position: 'Врач-терапевт', phone: '+375 (29) 111-22-33', email: 'ivanov@med.by', photoUrl: '/static/images/doctor1.jpg', description: 'Специалист по терапии' },
+            { id: 2, firstName: 'Петр', lastName: 'Петров', position: 'Хирург', phone: '8 (029) 2223344', email: 'petrov@med.by', photoUrl: '/static/images/doctor2.jpg', description: 'Опытный хирург' },
+            { id: 3, firstName: 'Мария', lastName: 'Сидорова', position: 'Медсестра', phone: '80293334455', email: 'sidorova@med.by', photoUrl: '/static/images/doctor3.jpg', description: 'Медицинская сестра' },
+            { id: 4, firstName: 'Анна', lastName: 'Иванова', position: 'Педиатр', phone: '+375 (29) 444 55 66', email: 'anna@med.by', photoUrl: '/static/images/doctor4.jpg', description: 'Детский врач' },
+            { id: 5, firstName: 'Сергей', lastName: 'Козлов', position: 'Кардиолог', phone: '8 (029) 5556677', email: 'kozlov@med.by', photoUrl: '/static/images/doctor5.jpg', description: 'Специалист по сердцу' },
+            { id: 6, firstName: 'Елена', lastName: 'Смирнова', position: 'Офтальмолог', phone: '+375 (29) 666-77-88', email: 'smirnova@med.by', photoUrl: '/static/images/doctor6.jpg', description: 'Глазной врач' },
+            { id: 7, firstName: 'Дмитрий', lastName: 'Волков', position: 'Стоматолог', phone: '80297778899', email: 'volkov@med.by', photoUrl: '/static/images/doctor7.jpg', description: 'Зубной врач' },
+            { id: 8, firstName: 'Ольга', lastName: 'Новикова', position: 'Гинеколог', phone: '8 (029) 8889900', email: 'novikova@med.by', photoUrl: '/static/images/doctor8.jpg', description: 'Женский врач' },
+            { id: 9, firstName: 'Алексей', lastName: 'Морозов', position: 'Невролог', phone: '+375 (29) 999 00 11', email: 'morozov@med.by', photoUrl: '/static/images/doctor9.jpg', description: 'Невролог' },
+            { id: 10, firstName: 'Татьяна', lastName: 'Лебедева', position: 'Эндокринолог', phone: '+375 (29) 000-11-22', email: 'lebedeva@med.by', photoUrl: '/static/images/doctor10.jpg', description: 'Специалист по гормонам' }
         ];
     }
 
@@ -454,10 +456,17 @@ class EmployeeTable {
     }
 
     render() {
+        console.log('Render called with', this.filteredEmployees.length, 'employees');
         const tbody = document.getElementById('employeeTableBody');
+        if (!tbody) {
+            console.error('employeeTableBody element not found!');
+            return;
+        }
+        
         const start = (this.currentPage - 1) * this.itemsPerPage;
         const end = start + this.itemsPerPage;
         const pageEmployees = this.filteredEmployees.slice(start, end);
+        console.log('Rendering page', this.currentPage, ':', pageEmployees.length, 'employees');
 
         tbody.innerHTML = pageEmployees.map(emp => `
             <tr class="employee-row" data-id="${emp.id}">
@@ -471,6 +480,8 @@ class EmployeeTable {
                 <td>${emp.description}</td>
             </tr>
         `).join('');
+        
+        console.log('HTML set, tbody children count:', tbody.children.length);
 
         // Attach row click and checkbox events
         document.querySelectorAll('.employee-row').forEach(row => {
@@ -494,10 +505,13 @@ class EmployeeTable {
             });
         });
 
+        console.log('About to render pagination');
         this.renderPagination();
+        console.log('Render complete!');
     }
 
     renderPagination() {
+        console.log('renderPagination called');
         const pagination = document.getElementById('pagination');
         const totalPages = Math.ceil(this.filteredEmployees.length / this.itemsPerPage);
 

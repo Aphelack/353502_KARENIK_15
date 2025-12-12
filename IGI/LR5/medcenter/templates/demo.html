@@ -148,26 +148,84 @@
         <div id="chartContainer"></div>
     </section>
 
-    <!-- Task 11: Scroll Animations (implemented globally) -->
-    <div style="height: 500px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
-        <p>Прокрутите страницу вниз, чтобы увидеть анимации при скролле ⬇️</p>
-    </div>
+    <!-- Task 11: Scroll Animations -->
+    <section id="task11" class="lab-section">
+        <h2>Задание 11: Анимация при скроллинге</h2>
+        <p style="text-align: center; margin-bottom: 20px; font-size: 1.2rem;">
+            Прокрутите страницу вниз, чтобы увидеть медицинские анимации ⬇️
+        </p>
+        
+        <!-- Medical Parallax Animation Section -->
+        <div id="medicalScrollAnimation" style="position: relative; height: 600px; overflow: hidden; background: linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%); border-radius: 12px;">
+            <!-- Sky background -->
+            <div id="sky" style="position: absolute; width: 100%; height: 100%; background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%);"></div>
+            
+            <!-- Clouds -->
+            <div id="cloud1" style="position: absolute; top: 50px; left: 20%; font-size: 3rem;">☁️</div>
+            <div id="cloud2" style="position: absolute; top: 100px; right: 30%; font-size: 2.5rem;">☁️</div>
+            
+            <!-- Hospital building (left side) -->
+            <div id="hospital" style="position: absolute; bottom: 0; left: 10%; width: 200px; height: 250px; background: white; border: 3px solid #333; border-radius: 8px 8px 0 0;">
+                <div style="position: absolute; top: 20px; left: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 80px; left: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: 80px; right: 20px; width: 40px; height: 40px; background: lightblue; border: 2px solid #333;"></div>
+                <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; background: #8b4513; border: 2px solid #333;"></div>
+                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-size: 3rem;">🏥</div>
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: red;">➕</div>
+            </div>
+            
+            <!-- Ground -->
+            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: #4caf50;"></div>
+            <div style="position: absolute; bottom: 50px; left: 0; width: 100%; height: 10px; background: #666;"></div>
+            
+            <!-- Ambulance -->
+            <div id="ambulance" style="position: absolute; bottom: 60px; right: -10%; font-size: 4rem; transition: none;">🚑</div>
+            
+            <!-- Pills falling -->
+            <div id="pills1" style="position: absolute; top: -50px; left: 40%; font-size: 2rem;">💊</div>
+            <div id="pills2" style="position: absolute; top: -100px; left: 60%; font-size: 2rem;">💊</div>
+            <div id="pills3" style="position: absolute; top: -150px; left: 80%; font-size: 2rem;">💊</div>
+            
+            <!-- Heartbeat line -->
+            <div id="heartbeat" style="position: absolute; top: 30px; left: 10%; right: 10%; height: 60px; background: rgba(255,255,255,0.8); border: 2px solid red; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                ❤️ <span style="margin-left: 10px; font-family: monospace; color: red;">───╱╲───</span>
+            </div>
+            
+            <!-- Sick person (left) and Healthy person (right) -->
+            <div id="sickPerson" style="position: absolute; bottom: 60px; left: 5%; font-size: 5rem; opacity: 1;">🤒</div>
+            <div id="healthyPerson" style="position: absolute; bottom: 60px; right: 5%; font-size: 5rem; opacity: 0;">😊</div>
+            
+            <!-- Medical text -->
+            <div id="medicalText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-weight: bold; text-align: center; z-index: 10;">
+                Ваше здоровье - наша забота
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: var(--bg-secondary); border-radius: 8px;">
+            <h3>Описание анимации:</h3>
+            <ul style="line-height: 2;">
+                <li>☁️ Облака движутся в разные стороны</li>
+                <li>🚑 Скорая помощь приезжает к больнице</li>
+                <li>💊 Лекарства падают сверху</li>
+                <li>🤒➡️😊 Больной человек выздоравливает</li>
+                <li>❤️ Пульс показывает здоровье</li>
+            </ul>
+        </div>
+    </section>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/theme-switcher.js' %}"></script>
-<script src="{% static 'js/slider.js' %}"></script>
-<script src="{% static 'js/employee-table.js' %}"></script>
-<script src="{% static 'js/form-generator.js' %}"></script>
-<script src="{% static 'js/service-catalog.js' %}"></script>
-<script src="{% static 'js/age-verification.js' %}"></script>
-<script src="{% static 'js/class-inheritance.js' %}"></script>
-<script src="{% static 'js/apis-demo.js' %}"></script>
-<script src="{% static 'js/chartjs-visualization.js' %}"></script>
-<script src="{% static 'js/scroll-animations.js' %}"></script>
-
-<script>
+<script src="{% static 'js/slider.js' %}?v=3"></script>
+<script src="{% static 'js/employee-table.js' %}?v=3"></script>
+<script src="{% static 'js/form-generator.js' %}?v=3"></script>
+<script src="{% static 'js/service-catalog.js' %}?v=3"></script>
+<script src="{% static 'js/age-verification.js' %}?v=3"></script>
+<script src="{% static 'js/class-inheritance.js' %}?v=3"></script>
+<script src="{% static 'js/apis-demo.js' %}?v=3"></script>
+<script src="{% static 'js/chartjs-visualization.js' %}?v=3"></script>
+    <script src="{% static 'js/scroll-animations.js' %}?v=5"></script><script>
 // Initialize slider with sample images
 document.addEventListener('DOMContentLoaded', function() {
     const slider = new ImageSlider('#sliderContainer', {
@@ -181,8 +239,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add sample slides
     slider.addSlide('/static/images/banner1.svg', 'Современное оборудование', '/services/');
-    slider.addSlide('/static/images/banner2.svg', 'Квалифицированные врачи', '/doctors/');
-    slider.addSlide('/static/images/banner3.svg', 'Комфортные условия', '/company/info/');
+    slider.addSlide('/static/images/banner-2.svg', 'Квалифицированные врачи', '/doctors/');
+    slider.addSlide('/static/images/banner-3.svg', 'Комфортные условия', '/company/info/');
 
     // Update slider delay
     document.getElementById('updateSliderDelay').addEventListener('click', function() {

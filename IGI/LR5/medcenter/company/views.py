@@ -86,14 +86,23 @@ def contacts_api(request):
     
     contacts_data = []
     for contact in contacts:
+        # Use position_display property for custom positions
+        position_display = contact.position_display if hasattr(contact, 'position_display') else contact.get_position_display()
+        
+        # Build photo URL
+        photo_url = 'http://example.com/photo.html'  # Default placeholder
+        if contact.photo:
+            photo_url = request.build_absolute_uri(contact.photo.url)
+        
         contacts_data.append({
             'id': contact.id,
-            'first_name': contact.first_name,
-            'last_name': contact.last_name,
-            'position': contact.get_position_display(),
+            'firstName': contact.first_name,
+            'lastName': contact.last_name,
+            'position': position_display,
             'email': contact.email,
             'phone': contact.phone,
-            'photo_url': contact.photo.url if contact.photo else None,
+            'photoUrl': photo_url,
+            'description': contact.description,
         })
     
-    return JsonResponse({'employees': contacts_data})
+    return JsonResponse(contacts_data, safe=False)

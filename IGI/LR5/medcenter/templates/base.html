@@ -235,17 +235,17 @@
             window.addEventListener('load', function() {
                 console.log('Page fully loaded, hiding preloader...');
                 
-                // Минимальное время показа - 1.5 секунды
+                // Минимальное время показа - 500ms (reduced for faster display)
                 setTimeout(function() {
                     preloader.classList.add('hidden');
                     
-                    // Полностью удаляем через 0.5 секунды
+                    // Полностью удаляем через 0.3 секунды
                     setTimeout(function() {
                         preloader.style.display = 'none';
                         console.log('Preloader completely hidden');
-                    }, 500);
+                    }, 300);
                     
-                }, 1500);
+                }, 500);
             });
             
             // Fallback - скрыть через 5 секунд на всякий случай

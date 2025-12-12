@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 from .models import Service, ServiceCategory
 
 
@@ -71,3 +72,36 @@ def service_detail(request, service_id):
     }
     
     return render(request, 'services/service_detail.html', context)
+
+
+def service_list_api(request):
+    """API endpoint that returns services as JSON."""
+    services = Service.objects.select_related('category').all()
+    
+    # Filter by category
+    category_id = request.GET.get('category')
+    if category_id:
+        services = services.filter(category_id=category_id)
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        services = services.filter(
+            Q(name__icontains=search_query) | 
+            Q(description__icontains=search_query)
+        )
+    
+    # Convert to list of dictionaries
+    services_data = []
+    for service in services:
+        services_data.append({
+            'id': service.id,
+            'name': service.name,
+            'description': service.description or '',
+            'price': f'{service.price} BYN',
+            'category': service.category.name,
+            'duration': str(service.duration),
+            'image': f'service{service.id % 12 + 1}.svg'  # Placeholder image logic
+        })
+    
+    return JsonResponse(services_data, safe=False)

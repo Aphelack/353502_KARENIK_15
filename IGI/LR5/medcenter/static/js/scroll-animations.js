@@ -1,9 +1,94 @@
 /**
  * Scroll Animations - Lab 3, Task 11
- * Implements animations triggered by scrolling
- * Theme: Medical center - animated medical icons and elements
+ * Medical Parallax Scroll Animation
+ * Theme: Medical center - Ambulance driving, pills falling, person healing
  */
 
+// Initialize medical scroll animation when DOM is ready
+function initMedicalScrollAnimation() {
+    const animationSection = document.getElementById('medicalScrollAnimation');
+    if (!animationSection) {
+        console.log('Medical animation section not found');
+        return;
+    }
+
+    console.log('Initializing medical scroll animation');
+
+    // Get all animated elements
+    const ambulance = document.getElementById('ambulance');
+    const cloud1 = document.getElementById('cloud1');
+    const cloud2 = document.getElementById('cloud2');
+    const pills1 = document.getElementById('pills1');
+    const pills2 = document.getElementById('pills2');
+    const pills3 = document.getElementById('pills3');
+    const sickPerson = document.getElementById('sickPerson');
+    const healthyPerson = document.getElementById('healthyPerson');
+    const heartbeat = document.getElementById('heartbeat');
+    const medicalText = document.getElementById('medicalText');
+
+    // Scroll event handler
+    function handleScroll() {
+        const rect = animationSection.getBoundingClientRect();
+        const sectionTop = rect.top;
+        const sectionHeight = rect.height;
+        const windowHeight = window.innerHeight;
+
+        // Calculate scroll progress (0 to 1) based on section visibility
+        if (sectionTop < windowHeight && sectionTop > -sectionHeight) {
+            let scrollProgress = 1 - ((sectionTop + sectionHeight) / (windowHeight + sectionHeight));
+            scrollProgress = Math.max(0, Math.min(1, scrollProgress));
+
+            // Ambulance drives from right to left (stops at hospital at 10%)
+            if (ambulance) {
+                const ambulanceProgress = Math.min(1, scrollProgress * 1.5);
+                // Start at -10%, end at hospital (around 15%)
+                ambulance.style.right = `${-10 + (ambulanceProgress * 85)}%`;
+            }
+
+            // Clouds move in opposite directions
+            if (cloud1) cloud1.style.transform = `translateX(${scrollProgress * 100}px)`;
+            if (cloud2) cloud2.style.transform = `translateX(${-scrollProgress * 80}px)`;
+
+            // Pills fall down
+            if (pills1) pills1.style.top = `${-50 + (scrollProgress * 400)}px`;
+            if (pills2) pills2.style.top = `${-100 + (scrollProgress * 450)}px`;
+            if (pills3) pills3.style.top = `${-150 + (scrollProgress * 500)}px`;
+
+            // Person transforms from sick to healthy
+            const healProgress = Math.max(0, (scrollProgress - 0.3) * 2);
+            if (sickPerson) sickPerson.style.opacity = 1 - healProgress;
+            if (healthyPerson) healthyPerson.style.opacity = healProgress;
+
+            // Heartbeat pulses
+            if (heartbeat) {
+                const pulse = Math.sin(scrollProgress * Math.PI * 4);
+                heartbeat.style.transform = `scale(${1 + pulse * 0.1})`;
+            }
+
+            // Text fades in
+            if (medicalText) {
+                medicalText.style.opacity = Math.min(1, scrollProgress * 2);
+            }
+        }
+    }
+
+    // Add scroll event listener with throttling
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                handleScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial call
+    handleScroll();
+}
+
+// Additional scroll reveal animations for other elements
 class ScrollAnimations {
     constructor() {
         this.animatedElements = [];
@@ -11,48 +96,13 @@ class ScrollAnimations {
     }
 
     init() {
-        this.createAnimationElements();
+        initMedicalScrollAnimation(); // Initialize demo page animation
+        this.collectAnimatedElements();
         this.attachScrollListener();
         this.checkVisibility();
     }
 
-    createAnimationElements() {
-        // Create floating medical icons container
-        const animContainer = document.createElement('div');
-        animContainer.id = 'scrollAnimationContainer';
-        animContainer.className = 'scroll-animation-container';
-        animContainer.innerHTML = `
-            <div class="animated-element medical-icon heart-icon" data-animation="float">
-                ❤️
-            </div>
-            <div class="animated-element medical-icon pill-icon" data-animation="rotate">
-                💊
-            </div>
-            <div class="animated-element medical-icon syringe-icon" data-animation="slide-in-left">
-                💉
-            </div>
-            <div class="animated-element medical-icon cross-icon" data-animation="bounce">
-                ➕
-            </div>
-            <div class="animated-element medical-icon stethoscope-icon" data-animation="pulse">
-                🩺
-            </div>
-            <div class="animated-element medical-icon ambulance-icon" data-animation="slide-in-right">
-                🚑
-            </div>
-            <div class="animated-element medical-icon hospital-icon" data-animation="fade-in">
-                🏥
-            </div>
-            <div class="animated-element medical-icon doctor-icon" data-animation="scale-up">
-                👨‍⚕️
-            </div>
-        `;
-
-        // Add to body if not already present
-        if (!document.getElementById('scrollAnimationContainer')) {
-            document.body.appendChild(animContainer);
-        }
-
+    collectAnimatedElements() {
         // Get all animated elements
         this.animatedElements = document.querySelectorAll('.animated-element');
     }

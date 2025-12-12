@@ -64,15 +64,17 @@ class ServiceCatalogPagination {
 
     async loadServices() {
         try {
-            // Try to fetch from Django backend
-            const response = await fetch('/services/api/services/');
+            // Fetch from Django API endpoint
+            const response = await fetch('/services/api/');
             if (response.ok) {
                 const data = await response.json();
                 this.services = data;
             } else {
+                console.log('API returned error, using sample data');
                 this.services = this.getSampleServices();
             }
         } catch (error) {
+            console.log('Failed to fetch services:', error);
             console.log('Using sample data');
             this.services = this.getSampleServices();
         } finally {
@@ -82,18 +84,18 @@ class ServiceCatalogPagination {
 
     getSampleServices() {
         return [
-            { id: 1, name: 'Консультация терапевта', description: 'Первичный осмотр и консультация врача-терапевта', price: '30 BYN', image: 'service1.svg' },
-            { id: 2, name: 'УЗИ диагностика', description: 'Ультразвуковое исследование органов', price: '45 BYN', image: 'service2.svg' },
-            { id: 3, name: 'Анализы крови', description: 'Общий и биохимический анализ крови', price: '25 BYN', image: 'service3.svg' },
-            { id: 4, name: 'Кардиограмма', description: 'ЭКГ с расшифровкой', price: '20 BYN', image: 'service4.svg' },
-            { id: 5, name: 'Рентген', description: 'Рентгенологическое исследование', price: '35 BYN', image: 'service5.svg' },
-            { id: 6, name: 'Консультация хирурга', description: 'Осмотр и консультация врача-хирурга', price: '40 BYN', image: 'service6.svg' },
-            { id: 7, name: 'Стоматология', description: 'Лечение и профилактика зубов', price: '50 BYN', image: 'service7.svg' },
-            { id: 8, name: 'Офтальмология', description: 'Проверка зрения и консультация', price: '30 BYN', image: 'service8.svg' },
-            { id: 9, name: 'Педиатрия', description: 'Консультация детского врача', price: '35 BYN', image: 'service9.svg' },
-            { id: 10, name: 'Невролог', description: 'Консультация невролога', price: '40 BYN', image: 'service10.svg' },
-            { id: 11, name: 'Эндокринолог', description: 'Консультация эндокринолога', price: '38 BYN', image: 'service11.svg' },
-            { id: 12, name: 'Гинеколог', description: 'Консультация гинеколога', price: '42 BYN', image: 'service12.svg' }
+            { id: 1, name: 'Консультация терапевта', description: 'Первичный осмотр и консультация врача-терапевта', price: '30 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 2, name: 'УЗИ диагностика', description: 'Ультразвуковое исследование органов', price: '45 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 3, name: 'Анализы крови', description: 'Общий и биохимический анализ крови', price: '25 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 4, name: 'Кардиограмма', description: 'ЭКГ с расшифровкой', price: '20 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 5, name: 'Рентген', description: 'Рентгенологическое исследование', price: '35 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 6, name: 'Консультация хирурга', description: 'Осмотр и консультация врача-хирурга', price: '40 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 7, name: 'Стоматология', description: 'Лечение и профилактика зубов', price: '50 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 8, name: 'Офтальмология', description: 'Проверка зрения и консультация', price: '30 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 9, name: 'Педиатрия', description: 'Консультация детского врача', price: '35 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 10, name: 'Невролог', description: 'Консультация невролога', price: '40 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 11, name: 'Эндокринолог', description: 'Консультация эндокринолога', price: '38 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' },
+            { id: 12, name: 'Гинеколог', description: 'Консультация гинеколога', price: '42 BYN', image: 'surgery-operation-surgeon-operating-room-svgrepo-com.svg' }
         ];
     }
 
