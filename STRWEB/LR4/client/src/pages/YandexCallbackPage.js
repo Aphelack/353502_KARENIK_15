@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function YandexCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const processedRef = useRef(false);
 
   useEffect(() => {
+    // Prevent double execution in React Strict Mode
+    if (processedRef.current) return;
+    processedRef.current = true;
+
     const code = searchParams.get('code');
     
     if (code) {
+      console.log('YandexCallbackPage: Sending code to parent window');
+      
       // Send code back to parent window (for popup flow)
       if (window.opener) {
         window.opener.postMessage({

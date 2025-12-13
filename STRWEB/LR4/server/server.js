@@ -26,6 +26,13 @@ mongoose.connect(MONGODB_URI, {
 .then(() => console.log('MongoDB connected successfully'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
+// Validate Yandex OAuth configuration
+if (!process.env.Yandex_Client_ID || !process.env.Yandex_Client_Secret) {
+  console.warn('⚠️  WARNING: Yandex OAuth credentials not configured. Check .env file.');
+} else {
+  console.log('✓ Yandex OAuth configured');
+}
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/pizzas', pizzaRoutes);

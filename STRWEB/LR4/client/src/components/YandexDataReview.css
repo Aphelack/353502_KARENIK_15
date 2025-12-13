@@ -1,0 +1,195 @@
+.yandex-review-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.yandex-review-modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+}
+
+.yandex-review-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.yandex-review-header h2 {
+  color: var(--primary-red);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.yandex-review-header p {
+  color: var(--dark-grey);
+  font-size: 1rem;
+}
+
+.yandex-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.yandex-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-yellow);
+  box-shadow: 0 4px 15px var(--shadow);
+  animation: zoomIn 0.5s ease;
+}
+
+.yandex-review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group.animate-fill {
+  animation: slideInRight 0.5s ease;
+  animation-fill-mode: both;
+}
+
+.form-group.animate-fill:nth-child(1) { animation-delay: 0.3s; }
+.form-group.animate-fill:nth-child(2) { animation-delay: 0.5s; }
+.form-group.animate-fill:nth-child(3) { animation-delay: 0.7s; }
+.form-group.animate-fill:nth-child(4) { animation-delay: 0.9s; }
+.form-group.animate-fill:nth-child(5) { animation-delay: 1.1s; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--dark-grey);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--light-grey);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.form-group input[type="date"] {
+  font-family: inherit;
+}
+
+.yandex-review-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.yandex-review-actions button {
+  flex: 1;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+  animation: shake 0.5s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .yandex-review-modal {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .yandex-review-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .yandex-avatar img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .yandex-review-actions {
+    flex-direction: column;
+  }
+}

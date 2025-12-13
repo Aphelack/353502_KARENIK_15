@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../utils/api';
 import { isValidEmail } from '../utils/helpers';
+import YandexDataReview from '../components/YandexDataReview';
 import './RegisterPage.css';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { register, loginWithYandex } = useAuth();
+  const { register } = useAuth();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +18,21 @@ function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [yandexData, setYandexData] = useState(null);
+  const messageHandlerRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (messageHandlerRef.current) {
+        window.removeEventListener('message', messageHandlerRef.current);
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Event Handler 26: onInputChange
   const handleInputChange = (e) => {
@@ -90,6 +106,16 @@ function RegisterPage() {
 
   // Event Handler 28: onYandexRegister
   const handleYandexRegister = async () => {
+    // Clean up any existing listeners
+    if (messageHandlerRef.current) {
+      window.removeEventListener('message', messageHandlerRef.current);
+      messageHandlerRef.current = null;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     try {
       const response = await authAPI.getYandexUrl();
       const authUrl = response.data.authUrl;
@@ -101,38 +127,86 @@ function RegisterPage() {
         'width=600,height=700'
       );
 
+      // Flag to prevent duplicate processing
+      let processed = false;
+
       // Listen for OAuth callback
       const handleMessage = async (event) => {
-        if (event.data.type === 'yandex-oauth') {
+        if (event.data.type === 'yandex-oauth' && !processed) {
+          processed = true; // Set flag immediately
           const code = event.data.code;
           popup?.close();
 
-          setLoading(true);
-          const result = await loginWithYandex(code);
-          
-          if (result.success) {
-            navigate('/');
-          } else {
-            setErrors({ general: result.error });
+          // Remove listener immediately to prevent duplicates
+          window.removeEventListener('message', handleMessage);
+          messageHandlerRef.current = null;
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
           }
-          setLoading(false);
+
+          setLoading(true);
+          try {
+            const result = await authAPI.yandexCallback(code);
+            
+            if (result.data.success) {
+              if (result.data.isLogin) {
+                // User already exists - login directly
+                localStorage.setItem('token', result.data.token);
+                localStorage.setItem('user', JSON.stringify(result.data.user));
+                navigate('/');
+              } else {
+                // New user - show review modal with user data
+                setYandexData(result.data.userData);
+              }
+            } else {
+              setErrors({ general: 'Failed to get user data from Yandex' });
+            }
+          } catch (err) {
+            setErrors({ general: err.response?.data?.message || 'Yandex authentication failed. Please try again.' });
+          } finally {
+            setLoading(false);
+          }
         }
       };
 
+      messageHandlerRef.current = handleMessage;
       window.addEventListener('message', handleMessage);
 
-      // Cleanup
-      return () => {
-        window.removeEventListener('message', handleMessage);
-      };
+      // Cleanup after 2 minutes (timeout for OAuth flow)
+      timeoutRef.current = setTimeout(() => {
+        if (messageHandlerRef.current) {
+          window.removeEventListener('message', messageHandlerRef.current);
+          messageHandlerRef.current = null;
+        }
+      }, 120000);
     } catch (err) {
       console.error('Yandex register error:', err);
-      setErrors({ general: 'Yandex authentication failed' });
+      setErrors({ general: 'Yandex authentication failed. Please try again.' });
     }
+  };
+
+  // Handle Yandex data confirmation
+  const handleYandexConfirm = (response) => {
+    // User is now registered and logged in
+    setYandexData(null);
+    window.location.reload(); // Reload to update auth context
+  };
+
+  const handleYandexCancel = () => {
+    setYandexData(null);
   };
 
   return (
     <div className="register-page">
+      {yandexData && (
+        <YandexDataReview 
+          userData={yandexData}
+          onConfirm={handleYandexConfirm}
+          onCancel={handleYandexCancel}
+        />
+      )}
+      
       <div className="register-container">
         <div className="register-header">
           <h1>🍕 Join Pizzeria</h1>

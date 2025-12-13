@@ -60,6 +60,7 @@ function PizzaCustomizer() {
   // Load ingredients
   useEffect(() => {
     loadIngredients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
   const loadIngredients = async () => {

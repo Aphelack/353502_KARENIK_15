@@ -39,6 +39,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'UTC',
   },
+  birthDate: {
+    type: Date,
+  },
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'other', null],
+  },
+  avatar: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

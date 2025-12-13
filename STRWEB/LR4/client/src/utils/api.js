@@ -69,6 +69,7 @@ export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   getYandexUrl: () => api.get('/auth/yandex/url'),
   yandexCallback: (code) => api.post('/auth/yandex/callback', { code }),
+  yandexConfirm: (userData, timezone) => api.post('/auth/yandex/confirm', { userData, timezone }),
   getMe: () => api.get('/auth/me'),
 };
 

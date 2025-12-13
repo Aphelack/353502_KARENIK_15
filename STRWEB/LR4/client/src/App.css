@@ -261,7 +261,7 @@ body {
 
 .markdown-content h2 {
   font-size: 1.5em;
-  color: var(--dark-red);
+  color: var(--dark-grey);
   margin: 0.8em 0 0.4em 0;
   font-weight: 600;
   border-bottom: 2px solid var(--primary-yellow);
@@ -270,7 +270,7 @@ body {
 
 .markdown-content h3 {
   font-size: 1.2em;
-  color: var(--primary-green);
+  color: var(--dark-grey);
   margin: 0.6em 0 0.3em 0;
   font-weight: 600;
 }
@@ -278,6 +278,7 @@ body {
 .markdown-content p {
   margin: 0.8em 0;
   text-align: left;
+  color: var(--dark-grey);
 }
 
 .markdown-content ul, .markdown-content ol {
@@ -287,16 +288,17 @@ body {
 
 .markdown-content li {
   margin: 0.4em 0;
+  color: var(--dark-grey);
 }
 
 .markdown-content strong {
-  color: var(--dark-red);
+  color: #1a1a1a;
   font-weight: 700;
 }
 
 .markdown-content em {
   font-style: italic;
-  color: var(--primary-green);
+  color: var(--dark-grey);
 }
 
 .markdown-content code {
@@ -305,6 +307,7 @@ body {
   border-radius: 4px;
   font-family: 'Courier New', monospace;
   font-size: 0.9em;
+  color: var(--dark-grey);
 }
 
 .markdown-content pre {

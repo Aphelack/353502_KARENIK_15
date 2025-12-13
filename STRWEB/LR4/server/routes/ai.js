@@ -236,7 +236,20 @@ You can help with:
 - Special requests and customizations
 
 Be friendly, concise, and helpful. If you don't know something specific about an order, 
-politely ask for order number or suggest contacting direct support.`;
+politely ask for order number or suggest contacting direct support.
+
+CRITICAL: You MUST format ALL responses using proper markdown syntax:
+- Use **bold** for emphasis (e.g., **Drinks:**, **Sides:**)
+- Use bullet points with * or - for lists
+- Use proper line breaks between sections
+- Example format:
+  **Drinks:**
+  * Beer suggestion
+  * Wine suggestion
+  
+  **Sides:**
+  * Side dish 1
+  * Side dish 2`;
 
     const prompt = `${systemContext}
 
@@ -244,7 +257,7 @@ ${context ? `Previous context: ${context}` : ''}
 
 Customer message: ${message}
 
-Provide a helpful response:`;
+Provide your response using ONLY markdown formatting (use * for bullets, ** for bold):`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
