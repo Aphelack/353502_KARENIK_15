@@ -70,10 +70,8 @@ function YandexDataReview({ userData, onConfirm, onCancel }) {
 
       const response = await authAPI.yandexConfirm(confirmData, timezone);
       
-      // Save token and call onConfirm
-      localStorage.setItem('token', response.data.token);
+      // Call onConfirm with response data
       onConfirm(response.data);
-      navigate('/');
     } catch (err) {
       console.error('Confirmation error:', err);
       setError(err.response?.data?.message || 'Failed to complete registration');

@@ -8,7 +8,7 @@ import './LoginPage.css';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, setAuthData } = useAuth();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -118,13 +118,13 @@ function LoginPage() {
 
           setLoading(true);
           try {
-            const result = await authAPI.yandexCallback(code);
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const result = await authAPI.yandexCallback(code, timezone);
             
             if (result.data.success) {
               if (result.data.isLogin) {
                 // Existing user - login directly
-                localStorage.setItem('token', result.data.token);
-                localStorage.setItem('user', JSON.stringify(result.data.user));
+                setAuthData(result.data.token, result.data.user);
                 navigate('/');
               } else {
                 // New user - show registration form
@@ -158,10 +158,11 @@ function LoginPage() {
   };
 
   // Handle Yandex data confirmation
-  const handleYandexConfirm = (response) => {
+  const handleYandexConfirm = (data) => {
     // User is now logged in
     setYandexData(null);
-    window.location.reload(); // Reload to update auth context
+    setAuthData(data.token, data.user);
+    navigate('/');
   };
 
   const handleYandexCancel = () => {

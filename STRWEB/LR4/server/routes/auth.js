@@ -330,23 +330,37 @@ router.post('/yandex/callback', async (req, res) => {
       });
     }
 
-    // New user - return data for registration confirmation
+    // New user - Auto-register
+    const timezone = req.body.timezone || 'UTC';
+    
+    const newUser = new User({
+      yandexId: yandexUser.id,
+      email: userEmail,
+      name: userName,
+      timezone: timezone,
+      birthDate: yandexUser.birthday || null,
+      gender: yandexUser.sex || null,
+      avatar: yandexUser.default_avatar_id ? 
+        `https://avatars.yandex.net/get-yapic/${yandexUser.default_avatar_id}/islands-200` : null,
+      phone: yandexUser.default_phone?.number || null,
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
+
     res.json({
       success: true,
-      isLogin: false,
-      userData: {
-        yandexId: yandexUser.id,
-        email: userEmail,
-        name: userName,
-        firstName: yandexUser.first_name || '',
-        lastName: yandexUser.last_name || '',
-        birthDate: yandexUser.birthday || null,
-        gender: yandexUser.sex || null,
-        avatar: yandexUser.default_avatar_id ? 
-          `https://avatars.yandex.net/get-yapic/${yandexUser.default_avatar_id}/islands-200` : null,
-        phone: yandexUser.default_phone?.number || null,
-      },
-      accessToken,
+      isLogin: true,
+      token,
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+        name: newUser.name,
+        role: newUser.role,
+        timezone: newUser.timezone,
+        avatar: newUser.avatar,
+      }
     });
   } catch (error) {
     console.error('Yandex OAuth unexpected error:', error);

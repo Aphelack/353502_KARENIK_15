@@ -103,6 +103,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const setAuthData = (token, userData) => {
+    localStorage.setItem('token', token);
+    setToken(token);
+    setUser(userData);
+  };
+
   const getAuthHeader = () => {
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
@@ -115,6 +121,7 @@ export const AuthProvider = ({ children }) => {
     register,
     loginWithYandex,
     logout,
+    setAuthData,
     getAuthHeader,
   };
 
