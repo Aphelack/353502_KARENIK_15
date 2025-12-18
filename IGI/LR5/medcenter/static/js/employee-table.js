@@ -470,7 +470,7 @@ class EmployeeTable {
 
         tbody.innerHTML = pageEmployees.map(emp => `
             <tr class="employee-row" data-id="${emp.id}">
-                <td><input type="checkbox" class="employee-checkbox" data-id="${emp.id}" /></td>
+                <td><input type="checkbox" class="employee-checkbox" data-id="${emp.id}" ${this.selectedEmployees.has(emp.id) ? 'checked' : ''} /></td>
                 <td>${emp.lastName}</td>
                 <td>${emp.firstName}</td>
                 <td><img src="${emp.photoUrl}" alt="${emp.firstName}" class="employee-photo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22>No Image</text></svg>'" /></td>

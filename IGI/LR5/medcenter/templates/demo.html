@@ -244,6 +244,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update slider delay
     document.getElementById('updateSliderDelay').addEventListener('click', function() {
+        // Check if user is admin (passed from Django context)
+        {% comment %} const isAdmin = {{ user.is_staff|yesno:"true,false" }};
+        
+        if (!isAdmin) {
+            alert('Ошибка: Только администратор может изменять настройки слайдера!');
+            return;
+        } {% endcomment %}
+
         const delay = parseInt(document.getElementById('sliderDelay').value);
         slider.updateDelay(delay);
         alert(`Задержка обновлена: ${delay} секунд`);

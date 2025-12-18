@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pizzasAPI } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 import { formatPrice, debounce } from '../utils/helpers';
 import './MenuPage.css';
 
@@ -53,8 +54,11 @@ const FilterSection = ({ filters, onFilterChange }) => (
 );
 
 // Arrow Function Component for Pizza Grid Item
-const PizzaGridItem = ({ pizza, onView, onQuickOrder }) => {
+const PizzaGridItem = ({ pizza, onView, onQuickOrder, user, onEdit, onDelete }) => {
   const totalPrice = pizza.totalPrice || pizza.basePrice;
+  const isOwner = user && pizza.createdBy && (pizza.createdBy._id === user.id || pizza.createdBy === user.id);
+  const isAdmin = user && user.role === 'admin';
+  const canModify = isOwner || isAdmin;
   
   return (
     <div className="menu-pizza-card">
@@ -86,11 +90,17 @@ const PizzaGridItem = ({ pizza, onView, onQuickOrder }) => {
           <span className="pizza-price">{formatPrice(totalPrice)}</span>
           <div className="pizza-actions">
             <button onClick={onView} className="btn btn-sm btn-outline">
-              View Details
+              View
             </button>
             <button onClick={onQuickOrder} className="btn btn-sm btn-primary">
-              Quick Order
+              Order
             </button>
+            {canModify && (
+              <>
+                <button onClick={onEdit} className="btn btn-sm btn-secondary" style={{marginLeft: '5px'}}>Edit</button>
+                <button onClick={onDelete} className="btn btn-sm btn-danger" style={{marginLeft: '5px', backgroundColor: '#d32f2f', color: 'white', border: 'none'}}>Delete</button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -99,6 +109,7 @@ const PizzaGridItem = ({ pizza, onView, onQuickOrder }) => {
 };
 
 function MenuPage() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [pizzas, setPizzas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -214,6 +225,25 @@ function MenuPage() {
     }, 2000);
   };
 
+  // Event Handler: onDeletePizza
+  const handleDeletePizza = async (pizzaId) => {
+    if (window.confirm('Are you sure you want to delete this pizza?')) {
+      try {
+        await pizzasAPI.delete(pizzaId);
+        setPizzas(pizzas.filter(p => p._id !== pizzaId));
+        alert('Pizza deleted successfully');
+      } catch (error) {
+        console.error('Delete pizza error:', error);
+        alert('Failed to delete pizza');
+      }
+    }
+  };
+
+  // Event Handler: onEditPizza
+  const handleEditPizza = (pizzaId) => {
+    navigate(`/customize?edit=${pizzaId}`);
+  };
+
   return (
     <div className="menu-page">
       <div className="menu-header">
@@ -251,8 +281,11 @@ function MenuPage() {
             <PizzaGridItem
               key={pizza._id}
               pizza={pizza}
+              user={user}
               onView={() => handleViewDetails(pizza._id)}
               onQuickOrder={() => handleQuickOrder(pizza)}
+              onEdit={() => handleEditPizza(pizza._id)}
+              onDelete={() => handleDeletePizza(pizza._id)}
             />
           ))}
         </div>

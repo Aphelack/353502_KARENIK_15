@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { ingredientsAPI, pizzasAPI, aiAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,8 @@ const customizationReducer = (state, action) => {
   switch (action.type) {
     case 'SET_INGREDIENTS':
       return { ...state, availableIngredients: action.payload };
+    case 'SET_SELECTED_INGREDIENTS':
+      return { ...state, selectedIngredients: action.payload };
     case 'ADD_INGREDIENT':
       return {
         ...state,
@@ -43,6 +45,9 @@ const customizationReducer = (state, action) => {
 function PizzaCustomizer() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const editPizzaId = queryParams.get('edit');
 
   const [state, dispatch] = useReducer(customizationReducer, {
     availableIngredients: [],
@@ -62,6 +67,36 @@ function PizzaCustomizer() {
     loadIngredients();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
+
+  // Load pizza for edit
+  useEffect(() => {
+    if (editPizzaId) {
+      loadPizzaForEdit(editPizzaId);
+    }
+  }, [editPizzaId]);
+
+  const loadPizzaForEdit = async (id) => {
+    try {
+      setLoading(true);
+      const response = await pizzasAPI.getById(id);
+      const pizza = response.data.pizza;
+      
+      setPizzaName(pizza.name);
+      setDescription(pizza.description);
+      dispatch({ type: 'SET_SIZE', payload: pizza.size });
+      
+      if (pizza.ingredients) {
+        const selectedIngs = pizza.ingredients.map(ing => ing.ingredient);
+        dispatch({ type: 'SET_SELECTED_INGREDIENTS', payload: selectedIngs });
+      }
+    } catch (error) {
+      console.error('Load pizza error:', error);
+      alert('Failed to load pizza for editing');
+      navigate('/menu');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadIngredients = async () => {
     try {
@@ -166,8 +201,14 @@ function PizzaCustomizer() {
         })),
       };
 
-      await pizzasAPI.create(pizzaData);
-      alert('Pizza saved successfully!');
+      if (editPizzaId) {
+        await pizzasAPI.update(editPizzaId, pizzaData);
+        alert('Pizza updated successfully!');
+      } else {
+        await pizzasAPI.create(pizzaData);
+        alert('Pizza saved successfully!');
+      }
+
       dispatch({ type: 'RESET' });
       setPizzaName('');
       setDescription('');
